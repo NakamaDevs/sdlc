@@ -17,7 +17,7 @@ The code lives under `lib/sdlc/reader/`. Tests and fixtures live under `test/`.
 The pipeline has these stages:
 
 1. validate and fetch a public HTTP target;
-2. optionally render the page with a verified Chrome executable;
+2. optionally render the page with a verified Chrome executable and final-URL evidence;
 3. select the main readable content;
 4. remove navigation, ads, promotions, forms, and hidden page chrome;
 5. convert the selected DOM to CommonMark and GitHub Flavored Markdown;
@@ -86,9 +86,19 @@ mix sdlc.capture URL --output PATH --canonical-id ID --render --chrome VERIFIED_
 
 `VERIFIED_CHROME_PATH` is a placeholder. Replace it with an approved executable path.
 
+This command is an integration contract. The CLI needs a runner that reports the browser's final URL.
+
+The bundled `--dump-dom` runner returns only the DOM. The adapter rejects that result with `:rendered_final_url_unverified`.
+
 Rendered capture is not the default. It executes untrusted page JavaScript and expands the network trust boundary.
 
 Before Chrome starts, the adapter runs the bounded static preflight. It validates redirects, status, content type, and the final page URL.
+
+A verified runner must return the serialized DOM and Chrome's final page URL from browser-protocol evidence.
+
+The adapter validates that URL again. It rejects navigation after preflight with `:rendered_navigation_changed`.
+
+The adapter does not reuse preflight status or headers as rendered-response evidence.
 
 The preflight does not restrict requests that page JavaScript makes later. The repository does not provide a browser network sandbox.
 
@@ -155,6 +165,10 @@ Each source image is limited to 25 MiB. One capture can process 20 images and 10
 Each source is limited to 40 megapixels and 20,000 pixels per side. Optimized output is limited to 100 MiB per capture.
 
 The optimizer preserves aspect ratio. It limits the longest edge to 1600 pixels and uses quality 85 by default.
+
+An asset identity includes the source, format, maximum dimension, and quality. Different output variants cannot share one path.
+
+The optimizer uses an exclusive write. It reuses identical bytes and rejects an identity conflict.
 
 It removes unrelated metadata. It retains available artist, credit, rights, and copyright fields when possible.
 
@@ -234,7 +248,9 @@ The official timer demo changed from `0` in static HTML to `3` after rendered ca
 
 These live checks measured extraction quality and client-side execution. They ran before the final external-isolation confirmation gate.
 
-The current unit suite verifies the gate and static preflight. A fully isolated live browser pipeline remains pending.
+The current unit suite verifies isolation, static preflight, final-URL evidence, and navigation rejection.
+
+A fully isolated runner with browser-protocol final-URL evidence remains pending.
 
 Linux, Windows, and x86_64 remain unverified. See [UPDATE.md](UPDATE.md) for the full evidence matrix.
 

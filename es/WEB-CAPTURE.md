@@ -17,7 +17,7 @@ El código está en `lib/sdlc/reader/`. Los tests y fixtures están en `test/`.
 El pipeline tiene estas etapas:
 
 1. valida y obtiene un destino HTTP público;
-2. renderiza opcionalmente la página con un ejecutable verificado de Chrome;
+2. renderiza opcionalmente la página con Chrome verificado y evidencia de URL final;
 3. selecciona el contenido legible principal;
 4. quita navegación, anuncios, promociones, formularios y elementos ocultos;
 5. convierte el DOM seleccionado a CommonMark y GitHub Flavored Markdown;
@@ -86,9 +86,19 @@ mix sdlc.capture URL --output PATH --canonical-id ID --render --chrome VERIFIED_
 
 `VERIFIED_CHROME_PATH` es un marcador. Sustitúyalo con una ruta de ejecutable aprobada.
 
+Este comando es un contrato de integración. La CLI necesita un runner que informe la URL final del browser.
+
+El runner `--dump-dom` incluido devuelve solo el DOM. El adaptador rechaza ese resultado con `:rendered_final_url_unverified`.
+
 La captura renderizada no es predeterminada. Ejecuta JavaScript no confiable y amplía el límite de red.
 
 Antes de iniciar Chrome, el adaptador ejecuta el preflight estático acotado. Valida redirecciones, estado, tipo de contenido y URL final.
+
+Un runner verificado debe devolver el DOM serializado y la URL final de Chrome con evidencia del protocolo del browser.
+
+El adaptador valida esa URL de nuevo. Rechaza navegación después del preflight con `:rendered_navigation_changed`.
+
+El adaptador no reutiliza estado ni headers del preflight como evidencia de la respuesta renderizada.
 
 El preflight no restringe peticiones posteriores de JavaScript. El repositorio no proporciona un sandbox de red para el browser.
 
@@ -155,6 +165,10 @@ Cada imagen de origen está limitada a 25 MiB. Una captura puede procesar 20 im�
 Cada origen está limitado a 40 megapíxeles y 20,000 píxeles por lado. La salida está limitada a 100 MiB por captura.
 
 El optimizador conserva la proporción. Limita el lado mayor a 1600 píxeles y usa calidad 85 de forma predeterminada.
+
+La identidad incluye origen, formato, dimensión máxima y calidad. Variantes de salida diferentes no pueden compartir una ruta.
+
+El optimizador usa una escritura exclusiva. Reutiliza bytes idénticos y rechaza conflictos de identidad.
 
 Quita metadatos no relacionados. Conserva campos disponibles de artista, crédito, derechos y copyright cuando es posible.
 
@@ -234,7 +248,9 @@ La demo oficial de tiempo cambió de `0` en HTML estático a `3` después del re
 
 Estos checks midieron calidad de extracción y ejecución del cliente. Se ejecutaron antes del gate final de confirmación de aislamiento.
 
-La suite actual verifica el gate y preflight estático. Un pipeline de browser activo y totalmente aislado sigue pendiente.
+La suite actual verifica aislamiento, preflight estático, evidencia de URL final y rechazo de navegación.
+
+Sigue pendiente un runner totalmente aislado con evidencia de URL final del protocolo del browser.
 
 Linux, Windows y x86_64 siguen sin verificar. Consulte [UPDATE.md](UPDATE.md) para ver la matriz completa.
 
