@@ -64,6 +64,8 @@ texto libre, imágenes, audio y combinaciones de campos.
 
 Un análisis correcto es evidencia de apoyo. No demuestra que el contenido no tenga PII ni PHI.
 
+Mantenga bloqueado un valor numérico ambiguo que parezca un teléfono hasta que una persona lo clasifique. No añada una excepción general para versiones o identificadores técnicos.
+
 ## P: ¿Qué debe ocurrir después de una exposición?
 
 1. Detenga la publicación y el procesamiento posterior.
