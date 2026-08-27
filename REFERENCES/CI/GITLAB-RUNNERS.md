@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://docs.gitlab.com/runner/\n- Title: GitLab Runner\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n[Skip to main content](#skipTarget) [Go to GitLab Docs homepage](/)
+# SOURCE SNAPSHOT
+
+- Source URL: https://docs.gitlab.com/runner/
+- Title: GitLab Runner
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+[Skip to main content](#skipTarget) [Go to GitLab Docs homepage](/)
 
 [What's new?](https://about.gitlab.com/releases/whats-new/)
 
