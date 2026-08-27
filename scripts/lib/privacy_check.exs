@@ -23,7 +23,7 @@ defmodule Sdlc.PrivacyCheck do
         path = Path.join(root, relative_path)
         redacted_path = "tracked path ##{index} (redacted)"
 
-        case File.read(path) do
+        case read_worktree_path(path) do
           {:ok, content} when is_binary(content) ->
             cond do
               not String.valid?(content) ->
@@ -40,6 +40,9 @@ defmodule Sdlc.PrivacyCheck do
             end
 
           {:error, :enoent} ->
+            []
+
+          :skip ->
             []
 
           {:error, reason} ->
@@ -126,18 +129,18 @@ defmodule Sdlc.PrivacyCheck do
       [metadata, relative_path] = String.split(entry, "\t", parts: 2)
       [mode, object, stage] = String.split(metadata, " ", trim: true)
 
+      label =
+        if stage == "0", do: relative_path, else: "#{relative_path} (index stage #{stage})"
+
       if mode == "160000" do
-        []
+        [{label, ""}]
       else
         content = git!(root, ["cat-file", "blob", object], "read a staged Git blob")
 
         if String.valid?(content) do
-          label =
-            if stage == "0", do: relative_path, else: "#{relative_path} (index stage #{stage})"
-
           [{label, content}]
         else
-          []
+          [{label, ""}]
         end
       end
     end)
@@ -147,6 +150,15 @@ defmodule Sdlc.PrivacyCheck do
     root
     |> git!(["ls-files", "-z"], "list Git-tracked files")
     |> String.split("\0", trim: true)
+  end
+
+  defp read_worktree_path(path) do
+    case File.lstat(path) do
+      {:ok, %File.Stat{type: :regular}} -> File.read(path)
+      {:ok, %File.Stat{type: :symlink}} -> File.read_link(path)
+      {:ok, _stat} -> :skip
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   defp git!(root, arguments, operation) do

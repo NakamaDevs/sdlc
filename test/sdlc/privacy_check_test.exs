@@ -88,8 +88,10 @@ defmodule Sdlc.PrivacyCheckTest do
 
     private_email = Enum.join(["person", "private.invalid"], "@")
     private_path = "#{private_email}.md"
-    File.ln_s!(private_path, Path.join(root, private_path))
+    path = Path.join(root, private_path)
+    File.write!(path, "Safe content.\n")
     git!(root, ["add", private_path])
+    File.chmod!(path, 0o000)
 
     error =
       assert_raise RuntimeError, fn ->
@@ -99,6 +101,46 @@ defmodule Sdlc.PrivacyCheckTest do
     assert error.message =~ "tracked path #1 (redacted)"
     refute error.message =~ private_email
     refute error.message =~ private_path
+  end
+
+  test "reports a tracked path identifier for a binary blob" do
+    root = temporary_repository!()
+    on_exit(fn -> File.rm_rf!(root) end)
+
+    private_email = Enum.join(["person", "private.invalid"], "@")
+    private_path = "#{private_email}.bin"
+    File.write!(Path.join(root, private_path), <<0xFF, 0x00>>)
+    git!(root, ["add", private_path])
+
+    error =
+      assert_raise RuntimeError, fn ->
+        root
+        |> PrivacyCheck.tracked_documents!()
+        |> PrivacyCheck.validate!()
+      end
+
+    assert error.message =~ "tracked path #1 (redacted):path contains an email address"
+    refute error.message =~ private_email
+    refute error.message =~ private_path
+  end
+
+  test "does not scan the destination content of a tracked symlink" do
+    root = temporary_repository!()
+    outside = root <> "-outside"
+
+    on_exit(fn ->
+      File.rm_rf!(root)
+      File.rm_rf!(outside)
+    end)
+
+    private_email = Enum.join(["person", "private.invalid"], "@")
+    File.mkdir_p!(outside)
+    target = Path.join(outside, "target.txt")
+    File.write!(target, "Contact #{private_email}.\n")
+    File.ln_s!(target, Path.join(root, "reference-link"))
+    git!(root, ["add", "reference-link"])
+
+    assert root |> PrivacyCheck.tracked_documents!() |> PrivacyCheck.validate!() == :ok
   end
 
   test "scans staged content when the worktree contains a safe replacement" do
