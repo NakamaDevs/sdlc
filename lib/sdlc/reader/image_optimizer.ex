@@ -13,6 +13,7 @@ defmodule Sdlc.Reader.ImageOptimizer do
   @default_max_pixels 40_000_000
   @default_max_source_dimension 20_000
   @default_quality 85
+  @identity_version "sdlc-image-optimizer-v2"
   @preserved_metadata ~w(artist copyright creator credit rights)
 
   @type result :: %{
@@ -27,9 +28,9 @@ defmodule Sdlc.Reader.ImageOptimizer do
   @doc """
   Resize and encode a raster image for a local Markdown asset directory.
 
-  The output name contains a SHA-256 hash of the source URL and body. This
-  makes repeat runs deterministic and prevents unrelated source URLs from
-  sharing an asset name.
+  The output name contains a SHA-256 hash of the source, format, and effective
+  encoding options. Repeat runs are deterministic. Distinct output variants
+  cannot replace each other.
   """
   @spec optimize(binary(), keyword()) :: {:ok, result()} | {:error, atom() | term()}
   def optimize(binary, options) when is_binary(binary) and is_list(options) do
@@ -208,13 +209,41 @@ defmodule Sdlc.Reader.ImageOptimizer do
     do: [suffix: ".webp", quality: quality, effort: 8, minimize_file_size: true]
 
   defp write_output(encoded, suffix, binary, options, output_dir) do
-    source_url = Keyword.get(options, :source_url, "")
-    name = :crypto.hash(:sha256, [source_url, <<0>>, binary]) |> Base.encode16(case: :lower)
+    name = output_identity(suffix, binary, options)
     path = Path.join(output_dir, name <> suffix)
-    existed = File.exists?(path)
 
-    case File.write(path, encoded, [:binary]) do
-      :ok -> {:ok, path, not existed}
+    case File.write(path, encoded, [:binary, :exclusive]) do
+      :ok -> {:ok, path, true}
+      {:error, :eexist} -> existing_output(path, encoded)
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  defp output_identity(suffix, binary, options) do
+    source_url = Keyword.get(options, :source_url, "")
+    max_dimension = Keyword.get(options, :max_dimension, @default_max_dimension)
+    quality = Keyword.get(options, :quality, @default_quality)
+
+    :crypto.hash(:sha256, [
+      @identity_version,
+      <<0>>,
+      source_url,
+      <<0>>,
+      suffix,
+      <<0>>,
+      Integer.to_string(max_dimension),
+      <<0>>,
+      Integer.to_string(quality),
+      <<0>>,
+      binary
+    ])
+    |> Base.encode16(case: :lower)
+  end
+
+  defp existing_output(path, encoded) do
+    case File.read(path) do
+      {:ok, ^encoded} -> {:ok, path, false}
+      {:ok, _different} -> {:error, :asset_identity_conflict}
       {:error, reason} -> {:error, reason}
     end
   end

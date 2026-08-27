@@ -31,6 +31,37 @@ defmodule Sdlc.Reader.ImageOptimizerTest do
     assert Path.extname(result.path) == ".png"
   end
 
+  test "uses distinct identities for output-affecting options" do
+    source = Image.new!(200, 100, color: [210, 220, 230])
+    {:ok, binary} = Image.write(source, :memory, suffix: ".jpg", quality: 95)
+
+    common = [
+      source_url: "https://images.example.test/robots.jpg",
+      content_type: "image/jpeg",
+      output_dir: @output_dir
+    ]
+
+    assert {:ok, baseline} =
+             ImageOptimizer.optimize(binary, common ++ [max_dimension: 200, quality: 85])
+
+    assert {:ok, lower_quality} =
+             ImageOptimizer.optimize(binary, common ++ [max_dimension: 200, quality: 70])
+
+    assert {:ok, smaller} =
+             ImageOptimizer.optimize(binary, common ++ [max_dimension: 100, quality: 85])
+
+    refute baseline.path == lower_quality.path
+    refute baseline.path == smaller.path
+    assert smaller.width == 100
+    assert smaller.height == 50
+
+    assert {:ok, repeated} =
+             ImageOptimizer.optimize(binary, common ++ [max_dimension: 200, quality: 85])
+
+    assert repeated.path == baseline.path
+    refute repeated.created
+  end
+
   test "rejects unsupported active image formats" do
     assert {:error, :unsupported_image_type} =
              ImageOptimizer.optimize("<svg><script>alert(1)</script></svg>",
