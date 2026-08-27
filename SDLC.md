@@ -1599,4 +1599,3 @@ Deployment references:
 - [Google Cloud instrumentation and observability](https://docs.cloud.google.com/stackdriver/docs/instrumentation/overview)
 - [AWS CloudWatch OpenTelemetry](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTLPGettingStarted.html)
 - [AWS Distro for OpenTelemetry and X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-services-adot.html)
-- [MARKDOWN.md](MARKDOWN.md) — reference snapshots, Turndown conversion, and unavailable sources.
