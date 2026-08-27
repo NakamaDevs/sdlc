@@ -40,6 +40,8 @@ Escapa caracteres de control Markdown. Quita elementos activos y esquemas URL in
 
 Las fences crecen cuando su contenido ya contiene una fence. Las listas anidadas reciben sangría estable.
 
+Conversión y captura usan un normalizador que reconoce fences. La validación busca líneas vacías excesivas solo fuera de fences.
+
 ## P: ¿Cómo funciona la extracción en modo lectura?
 
 El extractor usa primero candidatos semánticos como `article`, `main` e `itemprop="articleBody"`.
@@ -59,6 +61,10 @@ Rechaza direcciones privadas literales y resueltas. Valida cada redirección y f
 Usa los registros IANA de direcciones especiales para rechazar destinos IPv4 e IPv6 no globales.
 
 Desactiva compresión y decodificación automática del cuerpo. Esto limita el riesgo de bombas de descompresión.
+
+El lector valida UTF-8 antes de analizar HTML. Una entrada incorrecta devuelve `:invalid_html_encoding`.
+
+Cuando falta `Content-Type`, la detección HTML lee solo un prefijo ASCII de 512 bytes.
 
 Use esta forma de comando específica del repositorio:
 
@@ -248,7 +254,7 @@ La demo oficial de tiempo cambió de `0` en HTML estático a `3` después del re
 
 Estos checks midieron calidad de extracción y ejecución del cliente. Se ejecutaron antes del gate final de confirmación de aislamiento.
 
-La suite actual verifica aislamiento, preflight estático, evidencia de URL final y rechazo de navegación.
+La suite actual verifica aislamiento, codificación del preflight, evidencia de URL final y rechazo de navegación.
 
 Sigue pendiente un runner totalmente aislado con evidencia de URL final del protocolo del browser.
 

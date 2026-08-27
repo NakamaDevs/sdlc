@@ -40,6 +40,8 @@ It escapes Markdown control characters. It removes active elements and unsafe UR
 
 Code fences grow when their content already contains a fence. Nested list content receives stable indentation.
 
+Conversion and capture use one fence-aware normalizer. Validation checks excess blank lines only outside fences.
+
 ## Q: How does reader-mode extraction work?
 
 The extractor first uses semantic candidates such as `article`, `main`, and `itemprop="articleBody"`.
@@ -59,6 +61,10 @@ It rejects literal and resolved private addresses. It validates each redirect an
 It uses the IANA special-purpose address registries to reject non-global IPv4 and IPv6 destinations.
 
 It disables response compression and automatic body decoding. This limits decompression-bomb risk.
+
+The reader validates UTF-8 before HTML parsing. Invalid input returns `:invalid_html_encoding`.
+
+When `Content-Type` is missing, HTML detection reads only a 512-byte ASCII prefix.
 
 Use this repository-specific command form:
 
@@ -248,7 +254,7 @@ The official timer demo changed from `0` in static HTML to `3` after rendered ca
 
 These live checks measured extraction quality and client-side execution. They ran before the final external-isolation confirmation gate.
 
-The current unit suite verifies isolation, static preflight, final-URL evidence, and navigation rejection.
+The current unit suite verifies isolation, preflight encoding, final-URL evidence, and navigation rejection.
 
 A fully isolated runner with browser-protocol final-URL evidence remains pending.
 
