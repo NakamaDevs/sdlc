@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://claude.com/blog/the-ai-native-sdlc-playbook\n- Title: The AI-native SDLC playbook\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n[
+# SOURCE SNAPSHOT
+
+- Source URL: https://claude.com/blog/the-ai-native-sdlc-playbook
+- Title: The AI-native SDLC playbook
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+[
 
 ](https://claude.com)
 
