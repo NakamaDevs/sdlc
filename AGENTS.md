@@ -41,7 +41,7 @@ Use [CODE-REVIEW.md](en/CODE-REVIEW.md) and the repository-local `resolve-pr-rev
 1. Keep incomplete work in a draft pull request.
 2. Run focused checks and self-review the complete diff.
 3. Move the pull request to ready for review.
-4. Let the configured initial Codex review run.
+4. Let the configured initial Codex review run. If none starts, post `@codex review` once.
 5. Classify every finding as `valid`, `invalid`, `unclear`, or `superseded`.
 6. Fix valid findings with focused evidence. Reject invalid findings only with evidence.
 7. Commit and push each coherent review response.

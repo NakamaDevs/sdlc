@@ -64,6 +64,8 @@ Use la skill local `resolve-pr-review-threads` cuando esté disponible.
 
 Mueva un pull request de borrador a listo sólo cuando pasen los checks enfocados. El review inicial de Codex puede empezar automáticamente después.
 
+Si no empieza el review automático, confirme que no haya otro activo. Después, publique `@codex review` una vez.
+
 Use `@codex review` cuando los cambios posteriores necesiten otro review.
 
 Clasifique cada hallazgo como `valid`, `invalid`, `unclear` o `superseded`. Use `accepted`, `fixed`, `rejected`, `blocked` o `superseded` para el status del thread.

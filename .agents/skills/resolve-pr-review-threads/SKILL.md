@@ -117,6 +117,8 @@ Update or rebase only when repository policy requires it. Coordinate before rewr
 
 Let the configured initial review run after the pull request becomes ready for review.
 
+If no review starts after the configured interval, confirm that none is active. Then post `@codex review` once.
+
 For a later pass, first push all fixes, post replies, resolve completed threads, and verify CI. Then post `@codex review` once.
 
 Do not request repeated reviews while a prior review is active or known work remains.

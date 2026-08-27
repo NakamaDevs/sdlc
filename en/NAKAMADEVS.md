@@ -64,6 +64,8 @@ Use the repository-local `resolve-pr-review-threads` skill when it is available.
 
 Move a draft pull request to ready only after focused checks pass. The initial Codex review can start automatically after that transition.
 
+If no automatic review starts, confirm that no review is active. Then post `@codex review` once.
+
 Use `@codex review` after later changes need another review pass.
 
 Classify each finding as `valid`, `invalid`, `unclear`, or `superseded`. Use `accepted`, `fixed`, `rejected`, `blocked`, or `superseded` for the thread status.
