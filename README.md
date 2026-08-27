@@ -36,4 +36,5 @@ This repository is the canonical, reviewable version of the guidance. The origin
 
 ## Snapshot
 
-- [GitHub Gist snapshot](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)\n28. [MARKDOWN.md](MARKDOWN.md) — reference snapshots, Turndown conversion, and unavailable sources.\n
+- [GitHub Gist snapshot](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
+28. [MARKDOWN.md](MARKDOWN.md) — reference snapshots, Turndown conversion, and unavailable sources.
