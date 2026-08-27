@@ -24,13 +24,6 @@ This repository is the canonical, reviewable version of the guidance. The origin
 16. [OWASP.md](OWASP.md) — OWASP standards, secrets, storage, attestation, and pre-launch security.
 17. [MCP.md](MCP.md) — MCP transports, Code Mode, stateless operation, authentication, authorization, and approvals.
 18. [AI-MLOPS.md](AI-MLOPS.md) — Mojo, MAX, model serving, evaluation, benchmarks, and AI operations.
-19. [RUNNERS.md](RUNNERS.md) — GitHub and GitLab hosted or self-hosted runners, isolation, and Dagger.
-20. [INFERENCE.md](INFERENCE.md) — local inference, Apple Silicon, DGX Spark, and model-serving validation.
-21. [COMMUNICATION.md](COMMUNICATION.md) — human and agent sharing, distillation, verification, and disclosure.
-22. [NOTES.md](NOTES.md) — local-first recording, transcription, notes, consent, and cross-platform behavior.
-23. [INTEGRATION.md](INTEGRATION.md) — HTTP, SSE, WebSockets, webhooks, ordering, and recovery.
-24. [CLAUDE.md](CLAUDE.md) — Claude-specific SDLC intake and operating guidance.
-25. [CODEX.md](CODEX.md) — Codex-specific SDLC intake and operating guidance.
 
 ## Snapshot
 
