@@ -36,10 +36,24 @@ defmodule GistExport do
     {"COMMITS.md", "z31-COMMITS.md"},
     {"GITHUB.md", "z32-GITHUB.md"},
     {"WEB-CAPTURE.md", "z33-WEB-CAPTURE.md"},
-    {"CODE-REVIEW.md", "z34-CODE-REVIEW.md"}
+    {"CODE-REVIEW.md", "z34-CODE-REVIEW.md"},
+    {"CHANGELOG.md", "z35-CHANGELOG.md"},
+    {"DEPLOY.md", "z36-DEPLOY.md"},
+    {"NAKAMADEVS.md", "zz01-NAKAMADEVS.md"}
+  ]
+
+  @optional_files ["NAKAMADEVS.md"]
+
+  @organization_markers [
+    ~r/@NakamaDevs\//,
+    ~r/\bNAK-\d+\b/,
+    ~r/repository-owner@gmail\.com/,
+    ~r/github\.com\/NakamaDevs\/(?:Kaicho|skills)/
   ]
 
   def run([language, output]) when language in ["en", "es"] do
+    validate_file_order!()
+
     output = Path.expand(output)
     File.mkdir_p!(output)
 
@@ -48,6 +62,7 @@ defmodule GistExport do
     Enum.each(@files, fn {source, target} ->
       input = Path.join([@root, language, source])
       content = File.read!(input)
+      validate_profile_boundary!(content, source)
       content = rewrite_guide_links(content, anchors)
       content = rewrite_repository_links(content)
       validate_export!(content, target)
@@ -85,6 +100,28 @@ defmodule GistExport do
       |> String.trim("-")
 
     "#file-#{normalized}"
+  end
+
+  defp validate_file_order! do
+    sources = Enum.map(@files, &elem(&1, 0))
+    split_at = length(sources) - length(@optional_files)
+    {generic, optional} = Enum.split(sources, split_at)
+
+    if optional != @optional_files or Enum.any?(generic, &(&1 in @optional_files)) do
+      raise "Optional Gist files must remain last: #{Enum.join(@optional_files, ", ")}"
+    end
+  end
+
+  defp validate_profile_boundary!(content, source) do
+    if source not in @optional_files do
+      case Enum.find(@organization_markers, &Regex.match?(&1, content)) do
+        nil ->
+          :ok
+
+        marker ->
+          raise "#{source} contains an organization marker outside the optional profile: #{inspect(marker)}"
+      end
+    end
   end
 
   defp validate_export!(content, target) do
