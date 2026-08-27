@@ -61,16 +61,19 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ international
   end
 
-  test "reports two-group international phone formats without repeating them" do
-    international = "+91 " <> Enum.join(["98765", "43210"], " ")
+  test "reports grouped international phone formats without repeating them" do
+    two_groups = "+91 " <> Enum.join(["98765", "43210"], " ")
+    one_digit_group = "+33 " <> Enum.join(["1", "42", "68", "53", "00"], " ")
 
     error =
       assert_raise RuntimeError, fn ->
-        PrivacyCheck.validate!([{"guide.md", international}])
+        PrivacyCheck.validate!([{"guide.md", Enum.join([two_groups, one_digit_group], "\n")}])
       end
 
     assert error.message =~ "guide.md:1 contains an international phone number pattern"
-    refute error.message =~ international
+    assert error.message =~ "guide.md:2 contains an international phone number pattern"
+    refute error.message =~ two_groups
+    refute error.message =~ one_digit_group
 
     too_short = "+12 " <> Enum.join(["34", "56"], " ")
     assert PrivacyCheck.findings([{"guide.md", too_short}]) == []
