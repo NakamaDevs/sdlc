@@ -1869,4 +1869,4 @@ OWASP ® is a registered trademark of the OWASP Foundation, Inc. This website us
 
 Made with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) | _Website and covers designed by Carlos Holguera._
 
-[](https://owasp.slack.com/archives/C1M6ZVC6S "owasp.slack.com")[](https://bsky.app/profile/owasp-mas.bsky.social "bsky.app")[](https://infosec.exchange/@OWASP_MAS "infosec.exchange")[](https://github.com/OWASP?q=mas#org-profile-repositories "github.com")[](/cdn-cgi/l/email-protection#bbd8dac9d7d4c895d3d4d7dccedec9dafbd4ccdac8cb95d4c9dc97c8cdded595c8d8d3d7ded2dec9fbd4ccdac8cb95d4c9dc)
+[](https://owasp.slack.com/archives/C1M6ZVC6S "owasp.slack.com")[](https://bsky.app/profile/owasp-mas.bsky.social "bsky.app")[](https://infosec.exchange/@OWASP_MAS "infosec.exchange")[](https://github.com/OWASP?q=mas#org-profile-repositories "github.com")[](/cdn-cgi/l/email-protection#523133203e3d217c3a3d3e3527372033123d253321227c3d20357e2124373c7c21313a3e373b3720123d253321227c3d2035)
