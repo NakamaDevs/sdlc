@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://prek.j178.dev/quickstart/\n- Title: prek quickstart\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n 
+# SOURCE SNAPSHOT
+
+- Source URL: https://prek.j178.dev/quickstart/
+- Title: prek quickstart
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+ 
 
 [Skip to content](#quickstart)
 
