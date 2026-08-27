@@ -45,3 +45,8 @@ Check whether people can understand the state, override the agent, recover work,
 - [Human-in-the-loop software development agents](https://arxiv.org/abs/2411.12924)
 - [OpenAI harness engineering](https://openai.com/index/harness-engineering/)
 - [OpenAI Symphony](https://openai.com/index/open-source-codex-orchestration-symphony/)
+## Q: How should humans share AI-assisted work?
+
+Read, verify, distill, and disclose AI assistance when it affects trust or review. Share the answer and evidence first. Link large artifacts instead of pasting raw model output into a conversation.
+
+Use [COMMUNICATION.md](COMMUNICATION.md) for the team sharing contract and [NOTES.md](NOTES.md) for recording and note-taking requirements.
