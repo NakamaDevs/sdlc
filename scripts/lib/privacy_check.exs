@@ -9,6 +9,44 @@ defmodule Sdlc.PrivacyCheck do
 
   @safe_email_domains ~w(example.com example.net example.org example.test users.noreply.github.com)
   @safe_transport_emails ~w(git@github.com git@gitlab.com git@bitbucket.org)
+  @safe_role_emails ~w(privacy@nvidia.com)
+
+  def tracked_documents!(root) do
+    index_documents = index_documents!(root)
+
+    worktree_documents =
+      root
+      |> git_files!()
+      |> Enum.sort()
+      |> Enum.flat_map(fn relative_path ->
+        path = Path.join(root, relative_path)
+
+        case File.read(path) do
+          {:ok, content} when is_binary(content) ->
+            cond do
+              not String.valid?(content) ->
+                []
+
+              Enum.any?(index_documents, fn
+                {^relative_path, index_content} -> index_content == content
+                _document -> false
+              end) ->
+                []
+
+              true ->
+                [{relative_path <> " (worktree)", content}]
+            end
+
+          {:error, :enoent} ->
+            []
+
+          {:error, reason} ->
+            raise "Privacy check could not read #{relative_path}: #{:file.format_error(reason)}"
+        end
+      end)
+
+    index_documents ++ worktree_documents
+  end
 
   def findings(documents) when is_list(documents) do
     Enum.flat_map(documents, fn {name, content} ->
@@ -62,9 +100,51 @@ defmodule Sdlc.PrivacyCheck do
   defp safe_email?(email) do
     normalized = String.downcase(email)
 
-    normalized in @safe_transport_emails or
+    normalized in @safe_transport_emails or normalized in @safe_role_emails or
       Enum.any?(@safe_email_domains, fn domain ->
         String.ends_with?(normalized, "@" <> domain)
       end)
+  end
+
+  defp index_documents!(root) do
+    root
+    |> git!(["ls-files", "--stage", "-z"], "read the Git index")
+    |> String.split("\0", trim: true)
+    |> Enum.sort()
+    |> Enum.flat_map(fn entry ->
+      [metadata, relative_path] = String.split(entry, "\t", parts: 2)
+      [mode, object, stage] = String.split(metadata, " ", trim: true)
+
+      if mode == "160000" do
+        []
+      else
+        content = git!(root, ["cat-file", "blob", object], "read a staged Git blob")
+
+        if String.valid?(content) do
+          label =
+            if stage == "0", do: relative_path, else: "#{relative_path} (index stage #{stage})"
+
+          [{label, content}]
+        else
+          []
+        end
+      end
+    end)
+  end
+
+  defp git_files!(root) do
+    root
+    |> git!(["ls-files", "-z"], "list Git-tracked files")
+    |> String.split("\0", trim: true)
+  end
+
+  defp git!(root, arguments, operation) do
+    case System.cmd("git", arguments, cd: root, stderr_to_stdout: true) do
+      {output, 0} ->
+        output
+
+      {_output, status} ->
+        raise "Privacy check could not #{operation}. Git exited with #{status}."
+    end
   end
 end

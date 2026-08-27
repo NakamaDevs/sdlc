@@ -9,7 +9,8 @@ defmodule Sdlc.PrivacyCheckTest do
     addresses = [
       "person@example.test",
       "git@github.com",
-      "account@users.noreply.github.com"
+      "account@users.noreply.github.com",
+      Enum.join(["privacy", "nvidia.com"], "@")
     ]
 
     documents = [
@@ -43,5 +44,67 @@ defmodule Sdlc.PrivacyCheckTest do
 
     assert error.message =~ "guide.md:1 contains a Gist account identifier"
     refute error.message =~ gist_url
+  end
+
+  test "scans staged content when the worktree contains a safe replacement" do
+    root = temporary_repository!()
+    on_exit(fn -> File.rm_rf!(root) end)
+
+    relative_path = "guide.md"
+    path = Path.join(root, relative_path)
+    private_email = Enum.join(["private", "invalid.local"], "@")
+
+    File.write!(path, "Contact #{private_email}.\n")
+    git!(root, ["add", relative_path])
+    File.write!(path, "Contact person@example.test.\n")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        root
+        |> PrivacyCheck.tracked_documents!()
+        |> PrivacyCheck.validate!()
+      end
+
+    assert error.message =~ "guide.md:1 contains an email address"
+    refute error.message =~ private_email
+  end
+
+  test "scans changed worktree content when the index contains a safe value" do
+    root = temporary_repository!()
+    on_exit(fn -> File.rm_rf!(root) end)
+
+    relative_path = "guide.md"
+    path = Path.join(root, relative_path)
+    private_email = Enum.join(["private", "invalid.local"], "@")
+
+    File.write!(path, "Contact person@example.test.\n")
+    git!(root, ["add", relative_path])
+    File.write!(path, "Contact #{private_email}.\n")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        root
+        |> PrivacyCheck.tracked_documents!()
+        |> PrivacyCheck.validate!()
+      end
+
+    assert error.message =~ "guide.md (worktree):1 contains an email address"
+    refute error.message =~ private_email
+  end
+
+  defp temporary_repository! do
+    root =
+      Path.join(
+        System.tmp_dir!(),
+        "sdlc-privacy-check-#{System.unique_integer([:positive, :monotonic])}"
+      )
+
+    File.mkdir_p!(root)
+    git!(root, ["init", "--quiet"])
+    root
+  end
+
+  defp git!(root, arguments) do
+    assert {_, 0} = System.cmd("git", arguments, cd: root, stderr_to_stdout: true)
   end
 end
