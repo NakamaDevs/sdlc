@@ -99,6 +99,18 @@ defmodule Sdlc.PrivacyCheckTest do
     assert PrivacyCheck.findings([{"guide.md", too_short}]) == []
   end
 
+  test "reports a five-group domestic phone format without repeating it" do
+    domestic = Enum.join(["01", "23", "45", "67", "89"], " ")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", domestic}])
+      end
+
+    assert error.message =~ "guide.md:1 contains a phone number pattern"
+    refute error.message =~ domestic
+  end
+
   test "reports a tracked path identifier without repeating the path" do
     root = temporary_repository!()
     on_exit(fn -> File.rm_rf!(root) end)
