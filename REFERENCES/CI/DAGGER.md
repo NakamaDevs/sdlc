@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://docs.dagger.io/\n- Title: Dagger documentation\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n[Skip to main content](#__docusaurus_skipToContent_fallback)
+# SOURCE SNAPSHOT
+
+- Source URL: https://docs.dagger.io/
+- Title: Dagger documentation
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+[Skip to main content](#__docusaurus_skipToContent_fallback)
 
 [
 
