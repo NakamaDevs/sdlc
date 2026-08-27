@@ -51,3 +51,10 @@ References:
 - [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/)
 - [An open-source spec for Codex orchestration: Symphony](https://openai.com/index/open-source-codex-orchestration-symphony/)
 - [OpenAI Symphony repository](https://github.com/openai/symphony)
+## Durable harness updates
+
+Harnesses should learn from execution evidence without changing their own rules silently. Record failed attempts, tool latency, test outcomes, recovery steps, and operator feedback. Convert a repeated failure into a reviewed task, test, guardrail, or documentation change.
+
+[AutoSaddler](https://arxiv.org/abs/2608.23041) is research on automatic harness optimization with durable updates from agent execution traces. Treat it as research evidence, not a permission for unreviewed self-modification. Keep policy changes reviewable, versioned, reversible, and attributable.
+
+The [Omar Sanusi discussion](https://x.com/omarsar0/status/2092246879702769956) is a secondary discussion reference. It is not a normative source. Validate its claims against the repository, tests, and primary research.
