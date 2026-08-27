@@ -48,7 +48,7 @@ defmodule GistExport do
     ~r/@NakamaDevs\//i,
     ~r/\bNAK-\d+\b/i,
     ~r/repository-owner@gmail\.com/i,
-    ~r/github\.com[\/:]NakamaDevs\/(?:Kaicho|skills)(?:\.git)?/i
+    ~r/(?:github\.com[\/:]|raw\.githubusercontent\.com\/|api\.github\.com\/repos\/)NakamaDevs\/(?:Kaicho|skills)(?:\.git)?(?:[\/?#]|$)/i
   ]
 
   @organization_marker_examples [
@@ -58,7 +58,9 @@ defmodule GistExport do
     "github.com/nakamadevs/kaicho",
     "github.com/NAKAMADEVS/SKILLS",
     "git@github.com:NakamaDevs/Kaicho.git",
-    "ssh://git@github.com/NakamaDevs/skills.git"
+    "ssh://git@github.com/NakamaDevs/skills.git",
+    "https://raw.githubusercontent.com/NakamaDevs/Kaicho/main/policy.md",
+    "https://api.github.com/repos/nakamadevs/SKILLS/contents/SKILL.md"
   ]
 
   def run([language, output]) when language in ["en", "es"] do
