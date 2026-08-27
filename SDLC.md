@@ -2,6 +2,11 @@
 
 ## Document currency and command evidence
 
+
+## Harness engineering
+
+Treat the repository as the system of record for agent-readable knowledge, executable guardrails, feedback loops, isolated work, and review evidence. See [HARNESS.md](HARNESS.md) for the detailed harness and Symphony guidance.
+
 ## Focused companion references
 
 - [MISE.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z03-mise-md) — mise tools, runtimes, environments, tasks, scope, and output handling.
