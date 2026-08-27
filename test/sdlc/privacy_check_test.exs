@@ -87,11 +87,26 @@ defmodule Sdlc.PrivacyCheckTest do
     on_exit(fn -> File.rm_rf!(root) end)
 
     private_email = Enum.join(["person", "private.invalid"], "@")
-    private_path = "#{private_email}.md"
-    path = Path.join(root, private_path)
-    File.write!(path, "Safe content.\n")
-    git!(root, ["add", private_path])
-    File.chmod!(path, 0o000)
+    private_path = "blocked/#{private_email}.md"
+    source_path = Path.join(root, "source.md")
+    File.write!(source_path, "Safe content.\n")
+
+    assert {object, 0} =
+             System.cmd("git", ["hash-object", "-w", "source.md"],
+               cd: root,
+               stderr_to_stdout: true
+             )
+
+    git!(root, [
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644",
+      String.trim(object),
+      private_path
+    ])
+
+    File.write!(Path.join(root, "blocked"), "This path component is not a directory.\n")
 
     error =
       assert_raise RuntimeError, fn ->
