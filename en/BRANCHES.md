@@ -13,14 +13,14 @@ Use this form:
 Examples:
 
 ```text
-feature/NAK-625-bilingual-sdlc-tooling
-fix/NAK-742-runner-timeout
-docs/NAK-810-update-release-guide
+feature/PROJ-625-bilingual-sdlc-tooling
+fix/PROJ-742-runner-timeout
+docs/PROJ-810-update-release-guide
 ```
 
-Use the Linear issue identifier first. Use lowercase kebab case for the short title.
+Use the project issue identifier first. Use lowercase kebab case for the short title.
 
-Do not add a user or agent identity segment. Avoid names such as `feature/cx/...` and `fix/hdb/...`.
+Do not add an identity segment unless repository policy requires one. Do not invent an undocumented namespace.
 
 The Linear issue, pull request, and commit metadata record ownership. The branch name records the work.
 
@@ -53,20 +53,20 @@ Use `feature` in branch names. Use `feat` in Conventional Commit messages.
 Good:
 
 ```text
-feature/NAK-625-bilingual-sdlc-tooling
+feature/PROJ-625-bilingual-sdlc-tooling
 ```
 
 Avoid:
 
 ```text
-feature/cx/add-new-stuff
-fix/hdb/urgent-fix
-feature/NAK-625-feature-for-bilingual-sdlc-tooling
+feature/add-new-stuff
+fix/urgent-fix
+feature/PROJ-625-feature-for-bilingual-sdlc-tooling
 ```
 
 ## Q: Who can use the same naming form?
 
-People and agents use the same form. Identity does not change the branch namespace.
+People and agents use the repository form. Repository policy can reserve a namespace for automated agents.
 
 One owner controls each branch and worktree. Other contributors use a separate worktree or review the pull request.
 
@@ -85,7 +85,7 @@ Use one issue, branch, worktree, and pull request for each layer.
 Use this shape:
 
 ```text
-main <- feature/NAK-100-foundation <- feature/NAK-101-dependent-change
+main <- feature/PROJ-100-foundation <- feature/PROJ-101-dependent-change
 ```
 
 Base each pull request on its direct parent. Review only the diff against that parent.

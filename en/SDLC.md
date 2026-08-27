@@ -43,6 +43,9 @@ The companion guides explain focused practices. They do not replace the core pro
 - [OLLAMA.md](OLLAMA.md) — local model serving, Aspire integration, Claude Code, trust, and validation.
 - [TESTING.md](TESTING.md) — specifications, FIRST tests, test layers, UI evidence, and validation.
 - [SECURITY.md](SECURITY.md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
+- [CHANGELOG.md](CHANGELOG.md) — changelog inputs, merge history, Semantic Versioning, and generation.
+- [DEPLOY.md](DEPLOY.md) — release planning, publication, deployment, promotion, and rollback.
+- [NAKAMADEVS.md](NAKAMADEVS.md) — optional organization policy, skills, stack, and ownership profile. Keep this profile last.
 
 ## Harness engineering
 
@@ -707,13 +710,12 @@ Keep executable scripts minimal and inspect them before execution. Prefer local 
 
 `npx skills add` supports project and global installation, selected skills, agent selection, local paths, Git sources, and direct URLs. `npx skills use` can use a skill without installing it. Use these modes deliberately and record the choice.
 
-Use the NakamaDevs private skills marketplace as the organization source for reviewed shared bundles. Keep repository-specific skills in the repository. Use a skills lock record or equivalent manifest for exact revisions. Review updates as code and run skill-level tests before promotion.
+Use the approved organization skills source for reviewed shared bundles. Keep repository-specific skills in the repository. Use a skills lock record or equivalent manifest for exact revisions. Review updates as code and run skill-level tests before promotion.
 
 References:
 
 - [Agent Skills specification and format](https://agentskills.io/home)
 - [npx skills CLI](https://github.com/vercel-labs/skills)
-- [NakamaDevs skills marketplace](https://github.com/NakamaDevs/skills)
 
 ## Project-management adapter
 

@@ -77,7 +77,7 @@ Add the Linear issue when it is not clear from the branch or pull request.
 Example:
 
 ```text
-Refs NAK-625
+Refs PROJ-625
 ```
 
 Use a breaking-change footer only for a real incompatible contract change:

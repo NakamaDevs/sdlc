@@ -77,7 +77,7 @@ Agregue el issue de Linear cuando no sea claro en el branch o pull request.
 Ejemplo:
 
 ```text
-Refs NAK-625
+Refs PROJ-625
 ```
 
 Use un pie de cambio incompatible solo para un cambio de contrato incompatible real:

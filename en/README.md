@@ -40,6 +40,9 @@ This repository is the canonical, reviewable guidance. The public Gists are gene
 32. [MARKDOWN.md](MARKDOWN.md) — source snapshots, local conversion, and unavailable sources.
 33. [WEB-CAPTURE.md](WEB-CAPTURE.md) — reader extraction, rendered pages, images, and comparison.
 34. [UPDATE.md](UPDATE.md) — document review, command evidence, and refresh records.
+35. [CHANGELOG.md](CHANGELOG.md) — changelog inputs, merge history, Semantic Versioning, and generation.
+36. [DEPLOY.md](DEPLOY.md) — release planning, publication, deployment, promotion, and rollback.
+37. [NAKAMADEVS.md](NAKAMADEVS.md) — optional NakamaDevs policy, skills, stack, and ownership profile. Keep this profile last.
 
 ## References
 

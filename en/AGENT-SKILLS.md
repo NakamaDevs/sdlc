@@ -89,10 +89,9 @@ Keep executable scripts minimal and inspect them before execution. Prefer local 
 
 `npx skills add` supports project and global installation, selected skills, agent selection, local paths, Git sources, and direct URLs. `npx skills use` can use a skill without installing it. Use these modes deliberately and record the choice.
 
-Use the NakamaDevs private skills marketplace as the organization source for reviewed shared bundles. Keep repository-specific skills in the repository. Use a skills lock record or equivalent manifest for exact revisions. Review updates as code and run skill-level tests before promotion.
+Use the approved organization skills source for reviewed shared bundles. Keep repository-specific skills in the repository. Use a skills lock record or equivalent manifest for exact revisions. Review updates as code and run skill-level tests before promotion.
 
 ## References
 
 - [Agent Skills specification and format](https://agentskills.io/home)
 - [npx skills CLI](https://github.com/vercel-labs/skills)
-- [NakamaDevs skills marketplace](https://github.com/NakamaDevs/skills)

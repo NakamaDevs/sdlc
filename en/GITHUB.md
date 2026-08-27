@@ -109,12 +109,12 @@ Use a visible GitHub team with write access. GitHub requires both conditions for
 Use this default when the repository wants the Devs team on almost every change:
 
 ```text
-* @NakamaDevs/devs
+* @example-org/devs
 ```
 
-The verified organization team is `Devs`, with slug `devs`.
+Replace `@example-org/devs` with the verified organization and team slug.
 
-On 2026-08-27, only the `Admins` team had repository access. Grant `Devs` write access before activating this entry.
+Confirm that the team is visible and has write access before activating this entry.
 
 Add narrower owners after the default when a path needs another specialist team.
 
