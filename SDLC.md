@@ -15,6 +15,13 @@
 - [OWASP.md](OWASP.md) — OWASP standards, secrets, storage, attestation, and pre-launch security.
 - [MCP.md](MCP.md) — MCP transports, Code Mode, stateless operation, authentication, authorization, and approvals.
 - [AI-MLOPS.md](AI-MLOPS.md) — Mojo, MAX, model serving, evaluation, benchmarks, and AI operations.
+- [RUNNERS.md](RUNNERS.md) — GitHub and GitLab hosted or self-hosted runners, isolation, and Dagger.
+- [INFERENCE.md](INFERENCE.md) — local inference, Apple Silicon, DGX Spark, and model-serving validation.
+- [COMMUNICATION.md](COMMUNICATION.md) — human and agent sharing, distillation, verification, and disclosure.
+- [NOTES.md](NOTES.md) — local-first recording, transcription, notes, consent, and cross-platform behavior.
+- [INTEGRATION.md](INTEGRATION.md) — HTTP, SSE, WebSockets, webhooks, ordering, and recovery.
+- [CLAUDE.md](CLAUDE.md) — Claude-specific SDLC intake and operating guidance.
+- [CODEX.md](CODEX.md) — Codex-specific SDLC intake and operating guidance.
 - [joy.md](joy.md) — meaningful work, autonomy, learning, focus, and team joy.
 - [burnout.md](burnout.md) — burnout risks, workload boundaries, recovery, and escalation.
 - [structure.md](structure.md) — mono-repo, multi-repo, submodules, meta, and editor automation.
