@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://mas.owasp.org/MASTG/0x02b-MASVS-MASTG-Adoption/\n- Title: MASVS and MASTG adoption\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n 
+# SOURCE SNAPSHOT
+
+- Source URL: https://mas.owasp.org/MASTG/0x02b-MASVS-MASTG-Adoption/
+- Title: MASVS and MASTG adoption
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+ 
 
 [Skip to content](#owasp-masvs-and-mastg-adoption)
 
