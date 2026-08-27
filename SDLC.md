@@ -7,6 +7,11 @@
 - [LINEAR.md](LINEAR.md) — issue, milestone, owner, status, progress, and review tracking.
 - [HARNESS.md](HARNESS.md) — harness engineering, repository legibility, feedback loops, isolation, and Symphony.
 - [ADOPTION.md](ADOPTION.md) — intake, repository structure, templates, adoption sequence, and operating cadence.
+- [joy.md](joy.md) — meaningful work, autonomy, learning, focus, and team joy.
+- [burnout.md](burnout.md) — burnout risks, workload boundaries, recovery, and escalation.
+- [structure.md](structure.md) — mono-repo, multi-repo, submodules, meta, and editor automation.
+- [human.md](human.md) — human-in-the-loop intake, steering, editor integration, and attention protection.
+- [herdr.md](herdr.md) — persistent local-first and remote-first workspaces.
 - [AGENT-SKILLS.md](AGENT-SKILLS.md) — research evidence, skills structure, distribution, versioning, and trust.
 - [MISE.md](MISE.md) — mise tools, runtimes, environments, tasks, scope, and output handling.
 - [ASPIRE.md](ASPIRE.md) — Aspire development, testing, previews, deployment, networking, secrets, AI, and observability.
