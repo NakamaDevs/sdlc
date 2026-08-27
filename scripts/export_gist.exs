@@ -50,7 +50,7 @@ defmodule GistExport do
     ~r/repository-owner@gmail\.com/i
   ]
 
-  @organization_repository_marker ~r/(?:^|[\/:\s(])NakamaDevs\/([^\/\s?#),;:]+)(?:[\/?#),;:\s]|$)/im
+  @organization_repository_marker ~r/(?:^|[^A-Za-z0-9_.-])NakamaDevs\/([A-Za-z0-9_.-]+)/im
   @public_organization_repositories ["sdlc"]
 
   @organization_marker_examples [
@@ -67,7 +67,10 @@ defmodule GistExport do
     "https://raw.githubusercontent.com/NakamaDevs/private-runner/main/README.md",
     "https://api.github.com/repos/NakamaDevs/internal-api/contents/config.json",
     "https://codeload.github.com/NakamaDevs/private-build/zip/main",
-    "NakamaDevs/internal-service"
+    "NakamaDevs/internal-service",
+    "`NakamaDevs/Kaicho`",
+    "[NakamaDevs/private-docs]",
+    "repo=NakamaDevs/internal-config"
   ]
 
   @public_organization_repository_examples [
@@ -75,7 +78,10 @@ defmodule GistExport do
     "git@github.com:NAKAMADEVS/SDLC.GIT",
     "https://raw.githubusercontent.com/NakamaDevs/sdlc/main/README.md",
     "https://api.github.com/repos/NakamaDevs/sdlc/contents/README.md",
-    "NakamaDevs/sdlc."
+    "NakamaDevs/sdlc.",
+    "`NakamaDevs/sdlc`",
+    "[NakamaDevs/sdlc]",
+    "repo=NakamaDevs/sdlc"
   ]
 
   def run([language, output]) when language in ["en", "es"] do
