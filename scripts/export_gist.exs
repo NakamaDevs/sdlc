@@ -47,9 +47,11 @@ defmodule GistExport do
   @organization_markers [
     ~r/@NakamaDevs\//i,
     ~r/\bNAK-\d+\b/i,
-    ~r/hectorddmx@gmail\.com/i,
-    ~r/(?:github\.com[\/:]|raw\.githubusercontent\.com\/|api\.github\.com\/repos\/)NakamaDevs\/(?:Kaicho|skills)(?:\.git)?(?:[\/?#]|$)/i
+    ~r/hectorddmx@gmail\.com/i
   ]
+
+  @organization_repository_marker ~r/(?:^|[\/:\s(])NakamaDevs\/([^\/\s?#),;:]+)(?:[\/?#),;:\s]|$)/im
+  @public_organization_repositories ["sdlc"]
 
   @organization_marker_examples [
     "@nakamadevs/devs",
@@ -60,7 +62,20 @@ defmodule GistExport do
     "git@github.com:NakamaDevs/Kaicho.git",
     "ssh://git@github.com/NakamaDevs/skills.git",
     "https://raw.githubusercontent.com/NakamaDevs/Kaicho/main/policy.md",
-    "https://api.github.com/repos/nakamadevs/SKILLS/contents/SKILL.md"
+    "https://api.github.com/repos/nakamadevs/SKILLS/contents/SKILL.md",
+    "https://github.com/NakamaDevs/internal-project",
+    "https://raw.githubusercontent.com/NakamaDevs/private-runner/main/README.md",
+    "https://api.github.com/repos/NakamaDevs/internal-api/contents/config.json",
+    "https://codeload.github.com/NakamaDevs/private-build/zip/main",
+    "NakamaDevs/internal-service"
+  ]
+
+  @public_organization_repository_examples [
+    "https://github.com/NakamaDevs/sdlc",
+    "git@github.com:NAKAMADEVS/SDLC.GIT",
+    "https://raw.githubusercontent.com/NakamaDevs/sdlc/main/README.md",
+    "https://api.github.com/repos/NakamaDevs/sdlc/contents/README.md",
+    "NakamaDevs/sdlc."
   ]
 
   def run([language, output]) when language in ["en", "es"] do
@@ -127,7 +142,7 @@ defmodule GistExport do
 
   defp validate_profile_boundary!(content, source) do
     if source not in @optional_files do
-      case Enum.find(@organization_markers, &Regex.match?(&1, content)) do
+      case find_organization_marker(content) do
         nil ->
           :ok
 
@@ -139,9 +154,35 @@ defmodule GistExport do
 
   defp validate_marker_configuration! do
     Enum.each(@organization_marker_examples, fn example ->
-      if not Enum.any?(@organization_markers, &Regex.match?(&1, example)) do
+      if is_nil(find_organization_marker(example)) do
         raise "Organization marker configuration misses a case variant: #{example}"
       end
+    end)
+
+    Enum.each(@public_organization_repository_examples, fn example ->
+      if find_organization_marker(example) do
+        raise "Organization marker configuration rejects a public repository: #{example}"
+      end
+    end)
+  end
+
+  defp find_organization_marker(content) do
+    case Enum.find(@organization_markers, &Regex.match?(&1, content)) do
+      nil -> find_private_organization_repository(content)
+      marker -> marker
+    end
+  end
+
+  defp find_private_organization_repository(content) do
+    @organization_repository_marker
+    |> Regex.scan(content, capture: :all_but_first)
+    |> Enum.map(fn [repository] -> repository end)
+    |> Enum.find(fn repository ->
+      repository
+      |> String.downcase()
+      |> String.trim_trailing(".")
+      |> String.trim_trailing(".git")
+      |> then(&(&1 not in @public_organization_repositories))
     end)
   end
 
