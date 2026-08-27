@@ -131,19 +131,23 @@ defmodule Sdlc.PrivacyCheckTest do
   test "reports international phone formats with nonbreaking spaces" do
     regular_space = <<0xC2, 0xA0>>
     narrow_space = <<0xE2, 0x80, 0xAF>>
+    thin_space = <<0xE2, 0x80, 0x89>>
     groups = ["1", "42", "68", "53", "00"]
     regular = "+33" <> regular_space <> Enum.join(groups, regular_space)
     narrow = "+33" <> narrow_space <> Enum.join(groups, narrow_space)
+    thin = "+33" <> thin_space <> Enum.join(groups, thin_space)
 
     error =
       assert_raise RuntimeError, fn ->
-        PrivacyCheck.validate!([{"guide.md", Enum.join([regular, narrow], "\n")}])
+        PrivacyCheck.validate!([{"guide.md", Enum.join([regular, narrow, thin], "\n")}])
       end
 
     assert error.message =~ "guide.md:1 contains an international phone number pattern"
     assert error.message =~ "guide.md:2 contains an international phone number pattern"
+    assert error.message =~ "guide.md:3 contains an international phone number pattern"
     refute error.message =~ regular
     refute error.message =~ narrow
+    refute error.message =~ thin
   end
 
   test "reports adjacent country and area codes" do
@@ -160,14 +164,34 @@ defmodule Sdlc.PrivacyCheckTest do
 
   test "reports an international trunk marker" do
     trunk = "+33 " <> "(0)" <> "1 " <> Enum.join(["42", "68", "53", "00"], " ")
+    maximum = "+49 " <> "(0) " <> Enum.join(["1234", "1234567", "89"], " ")
+    overlong = "+49 " <> "(0) " <> Enum.join(["1234", "1234567", "890"], " ")
 
     error =
       assert_raise RuntimeError, fn ->
-        PrivacyCheck.validate!([{"guide.md", trunk}])
+        PrivacyCheck.validate!([{"guide.md", Enum.join([trunk, maximum], "\n")}])
       end
 
     assert error.message =~ "guide.md:1 contains an international phone number pattern"
+    assert error.message =~ "guide.md:2 contains an international phone number pattern"
     refute error.message =~ trunk
+    refute error.message =~ maximum
+    assert PrivacyCheck.findings([{"guide.md", overlong}]) == []
+  end
+
+  test "reports one subscriber group after a parenthesized area code" do
+    international = "+49 " <> "(30) " <> "901820"
+    domestic = "(030) " <> "901820"
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", Enum.join([international, domestic], "\n")}])
+      end
+
+    assert error.message =~ "guide.md:1 contains a phone number pattern"
+    assert error.message =~ "guide.md:2 contains a phone number pattern"
+    refute error.message =~ international
+    refute error.message =~ domestic
   end
 
   test "enforces the international digit ceiling for mobile formats" do
@@ -183,16 +207,40 @@ defmodule Sdlc.PrivacyCheckTest do
   test "reports two-group and four-group domestic phone formats" do
     two_groups = Enum.join(["098765", "43210"], " ")
     four_groups = Enum.join(["22", "12", "34", "56"], " ")
+    uneven_groups = Enum.join(["030", Enum.join(["1234", "5678"], "")], " ")
 
     error =
       assert_raise RuntimeError, fn ->
-        PrivacyCheck.validate!([{"guide.md", Enum.join([two_groups, four_groups], "\n")}])
+        PrivacyCheck.validate!([
+          {"guide.md", Enum.join([two_groups, four_groups, uneven_groups], "\n")}
+        ])
       end
 
     assert error.message =~ "guide.md:1 contains a phone number pattern"
     assert error.message =~ "guide.md:2 contains a phone number pattern"
+    assert error.message =~ "guide.md:3 contains a phone number pattern"
     refute error.message =~ two_groups
     refute error.message =~ four_groups
+    refute error.message =~ uneven_groups
+  end
+
+  test "reports bounded bare compact domestic phone formats" do
+    compact = Enum.join(["212", "555", "1234"], "")
+    embedded = "build" <> compact
+    overlong = compact <> "12"
+    url_identifier = Enum.join(["4915", "1933"], "")
+    url = "https://news.example.test/item?id=" <> url_identifier
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", compact}])
+      end
+
+    assert error.message =~ "guide.md:1 contains a phone number pattern"
+    refute error.message =~ compact
+    assert PrivacyCheck.findings([{"guide.md", embedded}]) == []
+    assert PrivacyCheck.findings([{"guide.md", overlong}]) == []
+    assert PrivacyCheck.findings([{"guide.md", url}]) == []
   end
 
   test "keeps ambiguous grouped values blocked and rejects overlong domestic identifiers" do
@@ -203,6 +251,7 @@ defmodule Sdlc.PrivacyCheckTest do
     doi_identifier = Enum.join(["2022", "107210"], ".")
     doi_url = "https://doi.org/10.1016/j.infsof." <> doi_identifier
     year_range = Enum.join(["2022", "2025"], "-")
+    version_suffix = ambiguous <> "beta"
 
     assert [%{category: "a phone number pattern"}] =
              PrivacyCheck.findings([{"guide.md", ambiguous}])
@@ -211,6 +260,7 @@ defmodule Sdlc.PrivacyCheckTest do
     assert PrivacyCheck.findings([{"guide.md", research_url}]) == []
     assert PrivacyCheck.findings([{"guide.md", doi_url}]) == []
     assert PrivacyCheck.findings([{"guide.md", year_range}]) == []
+    assert PrivacyCheck.findings([{"guide.md", version_suffix}]) == []
   end
 
   test "reports a five-group domestic phone format without repeating it" do

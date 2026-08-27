@@ -3,14 +3,16 @@ defmodule Sdlc.PrivacyCheck do
 
   @email ~r/(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/u
   @ssn ~r/(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)/
-  @e164_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{7,14}(?!\d)/
-  @international_grouped_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{0,6}(?:[ .\-\x{00A0}\x{202F}]\d{1,7}){1,6}(?![ .\-\x{00A0}\x{202F}]?\d)/u
-  @international_trunk_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]?\(0\)[ .\-\x{00A0}\x{202F}]?\d{1,4}(?:[ .\-\x{00A0}\x{202F}]\d{1,7}){1,5}(?![ .\-\x{00A0}\x{202F}]?\d)/u
+  @e164_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{7,14}(?![A-Za-z0-9_])/
+  @domestic_compact_phone ~r/(?<![A-Za-z0-9_\/.=])\d{8,11}(?![A-Za-z0-9_])/
+  @international_grouped_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{0,6}(?:[ .\-\x{00A0}\x{2009}\x{202F}]\d{1,7}){1,6}(?![A-Za-z0-9_]|[ .\-\x{00A0}\x{2009}\x{202F}]\d)/u
+  @international_trunk_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{0,2}[ .\-\x{00A0}\x{2009}\x{202F}]?\(0\)[ .\-\x{00A0}\x{2009}\x{202F}]?\d{1,4}(?:[ .\-\x{00A0}\x{2009}\x{202F}]\d{1,7}){1,5}(?![A-Za-z0-9_]|[ .\-\x{00A0}\x{2009}\x{202F}]\d)/u
   @separated_phone_patterns [
-    ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]?)?\(\d{1,4}\)[ .\-\x{00A0}\x{202F}]?|(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}])?\d{2,4}[ .\-\x{00A0}\x{202F}])\d{3,4}[ .\-\x{00A0}\x{202F}]\d{4}(?![ .\-\x{00A0}\x{202F}]?\d)/u,
-    ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]?)?\(\d{1,4}\)[ .\-\x{00A0}\x{202F}]?|\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]\d{2,4}[ .\-\x{00A0}\x{202F}])\d{5}[ .\-\x{00A0}\x{202F}]\d{4}(?![ .\-\x{00A0}\x{202F}]?\d)/u,
-    ~r/(?<![A-Za-z0-9+\/.)])(?<!\d[ .\-\x{00A0}\x{202F}])\d{2}(?:[ .\-\x{00A0}\x{202F}]\d{2}){3,4}(?![ .\-\x{00A0}\x{202F}]?\d)/u,
-    ~r/(?<![A-Za-z0-9+\/.)])(?<!\d[ .\-\x{00A0}\x{202F}])\d{4,6}[ \x{00A0}\x{202F}]\d{4,6}(?![ .\-\x{00A0}\x{202F}]?\d)/u
+    ~r/(?<![A-Za-z0-9_])(?:(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{2009}\x{202F}]?)?\(\d{1,4}\)[ .\-\x{00A0}\x{2009}\x{202F}]?|(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{2009}\x{202F}])?\d{2,4}[ .\-\x{00A0}\x{2009}\x{202F}])\d{3,4}[ .\-\x{00A0}\x{2009}\x{202F}]\d{4}(?![A-Za-z0-9_]|[ .\-\x{00A0}\x{2009}\x{202F}]\d)/u,
+    ~r/(?<![A-Za-z0-9_])(?:(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{2009}\x{202F}]?)?\(\d{1,4}\)[ .\-\x{00A0}\x{2009}\x{202F}]?|\+[1-9]\d{0,2}[ .\-\x{00A0}\x{2009}\x{202F}]\d{2,4}[ .\-\x{00A0}\x{2009}\x{202F}])\d{5}[ .\-\x{00A0}\x{2009}\x{202F}]\d{4}(?![A-Za-z0-9_]|[ .\-\x{00A0}\x{2009}\x{202F}]\d)/u,
+    ~r/(?<![A-Za-z0-9_])(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{2009}\x{202F}]?)?\(\d{1,4}\)[ .\-\x{00A0}\x{2009}\x{202F}]?\d{4,8}(?![A-Za-z0-9_]|[ .\-\x{00A0}\x{2009}\x{202F}]\d)/u,
+    ~r/(?<![A-Za-z0-9+\/.)])(?<!\d[ .\-\x{00A0}\x{2009}\x{202F}])\d{2}(?:[ .\-\x{00A0}\x{2009}\x{202F}]\d{2}){3,4}(?![A-Za-z0-9_]|[ .\-\x{00A0}\x{2009}\x{202F}]\d)/u,
+    ~r/(?<![A-Za-z0-9+\/.)])(?<!\d[ .\-\x{00A0}\x{2009}\x{202F}])\d{2,8}[ \x{00A0}\x{2009}\x{202F}]\d{2,8}(?![A-Za-z0-9_]|[ .\-\x{00A0}\x{2009}\x{202F}]\d)/u
   ]
   @gist_account_url ~r"https?://gist\.github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[0-9a-f]{20,64}"i
 
@@ -110,6 +112,9 @@ defmodule Sdlc.PrivacyCheck do
         international_phone?(line) ->
           [%{file: file, line: number, category: "an international phone number pattern"}]
 
+        Regex.match?(@domestic_compact_phone, line) ->
+          [%{file: file, line: number, category: "a phone number pattern"}]
+
         true ->
           []
       end
@@ -150,7 +155,14 @@ defmodule Sdlc.PrivacyCheck do
   end
 
   defp valid_phone_candidate?(candidate, range) do
-    digit_count = candidate |> String.replace(~r/\D/u, "") |> String.length()
+    dialed_candidate =
+      if String.starts_with?(candidate, "+") do
+        String.replace(candidate, "(0)", "", global: false)
+      else
+        candidate
+      end
+
+    digit_count = dialed_candidate |> String.replace(~r/\D/u, "") |> String.length()
     digit_count in range
   end
 
