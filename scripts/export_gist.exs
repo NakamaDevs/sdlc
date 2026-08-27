@@ -48,7 +48,7 @@ defmodule GistExport do
     ~r/@NakamaDevs\//i,
     ~r/\bNAK-\d+\b/i,
     ~r/repository-owner@gmail\.com/i,
-    ~r/github\.com\/NakamaDevs\/(?:Kaicho|skills)/i
+    ~r/github\.com[\/:]NakamaDevs\/(?:Kaicho|skills)(?:\.git)?/i
   ]
 
   @organization_marker_examples [
@@ -56,7 +56,9 @@ defmodule GistExport do
     "nak-662",
     "person@example.test",
     "github.com/nakamadevs/kaicho",
-    "github.com/NAKAMADEVS/SKILLS"
+    "github.com/NAKAMADEVS/SKILLS",
+    "git@github.com:NakamaDevs/Kaicho.git",
+    "ssh://git@github.com/NakamaDevs/skills.git"
   ]
 
   def run([language, output]) when language in ["en", "es"] do
