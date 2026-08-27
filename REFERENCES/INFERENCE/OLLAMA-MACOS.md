@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://docs.ollama.com/macos\n- Title: Ollama for macOS\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n> ## Documentation Index
+# SOURCE SNAPSHOT
+
+- Source URL: https://docs.ollama.com/macos
+- Title: Ollama for macOS
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+> ## Documentation Index
 > 
 > Fetch the complete documentation index at: [/llms.txt](/llms.txt)
 > 
