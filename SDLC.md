@@ -14,6 +14,7 @@
 - [HERDR.md](HERDR.md) — persistent local-first and remote-first workspaces.
 - [OWASP.md](OWASP.md) — OWASP standards, secrets, storage, attestation, and pre-launch security.
 - [MCP.md](MCP.md) — MCP transports, Code Mode, stateless operation, authentication, authorization, and approvals.
+- [AI-MLOPS.md](AI-MLOPS.md) — Mojo, MAX, model serving, evaluation, benchmarks, and AI operations.
 - [joy.md](joy.md) — meaningful work, autonomy, learning, focus, and team joy.
 - [burnout.md](burnout.md) — burnout risks, workload boundaries, recovery, and escalation.
 - [structure.md](structure.md) — mono-repo, multi-repo, submodules, meta, and editor automation.
