@@ -10,8 +10,8 @@ Kaicho define la política obligatoria de la organización. Las instrucciones de
 
 Use este orden:
 
-1. instrucciones directas del usuario autorizado actual;
-2. controles de seguridad del sistema y de la plataforma de agentes;
+1. controles de seguridad del sistema y de la plataforma de agentes;
+2. instrucciones directas del usuario autorizado actual;
 3. política versionada de Kaicho;
 4. guía de workspace en `AGENTS.md`;
 5. archivos `AGENTS.md` del repositorio y del directorio más cercano;
