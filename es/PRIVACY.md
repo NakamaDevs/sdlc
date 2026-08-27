@@ -49,14 +49,18 @@ No envíe datos restringidos a un modelo, herramienta, conector o servicio exter
 
 Analice fuentes mantenidas, cambios preparados, resultados generados, exportaciones públicas, logs y artefactos.
 
-El check del repositorio analiza cada archivo de texto UTF-8 registrado en Git.
-Omite contenido binario. Revise imágenes, audio, video, archivos comprimidos y
-otros binarios con un proceso aprobado. Use enlaces de Gist sin propietario
-cuando el nombre de una cuenta pública no aporte contexto necesario.
+El check del repositorio analiza cada blob preparado en Git y cada versión
+distinta del árbol de trabajo de un archivo de texto UTF-8 registrado. Omite
+contenido binario. Revise imágenes, audio, video, archivos comprimidos y otros
+binarios con un proceso aprobado. Use enlaces de Gist sin propietario cuando el
+nombre de una cuenta pública no aporte contexto necesario.
 
 Un check repetible puede encontrar identificadores estructurados y valores prohibidos conocidos. Debe informar sólo archivo, línea y categoría. No debe repetir el valor encontrado.
 
-Mantenga las listas permitidas acotadas, explicadas, probadas y revisadas. Una persona también debe revisar texto libre, imágenes, audio y combinaciones de campos.
+Mantenga las listas permitidas acotadas, explicadas, probadas y revisadas. Use
+entradas exactas para las direcciones públicas de roles de una organización. No
+permita un dominio completo para este fin. Una persona también debe revisar
+texto libre, imágenes, audio y combinaciones de campos.
 
 Un análisis correcto es evidencia de apoyo. No demuestra que el contenido no tenga PII ni PHI.
 
