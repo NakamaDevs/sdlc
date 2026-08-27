@@ -61,6 +61,27 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ international
   end
 
+  test "reports a tracked path identifier without repeating the path" do
+    root = temporary_repository!()
+    on_exit(fn -> File.rm_rf!(root) end)
+
+    private_email = Enum.join(["person", "private.invalid"], "@")
+    private_path = "#{private_email}.md"
+    File.write!(Path.join(root, private_path), "Safe content.\n")
+    git!(root, ["add", private_path])
+
+    error =
+      assert_raise RuntimeError, fn ->
+        root
+        |> PrivacyCheck.tracked_documents!()
+        |> PrivacyCheck.validate!()
+      end
+
+    assert error.message =~ "tracked path #1 (redacted):path contains an email address"
+    refute error.message =~ private_email
+    refute error.message =~ private_path
+  end
+
   test "scans staged content when the worktree contains a safe replacement" do
     root = temporary_repository!()
     on_exit(fn -> File.rm_rf!(root) end)
