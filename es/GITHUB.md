@@ -109,12 +109,12 @@ Use un equipo visible de GitHub con acceso de escritura. GitHub requiere ambas c
 Use este valor predeterminado cuando el equipo Devs deba revisar casi todos los cambios:
 
 ```text
-* @NakamaDevs/devs
+* @example-org/devs
 ```
 
-El equipo verificado de la organización es `Devs`, con slug `devs`.
+Sustituya `@example-org/devs` por la organización y el slug de equipo verificados.
 
-El 2026-08-27, solo `Admins` tenía acceso al repositorio. Dé acceso de escritura a `Devs` antes de activar esta entrada.
+Confirme que el equipo sea visible y tenga acceso de escritura antes de activar esta entrada.
 
 Agregue propietarios más específicos después del valor predeterminado cuando una ruta necesite otro equipo especialista.
 

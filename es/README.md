@@ -40,6 +40,9 @@ Este repositorio es la guía canónica y revisable. Los Gists públicos son edic
 32. [MARKDOWN.md](MARKDOWN.md) — instantáneas de fuentes, conversión local y fuentes no disponibles.
 33. [WEB-CAPTURE.md](WEB-CAPTURE.md) — extracción, páginas renderizadas, imágenes y comparación.
 34. [UPDATE.md](UPDATE.md) — revisión de documentos, evidencia de comandos y registros de actualización.
+35. [CHANGELOG.md](CHANGELOG.md) — fuentes del changelog, historia de merge, Semantic Versioning y generación.
+36. [DEPLOY.md](DEPLOY.md) — planificación de releases, publicación, deployment, promoción y rollback.
+37. [NAKAMADEVS.md](NAKAMADEVS.md) — perfil opcional de política, skills, stack y propiedad de NakamaDevs. Mantenga este perfil al final.
 
 ## Referencias
 

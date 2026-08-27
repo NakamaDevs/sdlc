@@ -13,14 +13,14 @@ Use esta forma:
 Ejemplos:
 
 ```text
-feature/NAK-625-bilingual-sdlc-tooling
-fix/NAK-742-runner-timeout
-docs/NAK-810-update-release-guide
+feature/PROJ-625-bilingual-sdlc-tooling
+fix/PROJ-742-runner-timeout
+docs/PROJ-810-update-release-guide
 ```
 
-Use primero el identificador del issue de Linear. Use kebab case en minúsculas para el título corto.
+Use primero el identificador del issue del proyecto. Use kebab case en minúsculas para el título corto.
 
-No agregue un segmento de identidad de persona o agente. Evite nombres como `feature/cx/...` y `fix/hdb/...`.
+No agregue un segmento de identidad salvo que la política lo exija. No invente un espacio de nombres sin documentar.
 
 El issue, pull request y metadatos del commit registran la propiedad. El nombre del branch registra el trabajo.
 
@@ -53,20 +53,20 @@ Use `feature` en nombres de branch. Use `feat` en mensajes de Conventional Commi
 Bien:
 
 ```text
-feature/NAK-625-bilingual-sdlc-tooling
+feature/PROJ-625-bilingual-sdlc-tooling
 ```
 
 Evite:
 
 ```text
-feature/cx/add-new-stuff
-fix/hdb/urgent-fix
-feature/NAK-625-feature-for-bilingual-sdlc-tooling
+feature/add-new-stuff
+fix/urgent-fix
+feature/PROJ-625-feature-for-bilingual-sdlc-tooling
 ```
 
 ## P: ¿Quién puede usar la misma forma de nombre?
 
-Las personas y agentes usan la misma forma. La identidad no cambia el espacio de nombres del branch.
+Las personas y agentes usan la forma del repositorio. La política puede reservar un espacio de nombres para agentes automatizados.
 
 Un propietario controla cada branch y worktree. Otros colaboradores usan otro worktree o revisan el pull request.
 
@@ -85,7 +85,7 @@ Use un issue, branch, worktree y pull request para cada capa.
 Use esta forma:
 
 ```text
-main <- feature/NAK-100-foundation <- feature/NAK-101-dependent-change
+main <- feature/PROJ-100-foundation <- feature/PROJ-101-dependent-change
 ```
 
 Base cada pull request en su padre directo. Revise solo el diff contra ese padre.

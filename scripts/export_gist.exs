@@ -36,10 +36,58 @@ defmodule GistExport do
     {"COMMITS.md", "z31-COMMITS.md"},
     {"GITHUB.md", "z32-GITHUB.md"},
     {"WEB-CAPTURE.md", "z33-WEB-CAPTURE.md"},
-    {"CODE-REVIEW.md", "z34-CODE-REVIEW.md"}
+    {"CODE-REVIEW.md", "z34-CODE-REVIEW.md"},
+    {"CHANGELOG.md", "z35-CHANGELOG.md"},
+    {"DEPLOY.md", "z36-DEPLOY.md"},
+    {"NAKAMADEVS.md", "zz01-NAKAMADEVS.md"}
+  ]
+
+  @optional_files ["NAKAMADEVS.md"]
+
+  @organization_markers [
+    ~r/@NakamaDevs\//i,
+    ~r/\bNAK-\d+\b/i,
+    ~r/repository-owner@gmail\.com/i
+  ]
+
+  @organization_repository_marker ~r/(?:^|[^A-Za-z0-9_.-])NakamaDevs\/([A-Za-z0-9_.-]+)/im
+  @public_organization_repositories ["sdlc"]
+
+  @organization_marker_examples [
+    "@nakamadevs/devs",
+    "nak-662",
+    "person@example.test",
+    "github.com/nakamadevs/kaicho",
+    "github.com/NAKAMADEVS/SKILLS",
+    "git@github.com:NakamaDevs/Kaicho.git",
+    "ssh://git@github.com/NakamaDevs/skills.git",
+    "https://raw.githubusercontent.com/NakamaDevs/Kaicho/main/policy.md",
+    "https://api.github.com/repos/nakamadevs/SKILLS/contents/SKILL.md",
+    "https://github.com/NakamaDevs/internal-project",
+    "https://raw.githubusercontent.com/NakamaDevs/private-runner/main/README.md",
+    "https://api.github.com/repos/NakamaDevs/internal-api/contents/config.json",
+    "https://codeload.github.com/NakamaDevs/private-build/zip/main",
+    "NakamaDevs/internal-service",
+    "`NakamaDevs/Kaicho`",
+    "[NakamaDevs/private-docs]",
+    "repo=NakamaDevs/internal-config"
+  ]
+
+  @public_organization_repository_examples [
+    "https://github.com/NakamaDevs/sdlc",
+    "git@github.com:NAKAMADEVS/SDLC.GIT",
+    "https://raw.githubusercontent.com/NakamaDevs/sdlc/main/README.md",
+    "https://api.github.com/repos/NakamaDevs/sdlc/contents/README.md",
+    "NakamaDevs/sdlc.",
+    "`NakamaDevs/sdlc`",
+    "[NakamaDevs/sdlc]",
+    "repo=NakamaDevs/sdlc"
   ]
 
   def run([language, output]) when language in ["en", "es"] do
+    validate_file_order!()
+    validate_marker_configuration!()
+
     output = Path.expand(output)
     File.mkdir_p!(output)
 
@@ -48,6 +96,7 @@ defmodule GistExport do
     Enum.each(@files, fn {source, target} ->
       input = Path.join([@root, language, source])
       content = File.read!(input)
+      validate_profile_boundary!(content, source)
       content = rewrite_guide_links(content, anchors)
       content = rewrite_repository_links(content)
       validate_export!(content, target)
@@ -85,6 +134,62 @@ defmodule GistExport do
       |> String.trim("-")
 
     "#file-#{normalized}"
+  end
+
+  defp validate_file_order! do
+    sources = Enum.map(@files, &elem(&1, 0))
+    split_at = length(sources) - length(@optional_files)
+    {generic, optional} = Enum.split(sources, split_at)
+
+    if optional != @optional_files or Enum.any?(generic, &(&1 in @optional_files)) do
+      raise "Optional Gist files must remain last: #{Enum.join(@optional_files, ", ")}"
+    end
+  end
+
+  defp validate_profile_boundary!(content, source) do
+    if source not in @optional_files do
+      case find_organization_marker(content) do
+        nil ->
+          :ok
+
+        marker ->
+          raise "#{source} contains an organization marker outside the optional profile: #{inspect(marker)}"
+      end
+    end
+  end
+
+  defp validate_marker_configuration! do
+    Enum.each(@organization_marker_examples, fn example ->
+      if is_nil(find_organization_marker(example)) do
+        raise "Organization marker configuration misses a case variant: #{example}"
+      end
+    end)
+
+    Enum.each(@public_organization_repository_examples, fn example ->
+      if find_organization_marker(example) do
+        raise "Organization marker configuration rejects a public repository: #{example}"
+      end
+    end)
+  end
+
+  defp find_organization_marker(content) do
+    case Enum.find(@organization_markers, &Regex.match?(&1, content)) do
+      nil -> find_private_organization_repository(content)
+      marker -> marker
+    end
+  end
+
+  defp find_private_organization_repository(content) do
+    @organization_repository_marker
+    |> Regex.scan(content, capture: :all_but_first)
+    |> Enum.map(fn [repository] -> repository end)
+    |> Enum.find(fn repository ->
+      repository
+      |> String.downcase()
+      |> String.trim_trailing(".")
+      |> String.trim_trailing(".git")
+      |> then(&(&1 not in @public_organization_repositories))
+    end)
   end
 
   defp validate_export!(content, target) do
