@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://dontpastetheai.com/?via=dailydev\n- Title: Don't Paste the AI\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\nPrefer another language? EN — English
+# SOURCE SNAPSHOT
+
+- Source URL: https://dontpastetheai.com/?via=dailydev
+- Title: Don't Paste the AI
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+Prefer another language? EN — English
 
 # Don't paste  
 the AI, please.
