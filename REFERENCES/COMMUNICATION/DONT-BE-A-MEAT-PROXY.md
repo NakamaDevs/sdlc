@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://gruhn.me/blog/2026-08-03/\n- Title: Don't be a meat proxy\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n[Niklas Gruhn / Blog](/)
+# SOURCE SNAPSHOT
+
+- Source URL: https://gruhn.me/blog/2026-08-03/
+- Title: Don't be a meat proxy
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+[Niklas Gruhn / Blog](/)
 
  [![RSS feed](/rss.svg)](/feed.xml "RSS")[![LinkedIn](/linkedin-box-fill.svg) ](https://www.linkedin.com/in/niklas-gruhn-b615a6245/ "LinkedIn")[![GitHub logo](/github-mark.svg)](https://github.com/gruhn "GitHub")
 
