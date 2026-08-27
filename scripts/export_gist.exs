@@ -35,7 +35,8 @@ defmodule GistExport do
     {"BRANCHES.md", "z30-BRANCHES.md"},
     {"COMMITS.md", "z31-COMMITS.md"},
     {"GITHUB.md", "z32-GITHUB.md"},
-    {"WEB-CAPTURE.md", "z33-WEB-CAPTURE.md"}
+    {"WEB-CAPTURE.md", "z33-WEB-CAPTURE.md"},
+    {"CODE-REVIEW.md", "z34-CODE-REVIEW.md"}
   ]
 
   def run([language, output]) when language in ["en", "es"] do

@@ -100,6 +100,8 @@ Evalúe los rulesets antes de aplicarlos. Confirme que bots, automatización de 
 
 Mantenga revisables los cambios del ruleset. Registre nombre, destino, checks, actores con bypass y fecha de revisión.
 
+Use [CODE-REVIEW.md](CODE-REVIEW.md) para verificar hallazgos, informar evidencia y resolver threads de review.
+
 ## P: ¿Cómo debe el equipo Devs poseer las revisiones?
 
 Use un equipo visible de GitHub con acceso de escritura. GitHub requiere ambas condiciones para entradas CODEOWNERS de equipos.
