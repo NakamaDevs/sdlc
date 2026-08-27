@@ -63,6 +63,8 @@ and cross-field combinations.
 
 A passing scanner is supporting evidence. It does not prove that content has no PII or PHI.
 
+Keep an ambiguous phone-like numeric value blocked until a person classifies it. Do not add a broad exception for technical versions or identifiers.
+
 ## Q: What should happen after an exposure?
 
 1. Stop publication and further processing.
