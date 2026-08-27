@@ -46,6 +46,21 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ gist_url
   end
 
+  test "reports common separated phone formats without repeating them" do
+    domestic = Enum.join(["212", "555", "1234"], "-")
+    international = "+1 " <> Enum.join(["212", "555", "1234"], " ")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", Enum.join([domestic, international], "\n")}])
+      end
+
+    assert error.message =~ "guide.md:1 contains a phone number pattern"
+    assert error.message =~ "guide.md:2 contains a phone number pattern"
+    refute error.message =~ domestic
+    refute error.message =~ international
+  end
+
   test "scans staged content when the worktree contains a safe replacement" do
     root = temporary_repository!()
     on_exit(fn -> File.rm_rf!(root) end)
