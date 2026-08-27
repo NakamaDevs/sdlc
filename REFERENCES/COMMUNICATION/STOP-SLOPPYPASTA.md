@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://stopsloppypasta.ai/en/\n- Title: Stop Sloppy Pasta\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n[Skip to main content](#main-content)
+# SOURCE SNAPSHOT
+
+- Source URL: https://stopsloppypasta.ai/en/
+- Title: Stop Sloppy Pasta
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+[Skip to main content](#main-content)
 
 # Stop Sloppypasta
 
