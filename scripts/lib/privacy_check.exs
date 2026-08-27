@@ -5,7 +5,11 @@ defmodule Sdlc.PrivacyCheck do
   @ssn ~r/(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)/
   @e164_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{9,14}(?!\d)/
   @international_grouped_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{0,2}(?:[ .-]\d{1,7}){2,6}(?![ .-]?\d)/
-  @separated_phone ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .-])?(?:\(\d{2,4}\)|\d{2,4})[ .-]\d{3,4}[ .-]\d{4}|(?:(?:\+[1-9]\d{0,2}[ .-])?\(\d{2,4}\)|\+[1-9]\d{0,2}[ .-]\d{2,4})[ .-]\d{5}[ .-]\d{4}|\d{2}(?:[ .-]\d{2}){4})(?![ .-]?\d)/
+  @separated_phone_patterns [
+    ~r/(?<![A-Za-z0-9])(?:\+[1-9]\d{0,2}[ .-])?(?:\(\d{2,4}\)[ .-]?|\d{2,4}[ .-])\d{3,4}[ .-]\d{4}(?![ .-]?\d)/,
+    ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .-])?\(\d{2,4}\)[ .-]?|\+[1-9]\d{0,2}[ .-]\d{2,4}[ .-])\d{5}[ .-]\d{4}(?![ .-]?\d)/,
+    ~r/(?<![A-Za-z0-9])\d{2}(?:[ .-]\d{2}){4}(?![ .-]?\d)/
+  ]
   @gist_account_url ~r"https?://gist\.github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[0-9a-f]{20,64}"i
 
   @safe_email_domains ~w(example.com example.net example.org example.test users.noreply.github.com)
@@ -98,7 +102,7 @@ defmodule Sdlc.PrivacyCheck do
 
     phone_findings =
       cond do
-        Regex.match?(@separated_phone, line) ->
+        separated_phone?(line) ->
           [%{file: file, line: number, category: "a phone number pattern"}]
 
         Regex.match?(@e164_phone, line) or international_grouped_phone?(line) ->
@@ -130,6 +134,10 @@ defmodule Sdlc.PrivacyCheck do
       digit_count = candidate |> String.replace(~r/\D/u, "") |> String.length()
       digit_count in 8..15
     end)
+  end
+
+  defp separated_phone?(line) do
+    Enum.any?(@separated_phone_patterns, &Regex.match?(&1, line))
   end
 
   defp safe_email?(email) do
