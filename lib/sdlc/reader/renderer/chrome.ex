@@ -4,6 +4,10 @@ defmodule Sdlc.Reader.Renderer.Chrome do
 
   This adapter is opt-in. It executes the target page's JavaScript. The caller
   must provide a verified Chrome executable and an isolated execution target.
+
+  A runner must return the serialized DOM and Chrome's final page URL. The
+  bundled command runner cannot prove that URL, so it fails closed after
+  capture. Use a runner with browser-protocol evidence for rendered capture.
   """
 
   @behaviour Sdlc.Reader.Renderer
@@ -31,14 +35,16 @@ defmodule Sdlc.Reader.Renderer.Chrome do
              ),
            {:ok, settings} <- settings(options),
            {:ok, profile} <- create_profile(options),
-           {:ok, body} <- run(chrome_path, uri, hd(addresses), profile, settings, options),
+           {:ok, rendered} <-
+             run(chrome_path, uri, hd(addresses), profile, settings, options),
+           {:ok, body, final_uri} <- validate_rendered_result(rendered, uri, options),
            :ok <- validate_body(body, settings.max_body_bytes) do
         {:ok,
          %{
-           url: URI.to_string(uri),
-           status: preflight.status,
-           headers: preflight.headers,
-           content_type: preflight.content_type,
+           url: URI.to_string(final_uri),
+           status: nil,
+           headers: %{},
+           content_type: "text/html",
            body: body
          }}
       end
@@ -196,6 +202,35 @@ defmodule Sdlc.Reader.Renderer.Chrome do
     end
   rescue
     error -> {:error, {:chrome_start_failed, error}}
+  end
+
+  defp validate_rendered_result(
+         %{body: body, final_url: final_url},
+         expected_uri,
+         options
+       )
+       when is_binary(body) and is_binary(final_url) do
+    resolver = Keyword.get(options, :resolver, &resolve_addresses/1)
+
+    with {:ok, final_uri, _addresses} <-
+           Fetcher.validate_destination(final_url, resolver: resolver),
+         :ok <- require_expected_final_url(expected_uri, final_uri) do
+      {:ok, body, final_uri}
+    end
+  end
+
+  defp validate_rendered_result(_result, _expected_uri, _options),
+    do: {:error, :rendered_final_url_unverified}
+
+  defp require_expected_final_url(expected_uri, final_uri) do
+    expected = URI.to_string(expected_uri)
+    final = URI.to_string(final_uri)
+
+    if final == expected do
+      :ok
+    else
+      {:error, {:rendered_navigation_changed, expected, final}}
+    end
   end
 
   defp collect_port(port, deadline, max_bytes, size, chunks, tail, complete?) do
