@@ -4,15 +4,23 @@
 
 ## Focused companion references
 
-- [MISE.md](.#MISE.md) — mise tools, runtimes, environments, tasks, scope, and output handling.
-- [ASPIRE.md](.#ASPIRE.md) — Aspire development, testing, previews, deployment, networking, secrets, AI, and observability.
-- [LINEAR.md](.#LINEAR.md) — issue, milestone, owner, status, progress, and review tracking.
-- [TESTING.md](.#TESTING.md) — specifications, FIRST tests, test layers, UI evidence, and validation.
-- [AGENT-SKILLS.md](.#AGENT-SKILLS.md) — research evidence, skills structure, distribution, versioning, and trust.
-- [SECURITY.md](.#SECURITY.md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
-- [OLLAMA.md](.#OLLAMA.md) — local model serving, Aspire integration, Claude Code, trust, and validation.
+- [LINEAR.md](LINEAR.md) — issue, milestone, owner, status, progress, and review tracking.
 - [HARNESS.md](HARNESS.md) — harness engineering, repository legibility, feedback loops, isolation, and Symphony.
 - [ADOPTION.md](ADOPTION.md) — intake, repository structure, templates, adoption sequence, and operating cadence.
+- [AGENT-SKILLS.md](AGENT-SKILLS.md) — research evidence, skills structure, distribution, versioning, and trust.
+- [MISE.md](MISE.md) — mise tools, runtimes, environments, tasks, scope, and output handling.
+- [ASPIRE.md](ASPIRE.md) — Aspire development, testing, previews, deployment, networking, secrets, AI, and observability.
+- [OLLAMA.md](OLLAMA.md) — local model serving, Aspire integration, Claude Code, trust, and validation.
+- [TESTING.md](TESTING.md) — specifications, FIRST tests, test layers, UI evidence, and validation.
+- [SECURITY.md](SECURITY.md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
+
+## Harness engineering
+
+Treat the repository as the system of record for agent-readable knowledge, executable guardrails, feedback loops, isolated work, and review evidence. See [HARNESS.md](HARNESS.md) for the detailed harness and Symphony guidance.
+
+## Adoption and operating model
+
+Use [ADOPTION.md](ADOPTION.md) to intake the SDLC system, structure repositories, create templates, and make the practices stick.
 
 Last reviewed: 2026-08-26
 
