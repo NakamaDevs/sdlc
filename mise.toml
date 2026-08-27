@@ -1,0 +1,60 @@
+[tools]
+erlang = "28.4.1"
+elixir = "1.19.5-otp-28"
+
+[tasks."check:docs"]
+description = "Check bilingual documents and reference metadata"
+run = "elixir scripts/check_docs.exs"
+
+[tasks."check:prompt-injection"]
+description = "Check documents for prompt-injection indicators"
+run = "mix run scripts/check_prompt_injection.exs"
+
+[tasks."check:format"]
+description = "Check Elixir formatting"
+run = "mix format --check-formatted"
+
+[tasks."check:compile"]
+description = "Compile the local reader without warnings"
+run = "mix compile --warnings-as-errors"
+
+[tasks."check:reader"]
+description = "Run local reader and capture tests"
+run = "mix test"
+
+[tasks."check:deps-lock"]
+description = "Check for unused locked dependencies"
+run = "mix deps.unlock --check-unused"
+
+[tasks."check:deps-audit"]
+description = "Check Hex dependencies for known advisories"
+run = "mix hex.audit"
+
+[tasks."export:gist:en"]
+description = "Export the English GitHub Gist edition"
+run = "elixir scripts/export_gist.exs en _build/gists/en"
+
+[tasks."export:gist:es"]
+description = "Export the Spanish GitHub Gist edition"
+run = "elixir scripts/export_gist.exs es _build/gists/es"
+
+[tasks."export:gist"]
+description = "Export both GitHub Gist editions"
+depends = ["export:gist:en", "export:gist:es"]
+
+[tasks."review:snapshots"]
+description = "Scan snapshots and record a reviewed body hash"
+run = "mix run scripts/record_snapshot_review.exs"
+
+[tasks.verify]
+description = "Run all repository checks"
+depends = [
+  "check:compile",
+  "check:deps-audit",
+  "check:deps-lock",
+  "check:docs",
+  "check:format",
+  "check:prompt-injection",
+  "check:reader",
+  "export:gist",
+]
