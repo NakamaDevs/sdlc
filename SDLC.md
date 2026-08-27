@@ -3,9 +3,9 @@
 ## Document currency and command evidence
 
 
-## Harness engineering
+## Adoption and operating model
 
-Treat the repository as the system of record for agent-readable knowledge, executable guardrails, feedback loops, isolated work, and review evidence. See [HARNESS.md](HARNESS.md) for the detailed harness and Symphony guidance.
+Use [ADOPTION.md](ADOPTION.md) to intake the SDLC system, structure repositories, create templates, and make the practices stick.
 
 ## Focused companion references
 
