@@ -51,5 +51,5 @@ Use [REFERENCES.md](REFERENCES.md) para las referencias activas verificadas y el
 
 Las instantáneas de fuentes conservan su idioma original. Son copias de evidencia, no traducciones mantenidas.
 
-- [Gist público en inglés — `sldc-en`](https://gist.github.com/hectorddmx/2ee0c10e6cb95231fd252d15ebfc8bbb)
-- [Gist público en español — `sldc-es`](https://gist.github.com/hectorddmx/048bf4208a4ede278917c6a93c3e7ac6)
+- [Gist público en inglés — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
+- [Gist público en español — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)

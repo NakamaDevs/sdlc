@@ -49,6 +49,11 @@ No envíe datos restringidos a un modelo, herramienta, conector o servicio exter
 
 Analice fuentes mantenidas, cambios preparados, resultados generados, exportaciones públicas, logs y artefactos.
 
+El check del repositorio analiza cada archivo de texto UTF-8 registrado en Git.
+Omite contenido binario. Revise imágenes, audio, video, archivos comprimidos y
+otros binarios con un proceso aprobado. Use enlaces de Gist sin propietario
+cuando el nombre de una cuenta pública no aporte contexto necesario.
+
 Un check repetible puede encontrar identificadores estructurados y valores prohibidos conocidos. Debe informar sólo archivo, línea y categoría. No debe repetir el valor encontrado.
 
 Mantenga las listas permitidas acotadas, explicadas, probadas y revisadas. Una persona también debe revisar texto libre, imágenes, audio y combinaciones de campos.

@@ -49,6 +49,11 @@ Do not send restricted data to an external model, tool, connector, or service wi
 
 Scan maintained source, staged changes, generated output, public exports, logs, and artifacts.
 
+The repository check scans every Git-tracked UTF-8 text file. It skips binary
+content. Review images, audio, video, archives, and other binary files with an
+approved process. Use owner-free Gist links when a public account name adds no
+necessary context.
+
 A repeatable check can find structured identifiers and known prohibited values. It must report only the file, line, and category. It must not repeat the discovered value.
 
 Keep allowlists narrow, explained, tested, and reviewed. A person must also review free text, images, audio, and cross-field combinations.

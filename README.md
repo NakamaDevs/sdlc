@@ -38,5 +38,5 @@ The repository is canonical. These public Gists are generated reading editions.
 
 El repositorio es canónico. Estos Gists públicos son ediciones generadas para lectura.
 
-- [English / Inglés — `sldc-en`](https://gist.github.com/hectorddmx/2ee0c10e6cb95231fd252d15ebfc8bbb)
-- [Español / Spanish — `sldc-es`](https://gist.github.com/hectorddmx/048bf4208a4ede278917c6a93c3e7ac6)
+- [English / Inglés — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
+- [Español / Spanish — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)

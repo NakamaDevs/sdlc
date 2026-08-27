@@ -51,5 +51,5 @@ Use [REFERENCES.md](REFERENCES.md) for verified live references and the [source 
 
 Source snapshots stay in their original language. They are evidence copies, not maintained translations.
 
-- [English public Gist — `sldc-en`](https://gist.github.com/hectorddmx/2ee0c10e6cb95231fd252d15ebfc8bbb)
-- [Spanish public Gist — `sldc-es`](https://gist.github.com/hectorddmx/048bf4208a4ede278917c6a93c3e7ac6)
+- [English public Gist — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
+- [Spanish public Gist — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)

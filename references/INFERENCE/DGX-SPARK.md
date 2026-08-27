@@ -12,7 +12,7 @@ license: null
 canonical_id: nvidia-dgx-spark
 trust: untrusted
 prompt_injection_reviewed_at: 2026-08-27
-body_sha256: 9fa573b0aa089b0b102e4421a1c38d67597d463bbaf2d48fde16a9df3b1235e9
+body_sha256: 469b9c8fd39c3ebcc40230ba1fffb73522dd1ccc40fdb6da5645fef95f30263f
 ---
 
 NVIDIA Home NVIDIA Home Menu Menu icon Menu Menu icon Close Close icon Close Close icon Close Close icon Caret down icon Accordion is closed, click to open. Caret down icon Accordion is closed, click to open. Caret up icon Accordion is open, click to close. Caret right icon Click to expand Caret right icon Click to expand Caret right icon Click to expand menu. Caret left icon Click to collapse menu. Caret left icon Click to collapse menu. Caret left icon Click to collapse menu. Shopping Cart Click to see cart items Search icon Click to search
@@ -799,7 +799,7 @@ ncid hidden field
 
 I agree to the collection and processing of the above information by NVIDIA Corporation for the purposes of research and event organization, and I have read and agree to [NVIDIA Privacy Policy](https://www.nvidia.com/en-us/about-nvidia/privacy-policy/?deeplink=visiting-our-website).
 
-I agree that the above information will be transferred to NVIDIA Corporation in the United States and stored in a manner consistent with [NVIDIA Privacy Policy](https://www.nvidia.com/en-us/about-nvidia/privacy-policy/?deeplink=visiting-our-website) due to necessities for research, event organization and corresponding NVIDIA internal management and system operation need. You may contact us by sending an email to [privacy@nvidia.com](mailto:privacy@nvidia.com) to resolve related problems.
+I agree that the above information will be transferred to NVIDIA Corporation in the United States and stored in a manner consistent with [NVIDIA Privacy Policy](https://www.nvidia.com/en-us/about-nvidia/privacy-policy/?deeplink=visiting-our-website) due to necessities for research, event organization and corresponding NVIDIA internal management and system operation need. Use the NVIDIA Privacy Policy contact process to resolve related problems.
 
 Submit
 
