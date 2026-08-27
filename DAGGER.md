@@ -103,7 +103,7 @@ GitHub recommends ephemeral self-hosted runners for autoscaling. GitLab provides
 - [GitHub ephemeral runners](https://docs.github.com/en/actions/reference/runners/self-hosted-runners#ephemeral-runners-for-autoscaling)
 - [GitHub Actions Runner Controller](https://docs.github.com/en/actions/concepts/runners/actions-runner-controller)
 - [GitLab Runner](https://docs.gitlab.com/runner/)
-- [GitLab runner autoscaling](https://docs.gitlab.com/runner/ autoscale/)
+- [GitLab runner autoscaling](https://docs.gitlab.com/runner/configuration/autoscale/)
 
 ## Q: When should a runner remain sticky?
 
