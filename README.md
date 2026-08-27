@@ -8,6 +8,7 @@ This repository is the canonical, reviewable version of the guidance. The origin
 
 1. [SDLC.md](SDLC.md) — principles, specifications, workflows, quality, and completion.
 2. [LINEAR.md](LINEAR.md) — issues, milestones, ownership, status, and progress.
+2. [HARNESS.md](HARNESS.md) — harness engineering, repository legibility, feedback loops, isolation, and Symphony.
 3. [AGENT-SKILLS.md](AGENT-SKILLS.md) — research, skills, distribution, versioning, and trust.
 4. [MISE.md](MISE.md) — tools, runtimes, environments, tasks, and output handling.
 5. [ASPIRE.md](ASPIRE.md) — optional orchestration, testing, previews, deployment, and observability.
