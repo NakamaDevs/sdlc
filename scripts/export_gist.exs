@@ -45,14 +45,23 @@ defmodule GistExport do
   @optional_files ["NAKAMADEVS.md"]
 
   @organization_markers [
-    ~r/@NakamaDevs\//,
-    ~r/\bNAK-\d+\b/,
-    ~r/hectorddmx@gmail\.com/,
-    ~r/github\.com\/NakamaDevs\/(?:Kaicho|skills)/
+    ~r/@NakamaDevs\//i,
+    ~r/\bNAK-\d+\b/i,
+    ~r/hectorddmx@gmail\.com/i,
+    ~r/github\.com\/NakamaDevs\/(?:Kaicho|skills)/i
+  ]
+
+  @organization_marker_examples [
+    "@nakamadevs/devs",
+    "nak-662",
+    "HECTORDDMX@GMAIL.COM",
+    "github.com/nakamadevs/kaicho",
+    "github.com/NAKAMADEVS/SKILLS"
   ]
 
   def run([language, output]) when language in ["en", "es"] do
     validate_file_order!()
+    validate_marker_configuration!()
 
     output = Path.expand(output)
     File.mkdir_p!(output)
@@ -122,6 +131,14 @@ defmodule GistExport do
           raise "#{source} contains an organization marker outside the optional profile: #{inspect(marker)}"
       end
     end
+  end
+
+  defp validate_marker_configuration! do
+    Enum.each(@organization_marker_examples, fn example ->
+      if not Enum.any?(@organization_markers, &Regex.match?(&1, example)) do
+        raise "Organization marker configuration misses a case variant: #{example}"
+      end
+    end)
   end
 
   defp validate_export!(content, target) do
