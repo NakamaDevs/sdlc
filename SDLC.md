@@ -15,18 +15,15 @@
 - [OWASP.md](OWASP.md) — OWASP standards, secrets, storage, attestation, and pre-launch security.
 - [MCP.md](MCP.md) — MCP transports, Code Mode, stateless operation, authentication, authorization, and approvals.
 - [AI-MLOPS.md](AI-MLOPS.md) — Mojo, MAX, model serving, evaluation, benchmarks, and AI operations.
-- [joy.md](joy.md) — meaningful work, autonomy, learning, focus, and team joy.
-- [burnout.md](burnout.md) — burnout risks, workload boundaries, recovery, and escalation.
-- [structure.md](structure.md) — mono-repo, multi-repo, submodules, meta, and editor automation.
-- [human.md](human.md) — human-in-the-loop intake, steering, editor integration, and attention protection.
-- [herdr.md](herdr.md) — persistent local-first and remote-first workspaces.
-- [AGENT-SKILLS.md](AGENT-SKILLS.md) — research evidence, skills structure, distribution, versioning, and trust.
-- [MISE.md](MISE.md) — mise tools, runtimes, environments, tasks, scope, and output handling.
-- [ASPIRE.md](ASPIRE.md) — Aspire development, testing, previews, deployment, networking, secrets, AI, and observability.
-- [OLLAMA.md](OLLAMA.md) — local model serving, Aspire integration, Claude Code, trust, and validation.
-- [TESTING.md](TESTING.md) — specifications, FIRST tests, test layers, UI evidence, and validation.
-- [SECURITY.md](SECURITY.md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
-
+- [RUNNERS.md](RUNNERS.md) — GitHub and GitLab hosted or self-hosted runners, isolation, and Dagger.
+- [INFERENCE.md](INFERENCE.md) — local inference, Apple Silicon, DGX Spark, and model-serving validation.
+- [COMMUNICATION.md](COMMUNICATION.md) — human and agent sharing, distillation, verification, and disclosure.
+- [NOTES.md](NOTES.md) — local-first recording, transcription, notes, consent, and cross-platform behavior.
+- [INTEGRATION.md](INTEGRATION.md) — HTTP, SSE, WebSockets, webhooks, ordering, and recovery.
+- [CLAUDE.md](CLAUDE.md) — Claude-specific SDLC intake and operating guidance.
+- [CODEX.md](CODEX.md) — Codex-specific SDLC intake and operating guidance.
+- [HOOKS.md](HOOKS.md) — Git hooks, prek, leak prevention, smoke tests, and fast local checks.
+- [DAGGER.md](DAGGER.md) — portable containerized build, test, caching, and delivery pipelines.
 ## Harness engineering
 
 Treat the repository as the system of record for agent-readable knowledge, executable guardrails, feedback loops, isolated work, and review evidence. See [HARNESS.md](HARNESS.md) for the detailed harness and Symphony guidance.
