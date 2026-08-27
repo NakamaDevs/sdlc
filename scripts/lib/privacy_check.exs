@@ -67,7 +67,7 @@ defmodule Sdlc.PrivacyCheck do
     |> Enum.with_index(1)
     |> Enum.flat_map(fn {{name, content}, index} ->
       redacted_name = "tracked path ##{index} (redacted)"
-      path_findings = line_findings(redacted_name, "path", name)
+      path_findings = path_findings(redacted_name, name)
       report_name = if path_findings == [], do: name, else: redacted_name
 
       content_findings =
@@ -78,6 +78,18 @@ defmodule Sdlc.PrivacyCheck do
 
       path_findings ++ content_findings
     end)
+  end
+
+  defp path_findings(redacted_name, name) do
+    name
+    |> String.split(["/", "\\"])
+    |> Enum.flat_map(fn component ->
+      strict_component = String.replace(component, ~r/[.=]/u, " ")
+
+      line_findings(redacted_name, "path", component) ++
+        line_findings(redacted_name, "path", strict_component)
+    end)
+    |> Enum.uniq()
   end
 
   def validate!(documents) do

@@ -324,6 +324,29 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ private_path
   end
 
+  test "reports phone identifiers in nested tracked path components" do
+    compact = Enum.join(["212", "555", "1234"], "")
+    parenthesized = "(" <> "212" <> ")" <> Enum.join(["555", "1234"], "-")
+
+    findings =
+      PrivacyCheck.findings([
+        {"contacts/#{compact}.txt", ""},
+        {"contacts/id=#{parenthesized}.txt", ""}
+      ])
+
+    assert %{file: "tracked path #1 (redacted)", line: "path", category: category} =
+             Enum.find(findings, &(&1.file == "tracked path #1 (redacted)"))
+
+    assert category == "a phone number pattern"
+
+    assert %{file: "tracked path #2 (redacted)", line: "path", category: category} =
+             Enum.find(findings, &(&1.file == "tracked path #2 (redacted)"))
+
+    assert category == "a phone number pattern"
+    refute inspect(findings) =~ compact
+    refute inspect(findings) =~ parenthesized
+  end
+
   test "redacts a tracked path when the worktree file cannot be read" do
     root = temporary_repository!()
     on_exit(fn -> File.rm_rf!(root) end)
