@@ -82,6 +82,25 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ private_path
   end
 
+  test "redacts a tracked path when the worktree file cannot be read" do
+    root = temporary_repository!()
+    on_exit(fn -> File.rm_rf!(root) end)
+
+    private_email = Enum.join(["person", "private.invalid"], "@")
+    private_path = "#{private_email}.md"
+    File.ln_s!(private_path, Path.join(root, private_path))
+    git!(root, ["add", private_path])
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.tracked_documents!(root)
+      end
+
+    assert error.message =~ "tracked path #1 (redacted)"
+    refute error.message =~ private_email
+    refute error.message =~ private_path
+  end
+
   test "scans staged content when the worktree contains a safe replacement" do
     root = temporary_repository!()
     on_exit(fn -> File.rm_rf!(root) end)

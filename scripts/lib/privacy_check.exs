@@ -18,8 +18,10 @@ defmodule Sdlc.PrivacyCheck do
       root
       |> git_files!()
       |> Enum.sort()
-      |> Enum.flat_map(fn relative_path ->
+      |> Enum.with_index(1)
+      |> Enum.flat_map(fn {relative_path, index} ->
         path = Path.join(root, relative_path)
+        redacted_path = "tracked path ##{index} (redacted)"
 
         case File.read(path) do
           {:ok, content} when is_binary(content) ->
@@ -41,7 +43,7 @@ defmodule Sdlc.PrivacyCheck do
             []
 
           {:error, reason} ->
-            raise "Privacy check could not read #{relative_path}: #{:file.format_error(reason)}"
+            raise "Privacy check could not read #{redacted_path}: #{:file.format_error(reason)}"
         end
       end)
 
