@@ -49,11 +49,20 @@ defmodule Sdlc.PrivacyCheck do
   end
 
   def findings(documents) when is_list(documents) do
-    Enum.flat_map(documents, fn {name, content} ->
-      content
-      |> String.split("\n")
-      |> Enum.with_index(1)
-      |> Enum.flat_map(fn {line, number} -> line_findings(name, number, line) end)
+    documents
+    |> Enum.with_index(1)
+    |> Enum.flat_map(fn {{name, content}, index} ->
+      redacted_name = "tracked path ##{index} (redacted)"
+      path_findings = line_findings(redacted_name, "path", name)
+      report_name = if path_findings == [], do: name, else: redacted_name
+
+      content_findings =
+        content
+        |> String.split("\n")
+        |> Enum.with_index(1)
+        |> Enum.flat_map(fn {line, number} -> line_findings(report_name, number, line) end)
+
+      path_findings ++ content_findings
     end)
   end
 
