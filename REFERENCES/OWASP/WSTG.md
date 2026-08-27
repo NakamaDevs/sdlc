@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/00-Introduction_and_Objectives/\n- Title: OWASP Web Security Testing Guide\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\nThis content represents the latest contributions to the Web Security Testing Guide, and may frequently change.
+# SOURCE SNAPSHOT
+
+- Source URL: https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/00-Introduction_and_Objectives/
+- Title: OWASP Web Security Testing Guide
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+This content represents the latest contributions to the Web Security Testing Guide, and may frequently change.
 
 [](#)[![OWASP logo](https://owasp.org/assets/images/logo.png)](https://owasp.org/)
 
