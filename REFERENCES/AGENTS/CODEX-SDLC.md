@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://learn.chatgpt.com/guides/build-ai-native-engineering-team\n- Title: Build an AI-native engineering team\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\nFor the complete documentation index, see [llms.txt](/llms.txt). Markdown versions of documentation pages are available by appending `.md` to the page URL.
+# SOURCE SNAPSHOT
+
+- Source URL: https://learn.chatgpt.com/guides/build-ai-native-engineering-team
+- Title: Build an AI-native engineering team
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+For the complete documentation index, see [llms.txt](/llms.txt). Markdown versions of documentation pages are available by appending `.md` to the page URL.
 
  [![OpenAI Developers](/OpenAI_Developers.svg) ChatGPT](/)
 
