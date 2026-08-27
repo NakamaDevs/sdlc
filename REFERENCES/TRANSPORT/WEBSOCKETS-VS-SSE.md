@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://dashbit.co/blog/websockets-vs-sse\n- Title: WebSockets vs Server-Sent Events\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n[![Dashbit](/images/logo-166c057038a97186c76e9f48807c096e.png?vsn=d)](/)
+# SOURCE SNAPSHOT
+
+- Source URL: https://dashbit.co/blog/websockets-vs-sse
+- Title: WebSockets vs Server-Sent Events
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+[![Dashbit](/images/logo-166c057038a97186c76e9f48807c096e.png?vsn=d)](/)
 
 [Get in touch](/#contact)
 
