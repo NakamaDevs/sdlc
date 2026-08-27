@@ -12,7 +12,7 @@ defmodule Sdlc.Reader.Renderer.Chrome do
 
   @behaviour Sdlc.Reader.Renderer
 
-  alias Sdlc.Reader.Fetcher
+  alias Sdlc.Reader.{Fetcher, HTML}
 
   @default_max_body_bytes 10 * 1024 * 1024
   @default_timeout 15_000
@@ -75,7 +75,8 @@ defmodule Sdlc.Reader.Renderer.Chrome do
     )
   end
 
-  defp validate_preflight(%{status: status, content_type: content_type, body: body}) do
+  defp validate_preflight(%{status: status, content_type: content_type, body: body})
+       when is_binary(body) do
     normalized =
       case content_type do
         value when is_binary(value) ->
@@ -87,6 +88,7 @@ defmodule Sdlc.Reader.Renderer.Chrome do
 
     cond do
       status not in 200..299 -> {:error, {:http_status, status}}
+      not String.valid?(body) -> {:error, :invalid_html_encoding}
       normalized in ["text/html", "application/xhtml+xml"] -> :ok
       normalized == "" and html_body?(body) -> :ok
       true -> {:error, {:unexpected_content_type, content_type}}
@@ -95,14 +97,7 @@ defmodule Sdlc.Reader.Renderer.Chrome do
 
   defp validate_preflight(_response), do: {:error, :invalid_fetch_response}
 
-  defp html_body?(body) when is_binary(body) do
-    body
-    |> String.trim_leading()
-    |> String.downcase()
-    |> then(&(String.starts_with?(&1, "<!doctype html") or String.starts_with?(&1, "<html")))
-  end
-
-  defp html_body?(_body), do: false
+  defp html_body?(body), do: HTML.document?(body)
 
   defp chrome_path(options) do
     case Keyword.get(options, :chrome_path) do

@@ -42,4 +42,10 @@ defmodule Sdlc.Reader.ValidatorTest do
     assert Enum.any?(issues, &(&1.kind == :excess_blank_lines))
     assert Enum.any?(issues, &(&1.kind == :empty_link_target))
   end
+
+  test "ignores repeated blank lines inside fenced code" do
+    markdown = "Before\n\n```text\nfirst\n\n\n\nsecond\n```\n\nAfter\n"
+
+    assert {:ok, []} = Validator.validate(markdown)
+  end
 end

@@ -1,7 +1,7 @@
 defmodule Sdlc.Reader.Validator do
   @moduledoc "Deterministic checks for unsafe or malformed Markdown input."
 
-  alias Sdlc.Reader.PromptScanner
+  alias Sdlc.Reader.{MarkdownDocument, PromptScanner}
 
   @empty_link ~r/!?(?:\[[^\]]*\])\(\s*\)/
 
@@ -13,7 +13,7 @@ defmodule Sdlc.Reader.Validator do
       |> Enum.map(&%{kind: &1.kind})
       |> Enum.uniq()
       |> add_if(:empty_link_target, Regex.match?(@empty_link, markdown))
-      |> add_if(:excess_blank_lines, Regex.match?(~r/\n{4,}/, markdown))
+      |> add_if(:excess_blank_lines, MarkdownDocument.excess_blank_lines?(markdown))
 
     case issues do
       [] -> {:ok, []}
