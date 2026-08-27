@@ -102,6 +102,18 @@ Coordine antes de cambiar un branch publicado. Actualice juntos su pull request,
 
 No cambie un branch solo para agregar la identidad de un colaborador.
 
+## P: ¿Cómo debe migrar un repositorio los nombres anteriores?
+
+Enumere cada branch anterior que tenga un pull request abierto antes de activar
+el checker nuevo. Use una lista temporal y exacta, como
+`LEGACY_BRANCH_ALLOWLIST`. Los hooks locales y CI deben aceptar solo los
+nombres de la lista. Deben rechazar los branches nuevos que usen la forma
+anterior.
+
+Quite cada entrada después de cerrar su pull request. Mantenga la lista vacía
+si ningún branch abierto la necesita. No cambie ni reescriba un branch
+publicado solo para completar esta migración.
+
 ## P: ¿Cuándo está completo un branch?
 
 Un branch está listo para revisión cuando:
