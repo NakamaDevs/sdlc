@@ -2,20 +2,17 @@
 
 ## Document currency and command evidence
 
-
-## Adoption and operating model
-
-Use [ADOPTION.md](ADOPTION.md) to intake the SDLC system, structure repositories, create templates, and make the practices stick.
-
 ## Focused companion references
 
-- [MISE.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z03-mise-md) — mise tools, runtimes, environments, tasks, scope, and output handling.
-- [ASPIRE.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z04-aspire-md) — Aspire development, testing, previews, deployment, networking, secrets, AI, and observability.
-- [LINEAR.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z01-linear-md) — issue, milestone, owner, status, progress, and review tracking.
-- [TESTING.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z06-testing-md) — specifications, FIRST tests, test layers, UI evidence, and validation.
-- [AGENT-SKILLS.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z02-agent-skills-md) — research evidence, skills structure, distribution, versioning, and trust.
-- [SECURITY.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z07-security-md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
-- [OLLAMA.md](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb#file-z05-ollama-md) — local model serving, Aspire integration, Claude Code, trust, and validation.
+- [MISE.md](.#MISE.md) — mise tools, runtimes, environments, tasks, scope, and output handling.
+- [ASPIRE.md](.#ASPIRE.md) — Aspire development, testing, previews, deployment, networking, secrets, AI, and observability.
+- [LINEAR.md](.#LINEAR.md) — issue, milestone, owner, status, progress, and review tracking.
+- [TESTING.md](.#TESTING.md) — specifications, FIRST tests, test layers, UI evidence, and validation.
+- [AGENT-SKILLS.md](.#AGENT-SKILLS.md) — research evidence, skills structure, distribution, versioning, and trust.
+- [SECURITY.md](.#SECURITY.md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
+- [OLLAMA.md](.#OLLAMA.md) — local model serving, Aspire integration, Claude Code, trust, and validation.
+- [HARNESS.md](HARNESS.md) — harness engineering, repository legibility, feedback loops, isolation, and Symphony.
+- [ADOPTION.md](ADOPTION.md) — intake, repository structure, templates, adoption sequence, and operating cadence.
 
 Last reviewed: 2026-08-26
 
