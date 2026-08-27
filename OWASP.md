@@ -126,3 +126,59 @@ A clean scanner result is not proof that the system is secure. Security is a ris
 - [WebAuthn API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API)
 - [OWASP ZAP](https://www.zaproxy.org/)
 - [OWASP MASTG adoption](https://mas.owasp.org/MASTG/0x02b-MASVS-MASTG-Adoption/)
+## Q: Which standard applies to each surface?
+
+Use the smallest set of standards that covers the product surface. Record the selected standards and the reason for each exclusion.
+
+- Web applications and services: use [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) for requirements and the [OWASP Web Security Testing Guide](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/00-Introduction_and_Objectives/) for repeatable security tests.
+- APIs: use [OWASP API Security Top 10](https://owasp.org/API-Security/) with ASVS controls. Test object-level authorization, authentication, property-level authorization, unrestricted resource use, SSRF, inventory, and unsafe consumption of third-party APIs.
+- Mobile: use [MASVS](https://mas.owasp.org/MASVS/) for requirements and [MASTG](https://mas.owasp.org/MASTG/) for tests. Use the [MASTG adoption guidance](https://mas.owasp.org/MASTG/0x02b-MASVS-MASTG-Adoption/) to select a risk-based subset.
+- Embedded and IoT: use the [OWASP IoT Security Verification Standard](https://owasp.org/IoT-Security-Verification-Standard-ISVS/) for requirements and the [OWASP IoT Security Testing Guide](https://owasp.org/owasp-istg/) for tests. Use the [OWASP Embedded Application Security](https://owasp.org/www-project-embedded-application-security/) guidance and Firmware Security Testing Methodology for firmware-specific risks.
+- Native desktop and WASM: apply ASVS and API controls when the application exposes web or network surfaces. Add platform signing, secure update, sandbox, memory-safety, FFI, capability, and reproducible-build checks. Use a platform-specific standard when one exists.
+- Software supply chain: use [OWASP SCVS](https://owasp.org/www-project-software-component-verification-standard/), an SBOM format such as [CycloneDX](https://cyclonedx.org/), [NIST SSDF](https://csrc.nist.gov/projects/ssdf), [SLSA](https://slsa.dev/spec/v1.2/), and [OpenSSF Scorecard](https://openssf.org/scorecard/) as applicable.
+- Development and delivery process: use the [OWASP DevSecOps Verification Standard](https://owasp.org/www-project-devsecops-verification-standard/) for a maturity and gap review.
+
+## Q: What is the web and API security checklist?
+
+- Define trust boundaries, data classifications, users, roles, tenants, and security objectives.
+- Map security requirements to ASVS identifiers and API resources.
+- Test authentication, session handling, authorization, tenant isolation, object ownership, and privilege changes.
+- Test input validation, output encoding, injection, file handling, SSRF, deserialization, redirects, and error responses.
+- Test browser controls: CSP, origin checks, CSRF protection, CORS, cookie flags, clickjacking protection, and safe browser storage.
+- Test API controls: method-level and object-level authorization, pagination and limits, rate limits, schema validation, content types, version inventory, and deprecated endpoints.
+- Run unit and integration tests for security invariants. Run authenticated and unauthenticated DAST against a disposable environment.
+- Record the target URL, build identifier, test account roles, tool versions, scope, findings, and remediation evidence.
+
+## Q: What is the embedded and IoT security checklist?
+
+- Model the device, ecosystem services, update path, physical interfaces, wireless interfaces, and operator roles.
+- Select ISVS requirements and ISTG test cases from the actual attacker model. Do not claim full coverage when hardware access is out of scope.
+- Check secure boot, signed firmware, key rotation, rollback protection, recovery mode, update transport, and failed-update behavior.
+- Check for hardcoded credentials, debug accounts, secrets in firmware images, unsafe logs, insecure defaults, and unnecessary services such as Telnet.
+- Test UART, JTAG, SWD, SPI, I2C, USB, Bluetooth, Wi-Fi, cellular, and exposed management interfaces when present.
+- Check memory safety, command injection, parser limits, privilege separation, sandboxing, and secure deletion.
+- Produce an SBOM for firmware and host services. Track component versions, licenses, known vulnerabilities, and end-of-support dates.
+- Test manufacturing, provisioning, ownership transfer, decommissioning, factory reset, and physical capture scenarios.
+- Preserve firmware hashes, test equipment, access level, test cases, findings, and signed release evidence.
+
+## Q: How should supply-chain evidence connect to a release?
+
+- Keep a locked dependency inventory and an SBOM for each release artifact.
+- Record source revision, build inputs, toolchain versions, builder identity, artifact digests, and signing identity.
+- Generate and verify provenance. [SLSA provenance](https://slsa.dev/spec/v1.2/provenance) describes where, when, and how an artifact was built.
+- Apply SCVS controls incrementally across inventory, SBOM, build environment, package management, component analysis, and pedigree or provenance.
+- Use Scorecard or an equivalent check for public dependencies and pin actions, images, packages, and tool versions.
+- Block release when a required control fails. Record an owner, expiry date, and compensating control for every accepted exception.
+
+## References for web, embedded, and supply-chain coverage
+
+- [OWASP Web Security Testing Guide](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/00-Introduction_and_Objectives/)
+- [OWASP IoT Security Verification Standard](https://owasp.org/IoT-Security-Verification-Standard-ISVS/)
+- [OWASP IoT Security Testing Guide](https://owasp.org/owasp-istg/)
+- [OWASP Embedded Application Security](https://owasp.org/www-project-embedded-application-security/)
+- OWASP Firmware Security Testing Methodology
+- [OWASP Software Component Verification Standard](https://scvs.owasp.org/)
+- [OWASP DevSecOps Verification Standard](https://owasp.org/www-project-devsecops-verification-standard/)
+- [NIST Secure Software Development Framework](https://csrc.nist.gov/projects/ssdf)
+- [SLSA specification](https://slsa.dev/spec/v1.2/)
+- [OpenSSF Scorecard](https://openssf.org/scorecard/)
