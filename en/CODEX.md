@@ -14,6 +14,18 @@ Report the answer first. Include evidence, limitations, current status, owner, a
 
 Use Linear or the repository's equivalent tracker when configured. Update the issue after meaningful progress and at milestone completion.
 
+## Q: How should Codex handle review comments?
+
+Use [CODE-REVIEW.md](CODE-REVIEW.md) for accuracy checks, response fields, status changes, evidence, and thread resolution.
+
+Verify each finding before changing code. Fix valid findings and add regression evidence.
+
+Reject invalid findings only with exact evidence.
+
+Resolve a thread after its final result is pushed and reported.
+
+Request another review after all threads reach a final state.
+
 ## Q: How should Codex use MCP and local tools?
 
 Use a repository task or skill when one exists. Use MCP for reusable capabilities and APIs. Use Code Mode only with an isolated sandbox, bounded output, and explicit approval for side effects.

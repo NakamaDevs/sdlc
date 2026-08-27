@@ -33,12 +33,13 @@ Este repositorio es la guía canónica y revisable. Los Gists públicos son edic
 25. [INTEGRATION.md](INTEGRATION.md) — HTTP, SSE, WebSockets, webhooks, orden y recuperación.
 26. [CLAUDE.md](CLAUDE.md) — recepción y guía operativa de SDLC específica para Claude.
 27. [CODEX.md](CODEX.md) — recepción y guía operativa de SDLC específica para Codex.
-28. [HOOKS.md](HOOKS.md) — Git hooks, prek, prevención de filtraciones, smoke tests y comprobaciones locales rápidas.
-29. [DAGGER.md](DAGGER.md) — pipelines portables de build, test, caché y entrega.
-30. [GITHUB.md](GITHUB.md) — arquitectura CI, rulesets, revisiones de equipos, bypass y runners.
-31. [MARKDOWN.md](MARKDOWN.md) — instantáneas de fuentes, conversión local y fuentes no disponibles.
-32. [WEB-CAPTURE.md](WEB-CAPTURE.md) — extracción, páginas renderizadas, imágenes y comparación.
-33. [UPDATE.md](UPDATE.md) — revisión de documentos, evidencia de comandos y registros de actualización.
+28. [CODE-REVIEW.md](CODE-REVIEW.md) — precisión, hallazgos, evidencia, estados y resolución de threads.
+29. [HOOKS.md](HOOKS.md) — Git hooks, prek, prevención de filtraciones, smoke tests y comprobaciones locales rápidas.
+30. [DAGGER.md](DAGGER.md) — pipelines portables de build, test, caché y entrega.
+31. [GITHUB.md](GITHUB.md) — arquitectura CI, rulesets, revisiones de equipos, bypass y runners.
+32. [MARKDOWN.md](MARKDOWN.md) — instantáneas de fuentes, conversión local y fuentes no disponibles.
+33. [WEB-CAPTURE.md](WEB-CAPTURE.md) — extracción, páginas renderizadas, imágenes y comparación.
+34. [UPDATE.md](UPDATE.md) — revisión de documentos, evidencia de comandos y registros de actualización.
 
 ## Referencias
 

@@ -34,6 +34,7 @@ The companion guides explain focused practices. They do not replace the core pro
 - [INTEGRATION.md](INTEGRATION.md) — HTTP, SSE, WebSockets, webhooks, ordering, and recovery.
 - [CLAUDE.md](CLAUDE.md) — Claude-specific SDLC intake and operating guidance.
 - [CODEX.md](CODEX.md) — Codex-specific SDLC intake and operating guidance.
+- [CODE-REVIEW.md](CODE-REVIEW.md) — Codex review accuracy, findings, evidence, statuses, and thread resolution.
 - [HOOKS.md](HOOKS.md) — Git hooks, prek, leak prevention, smoke tests, and fast local checks.
 - [DAGGER.md](DAGGER.md) — portable containerized build, test, caching, and delivery pipelines.
 - [AGENT-SKILLS.md](AGENT-SKILLS.md) — research evidence, skills structure, distribution, versioning, and trust.

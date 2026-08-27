@@ -34,6 +34,7 @@ Las guías complementarias explican prácticas específicas. No sustituyen los a
 - [INTEGRATION.md](INTEGRATION.md) — HTTP, SSE, WebSockets, webhooks, orden y recuperación.
 - [CLAUDE.md](CLAUDE.md) — admisión y operación del SDLC específicas de Claude.
 - [CODEX.md](CODEX.md) — admisión y operación del SDLC específicas de Codex.
+- [CODE-REVIEW.md](CODE-REVIEW.md) — precisión, hallazgos, evidencia, estados y resolución de threads de Codex.
 - [HOOKS.md](HOOKS.md) — Git hooks, prek, prevención de filtraciones, smoke tests y checks locales rápidos.
 - [DAGGER.md](DAGGER.md) — pipelines portátiles en contenedores para build, pruebas, caché y entrega.
 - [AGENT-SKILLS.md](AGENT-SKILLS.md) — evidencia, estructura, distribución, versiones y confianza de skills.

@@ -100,6 +100,8 @@ Evaluate rulesets before enforcement. Confirm that bots, release automation, and
 
 Keep ruleset changes reviewable. Record the ruleset name, target, checks, bypass actors, and last review date.
 
+Use [CODE-REVIEW.md](CODE-REVIEW.md) to verify findings, report evidence, and resolve review threads.
+
 ## Q: How should the Devs team own reviews?
 
 Use a visible GitHub team with write access. GitHub requires both conditions for team CODEOWNERS entries.
