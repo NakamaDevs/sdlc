@@ -50,24 +50,27 @@ defmodule Sdlc.PrivacyCheckTest do
     domestic = Enum.join(["212", "555", "1234"], "-")
     international = "+1 " <> Enum.join(["212", "555", "1234"], " ")
     adjacent = "(212)" <> Enum.join(["555", "1234"], "-")
+    country_adjacent = "+1(212)" <> Enum.join(["555", "1234"], "-")
 
     error =
       assert_raise RuntimeError, fn ->
         PrivacyCheck.validate!([
-          {"guide.md", Enum.join([domestic, international, adjacent], "\n")}
+          {"guide.md", Enum.join([domestic, international, adjacent, country_adjacent], "\n")}
         ])
       end
 
     assert error.message =~ "guide.md:1 contains a phone number pattern"
     assert error.message =~ "guide.md:2 contains a phone number pattern"
     assert error.message =~ "guide.md:3 contains a phone number pattern"
+    assert error.message =~ "guide.md:4 contains a phone number pattern"
     refute error.message =~ domestic
     refute error.message =~ international
     refute error.message =~ adjacent
+    refute error.message =~ country_adjacent
   end
 
   test "reports a parenthesized mobile phone format without repeating it" do
-    international_mobile = "+55 (11) " <> Enum.join(["91234", "5678"], "-")
+    international_mobile = "+55(11)" <> Enum.join(["91234", "5678"], "-")
     domestic_mobile = "(11)" <> Enum.join(["91234", "5678"], "-")
 
     error =
