@@ -46,6 +46,32 @@ defmodule Sdlc.Reader.CaptureTest do
        }}
     end
 
+    def fetch("https://news.example.test/articles/fenced-code", _options) do
+      {:ok,
+       %{
+         url: "https://news.example.test/articles/fenced-code",
+         status: 200,
+         content_type: "text/html",
+         body: """
+         <html><body><article><h1>Fenced code</h1>
+         <p>This article contains a complete code example with meaningful whitespace.</p>
+         <pre><code>first  \n\n\n\nsecond\t \n</code></pre>
+         <p>The final paragraph gives the reader enough useful extraction context.</p>
+         </article></body></html>
+         """
+       }}
+    end
+
+    def fetch("https://news.example.test/articles/legacy-encoded", _options) do
+      {:ok,
+       %{
+         url: "https://news.example.test/articles/legacy-encoded",
+         status: 200,
+         content_type: nil,
+         body: "<html><body><article>caf" <> <<0xE9>> <> "</article></body></html>"
+       }}
+    end
+
     def fetch("https://news.example.test/images/quoted.png", _options) do
       image = Image.new!(20, 10, color: [210, 220, 230])
       {:ok, body} = Image.write(image, :memory, suffix: ".png")
@@ -179,6 +205,23 @@ defmodule Sdlc.Reader.CaptureTest do
     assert result.markdown =~ "https://news.example.test/images/robots-at-work.jpg"
     refute result.markdown =~ "Buy this promoted product"
     assert result.issues == []
+  end
+
+  test "preserves fenced whitespace through capture validation" do
+    assert {:ok, result} =
+             Capture.capture("https://news.example.test/articles/fenced-code",
+               fetcher: FakeFetcher
+             )
+
+    assert result.markdown =~ "```\nfirst  \n\n\n\nsecond\t \n```"
+    assert result.issues == []
+  end
+
+  test "rejects an invalid UTF-8 response without raising" do
+    assert {:error, :invalid_html_encoding} =
+             Capture.capture("https://news.example.test/articles/legacy-encoded",
+               fetcher: FakeFetcher
+             )
   end
 
   test "writes snapshot metadata without claiming a human security review" do

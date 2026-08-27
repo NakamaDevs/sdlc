@@ -7,7 +7,7 @@ defmodule Sdlc.Reader.Capture do
   """
 
   alias Sdlc.Reader
-  alias Sdlc.Reader.{Fetcher, ImageOptimizer, Validator}
+  alias Sdlc.Reader.{Fetcher, HTML, ImageOptimizer, MarkdownDocument, Validator}
 
   @conversion "sdlc-reader-0.1.0"
   @image_pattern ~r/!\[(?<alt>(?:\\.|[^\]])*)\]\((?<url><[^>]+>|[^\s\)]+)(?:\s+"(?<title>(?:\\.|[^"\\])*)")?\)/
@@ -128,10 +128,11 @@ defmodule Sdlc.Reader.Capture do
     end)
   end
 
-  defp validate_html_response(%{content_type: content_type, body: body}) do
+  defp validate_html_response(%{content_type: content_type, body: body}) when is_binary(body) do
     normalized = normalize_content_type(content_type)
 
     cond do
+      not String.valid?(body) -> {:error, :invalid_html_encoding}
       normalized in ["text/html", "application/xhtml+xml"] -> :ok
       normalized == "" and html_body?(body) -> :ok
       true -> {:error, {:unexpected_content_type, content_type}}
@@ -140,12 +141,7 @@ defmodule Sdlc.Reader.Capture do
 
   defp validate_html_response(_response), do: {:error, :invalid_fetch_response}
 
-  defp html_body?(body) when is_binary(body) do
-    body
-    |> String.trim_leading()
-    |> String.downcase()
-    |> then(&(String.starts_with?(&1, "<!doctype html") or String.starts_with?(&1, "<html")))
-  end
+  defp html_body?(body), do: HTML.document?(body)
 
   defp process_images(markdown, :link, _options, _fetcher), do: {:ok, markdown, []}
 
@@ -318,14 +314,7 @@ defmodule Sdlc.Reader.Capture do
   end
 
   defp normalize_markdown(markdown) do
-    markdown
-    |> String.replace(~r/[ \t]+\n/u, "\n")
-    |> String.replace(~r/\n{3,}/u, "\n\n")
-    |> String.trim()
-    |> case do
-      "" -> ""
-      value -> value <> "\n"
-    end
+    MarkdownDocument.normalize(markdown)
   end
 
   defp snapshot(result, canonical_id, retrieved_at, options) do

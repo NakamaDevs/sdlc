@@ -6,6 +6,17 @@ defmodule Sdlc.Reader.Renderer.ChromeTest do
   @profile_root Path.expand("../../_build/test/chrome-profiles", __DIR__)
 
   defmodule FakeFetcher do
+    def fetch("https://legacy.example.test/article", _options) do
+      {:ok,
+       %{
+         url: "https://legacy.example.test/article",
+         status: 200,
+         headers: %{},
+         content_type: nil,
+         body: "<html><body>caf" <> <<0xE9>> <> "</body></html>"
+       }}
+    end
+
     def fetch("https://example.test/" <> _path, _options) do
       {:ok,
        %{
@@ -201,6 +212,21 @@ defmodule Sdlc.Reader.Renderer.ChromeTest do
 
     assert {:error, :private_address} =
              Chrome.render("https://unsafe.example.test/article",
+               chrome_path: "/verified/chrome",
+               isolation_confirmed: true,
+               profile_root: @profile_root,
+               fetcher: FakeFetcher,
+               runner: runner
+             )
+  end
+
+  test "rejects invalid UTF-8 during preflight without starting Chrome" do
+    runner = fn _executable, _arguments, _options ->
+      flunk("Chrome must not start for an invalid preflight body")
+    end
+
+    assert {:error, :invalid_html_encoding} =
+             Chrome.render("https://legacy.example.test/article",
                chrome_path: "/verified/chrome",
                isolation_confirmed: true,
                profile_root: @profile_root,
