@@ -61,6 +61,21 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ international
   end
 
+  test "reports a parenthesized mobile phone format without repeating it" do
+    mobile = "+55 (11) " <> Enum.join(["91234", "5678"], "-")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", mobile}])
+      end
+
+    assert error.message =~ "guide.md:1 contains a phone number pattern"
+    refute error.message =~ mobile
+
+    product_id = Enum.join(["123", "45678", "9012"], "-")
+    assert PrivacyCheck.findings([{"guide.md", product_id}]) == []
+  end
+
   test "reports grouped international phone formats without repeating them" do
     two_groups = "+91 " <> Enum.join(["98765", "43210"], " ")
     one_digit_group = "+33 " <> Enum.join(["1", "42", "68", "53", "00"], " ")
