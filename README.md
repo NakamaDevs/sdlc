@@ -23,6 +23,7 @@ This repository is the canonical, reviewable version of the guidance. The origin
 15. [SECURITY.md](SECURITY.md) — trust boundaries, secret protection, and security checks.
 16. [OWASP.md](OWASP.md) — OWASP standards, secrets, storage, attestation, and pre-launch security.
 17. [MCP.md](MCP.md) — MCP transports, Code Mode, stateless operation, authentication, authorization, and approvals.
+18. [AI-MLOPS.md](AI-MLOPS.md) — Mojo, MAX, model serving, evaluation, benchmarks, and AI operations.
 
 ## Snapshot
 
