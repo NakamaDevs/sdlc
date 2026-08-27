@@ -5,6 +5,7 @@ defmodule Sdlc.PrivacyCheck do
   @ssn ~r/(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)/
   @e164_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{9,14}(?!\d)/
   @formatted_phone ~r/(?<!\d)\(\d{3}\) \d{3}-\d{4}(?!\d)/
+  @gist_account_url ~r"https?://gist\.github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[0-9a-f]{20,64}"i
 
   @safe_email_domains ~w(example.com example.net example.org example.test users.noreply.github.com)
   @safe_transport_emails ~w(git@github.com git@gitlab.com git@bitbucket.org)
@@ -45,7 +46,8 @@ defmodule Sdlc.PrivacyCheck do
     structured = [
       {@ssn, "a government identifier pattern"},
       {@e164_phone, "an international phone number pattern"},
-      {@formatted_phone, "a phone number pattern"}
+      {@formatted_phone, "a phone number pattern"},
+      {@gist_account_url, "a Gist account identifier"}
     ]
 
     Enum.reduce(structured, email_findings, fn {pattern, category}, findings ->
