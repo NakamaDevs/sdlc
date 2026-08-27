@@ -24,6 +24,13 @@
 - [CODEX.md](CODEX.md) — Codex-specific SDLC intake and operating guidance.
 - [HOOKS.md](HOOKS.md) — Git hooks, prek, leak prevention, smoke tests, and fast local checks.
 - [DAGGER.md](DAGGER.md) — portable containerized build, test, caching, and delivery pipelines.
+- [AGENT-SKILLS.md](AGENT-SKILLS.md) — research evidence, skills structure, distribution, versioning, and trust.
+- [MISE.md](MISE.md) — mise tools, runtimes, environments, tasks, scope, and output handling.
+- [ASPIRE.md](ASPIRE.md) — Aspire development, testing, previews, deployment, networking, secrets, AI, and observability.
+- [OLLAMA.md](OLLAMA.md) — local model serving, Aspire integration, Claude Code, trust, and validation.
+- [TESTING.md](TESTING.md) — specifications, FIRST tests, test layers, UI evidence, and validation.
+- [SECURITY.md](SECURITY.md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
+
 ## Harness engineering
 
 Treat the repository as the system of record for agent-readable knowledge, executable guardrails, feedback loops, isolated work, and review evidence. See [HARNESS.md](HARNESS.md) for the detailed harness and Symphony guidance.
