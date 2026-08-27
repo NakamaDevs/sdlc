@@ -20,7 +20,7 @@ docs/PROJ-810-update-release-guide
 
 Use the project issue identifier first. Use lowercase kebab case for the short title.
 
-Do not add an identity segment unless repository policy requires one. Do not invent an undocumented namespace.
+Do not add an identity segment or agent namespace.
 
 The Linear issue, pull request, and commit metadata record ownership. The branch name records the work.
 
@@ -66,7 +66,7 @@ feature/PROJ-625-feature-for-bilingual-sdlc-tooling
 
 ## Q: Who can use the same naming form?
 
-People and agents use the repository form. Repository policy can reserve a namespace for automated agents.
+People and agents use the same repository form.
 
 One owner controls each branch and worktree. Other contributors use a separate worktree or review the pull request.
 

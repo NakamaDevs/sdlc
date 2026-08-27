@@ -46,6 +46,10 @@ Run `mise run check:prompt-injection` before an agent reads an updated snapshot.
 
 ## Security and Agent References
 
+- [NIST Privacy Framework](https://www.nist.gov/privacy-framework)
+- [NIST Privacy Framework use guidance](https://www.nist.gov/privacy-framework/using-privacy-framework-11)
+- [HHS guidance for de-identification of protected health information](https://www.hhs.gov/hipaa/for-professionals/special-topics/de-identification/index.html)
+- [FTC Start with Security guide](https://www.ftc.gov/business-guidance/resources/start-security-guide-business)
 - [SOPS](https://getsops.io/)
 - [Agent Skills specification](https://agentskills.io/home)
 - [npx skills CLI](https://github.com/vercel-labs/skills)

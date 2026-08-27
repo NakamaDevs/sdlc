@@ -46,6 +46,10 @@ Ejecute `mise run check:prompt-injection` antes de que un agente lea una instant
 
 ## Referencias de seguridad y agentes
 
+- [Marco de Privacidad de NIST](https://www.nist.gov/privacy-framework)
+- [Guía de uso del Marco de Privacidad de NIST](https://www.nist.gov/privacy-framework/using-privacy-framework-11)
+- [Guía de HHS para desidentificar información de salud protegida](https://www.hhs.gov/hipaa/for-professionals/special-topics/de-identification/index.html)
+- [Guía Start with Security de FTC](https://www.ftc.gov/business-guidance/resources/start-security-guide-business)
 - [SOPS](https://getsops.io/)
 - [Especificación de Agent Skills](https://agentskills.io/home)
 - [CLI npx skills](https://github.com/vercel-labs/skills)

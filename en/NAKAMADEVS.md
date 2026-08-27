@@ -31,26 +31,23 @@ Use a stack only when a later change depends on an earlier change. Record the di
 
 ## Q: Which branch policy overrides the generic examples?
 
-Use the workspace branch forms:
+Use one workspace branch form for people and agents:
 
 ```text
-Human: <type>/<username>-NAK-123-short-description
-Agent: <type>/cx/NAK-123-short-description
+<type>/NAK-123-short-description
 ```
 
 Use a Conventional Commit type for `<type>`. The `feature` alias remains valid for `feat`.
 
-The `cx` segment is the reserved namespace for Codex and Claude Code. Human branches use the approved username.
+Do not add a username, initials, account name, tool name, model name, or agent namespace.
 
-The repository policy overrides the identity-neutral examples in [BRANCHES.md](BRANCHES.md).
+Linear, the pull request, and Git commit metadata record ownership. The branch name records the work. This policy agrees with [BRANCHES.md](BRANCHES.md).
 
 ## Q: Which Git identity and commit form should be used?
 
-Use semantic and atomic Conventional Commits. Use the reviewed human identity for repository commits:
+Use semantic and atomic Conventional Commits. Use the approved repository identity for commits.
 
-```text
-Héctor De Diego <hectorddmx@gmail.com>
-```
+Keep the identity in private Git configuration. Do not copy its name or email address into reusable guidance, examples, logs, or Gists.
 
 Use one stable scope for each affected module. Link the `NAK` issue in the pull request and commit body when needed.
 
@@ -156,3 +153,4 @@ The generic public Gists must remain useful without this profile. Export this pr
 - [COMMITS.md](COMMITS.md)
 - [CODE-REVIEW.md](CODE-REVIEW.md)
 - [GITHUB.md](GITHUB.md)
+- [PRIVACY.md](PRIVACY.md)
