@@ -56,3 +56,10 @@ Change the system when people repeatedly report unclear work, needless waiting, 
 - [What happens when software developers are (un)happy](https://doi.org/10.1016/j.infsof.2018.04.001)
 - [Understanding developer well-being](https://doi.org/10.1007/s10664-026-10830-6)
 - [Towards a theory of software developer job satisfaction and perceived productivity](https://www.microsoft.com/en-us/research/wp-content/uploads/2019/12/storey-tse-2019.pdf)
+## Q: What can destroy joy even when output increases?
+
+Loss of autonomy, forced priority changes, repeated reorganization, unclear ownership, opaque rewards, and work that conflicts with a person's values can reduce motivation and trust.
+
+The [Pragmatic Engineer report on Meta](https://blog.pragmaticengineer.com/the-pulse-metas-self-inflicted-resignation-wave/) is a journalistic case report. Use it as a discussion prompt, not as causal or representative research.
+
+Ask whether people can choose meaningful work, understand decisions, recover from intense periods, and see a path for growth. Do not use automation to remove all learning, discretion, or craft from a role.
