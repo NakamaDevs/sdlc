@@ -10,6 +10,10 @@ run = "elixir scripts/check_docs.exs"
 description = "Check documents for prompt-injection indicators"
 run = "mix run scripts/check_prompt_injection.exs"
 
+[tasks."check:privacy"]
+description = "Check maintained documents for direct identifier patterns"
+run = "elixir scripts/check_privacy.exs"
+
 [tasks."check:format"]
 description = "Check Elixir formatting"
 run = "mix format --check-formatted"
@@ -55,6 +59,7 @@ depends = [
   "check:docs",
   "check:format",
   "check:prompt-injection",
+  "check:privacy",
   "check:reader",
   "export:gist",
 ]

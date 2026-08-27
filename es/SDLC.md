@@ -45,6 +45,7 @@ Las guías complementarias explican prácticas específicas. No sustituyen los a
 - [SECURITY.md](SECURITY.md) — límites de confianza, secretos, checks locales y controles de supply chain.
 - [CHANGELOG.md](CHANGELOG.md) — fuentes del changelog, historia de merge, Semantic Versioning y generación.
 - [DEPLOY.md](DEPLOY.md) — planificación de releases, publicación, deployment, promoción y rollback.
+- [PRIVACY.md](PRIVACY.md) — PII, PHI, minimización, datos sintéticos, detección y respuesta.
 - [NAKAMADEVS.md](NAKAMADEVS.md) — perfil opcional de política, skills, stack y propiedad. Mantenga este perfil al final.
 
 ## Ingeniería de harness

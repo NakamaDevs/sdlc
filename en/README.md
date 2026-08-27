@@ -42,7 +42,8 @@ This repository is the canonical, reviewable guidance. The public Gists are gene
 34. [UPDATE.md](UPDATE.md) — document review, command evidence, and refresh records.
 35. [CHANGELOG.md](CHANGELOG.md) — changelog inputs, merge history, Semantic Versioning, and generation.
 36. [DEPLOY.md](DEPLOY.md) — release planning, publication, deployment, promotion, and rollback.
-37. [NAKAMADEVS.md](NAKAMADEVS.md) — optional NakamaDevs policy, skills, stack, and ownership profile. Keep this profile last.
+37. [PRIVACY.md](PRIVACY.md) — PII, PHI, minimization, synthetic data, detection, and response.
+38. [NAKAMADEVS.md](NAKAMADEVS.md) — optional NakamaDevs policy, skills, stack, and ownership profile. Keep this profile last.
 
 ## References
 

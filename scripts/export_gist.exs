@@ -1,3 +1,5 @@
+Code.require_file("lib/privacy_check.exs", __DIR__)
+
 defmodule GistExport do
   @root Path.expand("..", __DIR__)
 
@@ -39,6 +41,7 @@ defmodule GistExport do
     {"CODE-REVIEW.md", "z34-CODE-REVIEW.md"},
     {"CHANGELOG.md", "z35-CHANGELOG.md"},
     {"DEPLOY.md", "z36-DEPLOY.md"},
+    {"PRIVACY.md", "z37-PRIVACY.md"},
     {"NAKAMADEVS.md", "zz01-NAKAMADEVS.md"}
   ]
 
@@ -46,8 +49,7 @@ defmodule GistExport do
 
   @organization_markers [
     ~r/@NakamaDevs\//i,
-    ~r/\bNAK-\d+\b/i,
-    ~r/repository-owner@gmail\.com/i
+    ~r/\bNAK-\d+\b/i
   ]
 
   @organization_repository_marker ~r/(?:^|[^A-Za-z0-9_.-])NakamaDevs\/([A-Za-z0-9_.-]+)/im
@@ -56,7 +58,6 @@ defmodule GistExport do
   @organization_marker_examples [
     "@nakamadevs/devs",
     "nak-662",
-    "person@example.test",
     "github.com/nakamadevs/kaicho",
     "github.com/NAKAMADEVS/SKILLS",
     "git@github.com:NakamaDevs/Kaicho.git",
@@ -99,6 +100,7 @@ defmodule GistExport do
       validate_profile_boundary!(content, source)
       content = rewrite_guide_links(content, anchors)
       content = rewrite_repository_links(content)
+      Sdlc.PrivacyCheck.validate!([{target, content}])
       validate_export!(content, target)
       File.write!(Path.join(output, target), content)
     end)

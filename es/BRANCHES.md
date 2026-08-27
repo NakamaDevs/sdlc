@@ -20,7 +20,7 @@ docs/PROJ-810-update-release-guide
 
 Use primero el identificador del issue del proyecto. Use kebab case en minúsculas para el título corto.
 
-No agregue un segmento de identidad salvo que la política lo exija. No invente un espacio de nombres sin documentar.
+No agregue un segmento de identidad ni un espacio de nombres de agente.
 
 El issue, pull request y metadatos del commit registran la propiedad. El nombre del branch registra el trabajo.
 
@@ -66,7 +66,7 @@ feature/PROJ-625-feature-for-bilingual-sdlc-tooling
 
 ## P: ¿Quién puede usar la misma forma de nombre?
 
-Las personas y agentes usan la forma del repositorio. La política puede reservar un espacio de nombres para agentes automatizados.
+Las personas y agentes usan la misma forma del repositorio.
 
 Un propietario controla cada branch y worktree. Otros colaboradores usan otro worktree o revisan el pull request.
 

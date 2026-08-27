@@ -98,7 +98,9 @@ If a required check cannot run, record the exact limitation in the pull request.
 
 ## Q: How should authorship work?
 
-Use the approved human identity for repository commits. Configure it explicitly when global Git identity is absent.
+Use the approved repository identity for commits. Keep its values in private Git configuration.
+
+Do not publish a real name or email address in reusable guidance or examples. Use a privacy-preserving author address when repository policy permits it.
 
 Do not invent co-authors. Add a co-author only when that person contributed and approved the attribution.
 
