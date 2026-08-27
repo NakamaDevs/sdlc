@@ -571,12 +571,57 @@ defmodule Sdlc.Reader.Markdown do
 
   defp normalize_document(markdown) do
     markdown
-    |> String.replace(~r/[ \t]+\n/u, "\n")
-    |> String.replace(~r/\n{3,}/u, "\n\n")
+    |> normalize_outside_fences()
     |> String.trim()
     |> case do
       "" -> ""
       value -> value <> "\n"
     end
+  end
+
+  defp normalize_outside_fences(markdown) do
+    {lines, _fence, _blank_lines} =
+      markdown
+      |> String.split("\n", trim: false)
+      |> Enum.reduce({[], nil, 0}, &normalize_line/2)
+
+    lines |> Enum.reverse() |> Enum.join("\n")
+  end
+
+  defp normalize_line(line, {lines, nil, blank_lines}) do
+    line = String.trim_trailing(line, " \t")
+
+    case opening_fence(line) do
+      {:ok, fence} ->
+        {[line | lines], fence, 0}
+
+      :error when line == "" and blank_lines >= 1 ->
+        {lines, nil, blank_lines}
+
+      :error when line == "" ->
+        {[line | lines], nil, blank_lines + 1}
+
+      :error ->
+        {[line | lines], nil, 0}
+    end
+  end
+
+  defp normalize_line(line, {lines, fence, _blank_lines}) do
+    next_fence = if closing_fence?(line, fence), do: nil, else: fence
+    {[line | lines], next_fence, 0}
+  end
+
+  defp opening_fence(line) do
+    case Regex.run(~r/^[ \t]{0,3}(`{3,}|~{3,})/u, line, capture: :all_but_first) do
+      [fence] -> {:ok, {String.first(fence), String.length(fence)}}
+      _ -> :error
+    end
+  end
+
+  defp closing_fence?(line, {marker, minimum_length}) do
+    candidate = String.trim(line, " \t")
+
+    String.length(candidate) >= minimum_length and
+      candidate |> String.graphemes() |> Enum.all?(&(&1 == marker))
   end
 end

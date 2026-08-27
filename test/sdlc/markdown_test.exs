@@ -62,4 +62,11 @@ defmodule Sdlc.Reader.MarkdownTest do
     refute markdown =~ "169.254.169.254"
     refute markdown =~ "!["
   end
+
+  test "preserves trailing spaces and blank lines inside fenced code" do
+    html = "<pre><code>first  \n\n\n\nsecond\t \n</code></pre>"
+
+    assert {:ok, markdown} = Markdown.convert(html)
+    assert markdown == "```\nfirst  \n\n\n\nsecond\t \n```\n"
+  end
 end
