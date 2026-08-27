@@ -43,6 +43,11 @@ No agregue username, iniciales, cuenta, herramienta, modelo ni espacio de nombre
 
 Linear, el pull request y los metadatos de Git registran la propiedad. El nombre del branch registra el trabajo. Esta política coincide con [BRANCHES.md](BRANCHES.md).
 
+Antes de adoptar v2, registre en `LEGACY_BRANCH_ALLOWLIST` cada branch con
+identidad que tenga un pull request abierto. Use la lista en `.branch-policy`.
+Acepte solo esos nombres exactos. Quite cada entrada cuando cierre su pull
+request.
+
 ## P: ¿Qué identidad Git y forma de commit deben usarse?
 
 Use Conventional Commits semánticos y atómicos. Use la identidad aprobada para commits del repositorio.

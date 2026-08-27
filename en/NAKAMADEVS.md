@@ -43,6 +43,10 @@ Do not add a username, initials, account name, tool name, model name, or agent n
 
 Linear, the pull request, and Git commit metadata record ownership. The branch name records the work. This policy agrees with [BRANCHES.md](BRANCHES.md).
 
+Before v2 adoption, record each identity-bearing branch for an open pull
+request in `LEGACY_BRANCH_ALLOWLIST` in `.branch-policy`. Accept only those
+exact names. Remove each entry after its pull request closes.
+
 ## Q: Which Git identity and commit form should be used?
 
 Use semantic and atomic Conventional Commits. Use the approved repository identity for commits.

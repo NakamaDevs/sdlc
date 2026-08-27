@@ -102,6 +102,17 @@ Coordinate before renaming a published branch. Update its pull request, worktree
 
 Do not rename a branch only to add a contributor identity.
 
+## Q: How should a repository migrate old branch names?
+
+List each old branch that has an open pull request before you enable the new
+checker. Use an exact, temporary allowlist such as `LEGACY_BRANCH_ALLOWLIST`.
+The local hooks and CI must accept only the listed names. They must reject new
+branches that use the old form.
+
+Remove each entry after its pull request closes. Keep the allowlist empty when
+no open branch needs it. Do not rename or rewrite a published branch only to
+complete this migration.
+
 ## Q: When is a branch complete?
 
 A branch is ready for review when:
