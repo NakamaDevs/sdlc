@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://webhooks.fyi/\n- Title: Webhooks.fyi\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\nOpen navigation
+# SOURCE SNAPSHOT
+
+- Source URL: https://webhooks.fyi/
+- Title: Webhooks.fyi
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+Open navigation
 
 [Home page](/)
 
