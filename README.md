@@ -34,7 +34,8 @@ This repository is the canonical, reviewable version of the guidance. The origin
 26. [HOOKS.md](HOOKS.md) — Git hooks, prek, leak prevention, smoke tests, and fast local checks.
 27. [DAGGER.md](DAGGER.md) — portable containerized build, test, caching, and delivery pipelines.
 
+28. [MARKDOWN.md](MARKDOWN.md) — reference snapshots, Turndown conversion, and unavailable sources.
+
 ## Snapshot
 
 - [GitHub Gist snapshot](https://gist.github.com/hectorddmx/2ee0c10e6cb95231fd252d15ebfc8bbb)
-28. [MARKDOWN.md](MARKDOWN.md) — reference snapshots, Turndown conversion, and unavailable sources.
