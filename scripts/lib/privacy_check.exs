@@ -4,6 +4,7 @@ defmodule Sdlc.PrivacyCheck do
   @email ~r/(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/u
   @ssn ~r/(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)/
   @e164_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{9,14}(?!\d)/
+  @international_grouped_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{0,2}(?:[ .-]\d{2,7}){2,5}(?![ .-]?\d)/
   @separated_phone ~r/(?<![A-Za-z0-9])(?:\+[1-9]\d{0,2}[ .-])?(?:\(\d{2,4}\)|\d{2,4})[ .-]\d{3,4}[ .-]\d{4}(?!\d)/
   @gist_account_url ~r"https?://gist\.github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[0-9a-f]{20,64}"i
 
@@ -95,19 +96,39 @@ defmodule Sdlc.PrivacyCheck do
       |> Enum.reject(&safe_email?/1)
       |> Enum.map(fn _value -> %{file: file, line: number, category: "an email address"} end)
 
+    phone_findings =
+      cond do
+        Regex.match?(@separated_phone, line) ->
+          [%{file: file, line: number, category: "a phone number pattern"}]
+
+        Regex.match?(@e164_phone, line) or international_grouped_phone?(line) ->
+          [%{file: file, line: number, category: "an international phone number pattern"}]
+
+        true ->
+          []
+      end
+
     structured = [
       {@ssn, "a government identifier pattern"},
-      {@e164_phone, "an international phone number pattern"},
-      {@separated_phone, "a phone number pattern"},
       {@gist_account_url, "a Gist account identifier"}
     ]
 
-    Enum.reduce(structured, email_findings, fn {pattern, category}, findings ->
+    Enum.reduce(structured, email_findings ++ phone_findings, fn {pattern, category}, findings ->
       if Regex.match?(pattern, line) do
         [%{file: file, line: number, category: category} | findings]
       else
         findings
       end
+    end)
+  end
+
+  defp international_grouped_phone?(line) do
+    @international_grouped_phone
+    |> Regex.scan(line)
+    |> List.flatten()
+    |> Enum.any?(fn candidate ->
+      digit_count = candidate |> String.replace(~r/\D/u, "") |> String.length()
+      digit_count in 8..15
     end)
   end
 
