@@ -22,6 +22,8 @@ Move the pull request to ready for review only when:
 
 The initial Codex review can start automatically when the pull request becomes ready. Record the exact reviewed head.
 
+If no automatic review starts, confirm that no review is active. Then request one pass with `@codex review`.
+
 After later changes, push the complete review response first. Then request another pass with `@codex review`.
 
 Do not request repeated reviews while known comments, failing checks, or unpublished fixes remain.

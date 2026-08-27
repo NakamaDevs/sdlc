@@ -22,6 +22,8 @@ Mueva el pull request a listo para review sólo cuando:
 
 El review inicial de Codex puede empezar automáticamente cuando el pull request esté listo. Registre el head exacto que se revisó.
 
+Si no empieza el review automático, confirme que no haya otro activo. Después, solicite una revisión con `@codex review`.
+
 Después de otros cambios, envíe primero la respuesta completa. Después, solicite otra revisión con `@codex review`.
 
 No solicite reviews repetidos mientras queden comentarios, checks fallidos o correcciones sin enviar.
