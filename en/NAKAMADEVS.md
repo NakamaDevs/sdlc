@@ -10,8 +10,8 @@ Kaicho defines required organization policy. Repository instructions define the 
 
 Use this order:
 
-1. direct instructions from the current authorized user;
-2. system and agent-platform safety controls;
+1. system and agent-platform safety controls;
+2. direct instructions from the current authorized user;
 3. versioned Kaicho policy;
 4. workspace `AGENTS.md` guidance;
 5. the repository and nearest directory `AGENTS.md` files;
