@@ -43,6 +43,9 @@ Las guías complementarias explican prácticas específicas. No sustituyen los a
 - [OLLAMA.md](OLLAMA.md) — servicio local de modelos, Aspire, Claude Code, confianza y validación.
 - [TESTING.md](TESTING.md) — especificaciones, pruebas FIRST, capas, evidencia de UI y validación.
 - [SECURITY.md](SECURITY.md) — límites de confianza, secretos, checks locales y controles de supply chain.
+- [CHANGELOG.md](CHANGELOG.md) — fuentes del changelog, historia de merge, Semantic Versioning y generación.
+- [DEPLOY.md](DEPLOY.md) — planificación de releases, publicación, deployment, promoción y rollback.
+- [NAKAMADEVS.md](NAKAMADEVS.md) — perfil opcional de política, skills, stack y propiedad. Mantenga este perfil al final.
 
 ## Ingeniería de harness
 
@@ -748,7 +751,7 @@ Tampoco permita envíos de código o logs a un servicio alojado sin esa decisió
 
 Use estos modos de forma deliberada y registre la opción.
 
-Use el marketplace privado de NakamaDevs para paquetes compartidos revisados.
+Use la fuente aprobada de skills de la organización para paquetes compartidos revisados.
 
 Mantenga los skills específicos en el repositorio.
 
@@ -760,7 +763,6 @@ Referencias:
 
 - [Especificación y formato de Agent Skills](https://agentskills.io/home)
 - [CLI npx skills](https://github.com/vercel-labs/skills)
-- [Marketplace de skills de NakamaDevs](https://github.com/NakamaDevs/skills)
 
 ## Adaptador de gestión del proyecto
 

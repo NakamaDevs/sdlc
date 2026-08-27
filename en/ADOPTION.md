@@ -59,6 +59,48 @@ tests/
 
 `AGENTS.md` should map the repository. `README.md` should onboard people. `spec.md` should define behavior. `workflow.md` should define the agent loop. `feature-matrix.md` should connect features to tests. `test.md` should define validation. `plans/` should hold active and completed plans.
 
+## Two adoption paths
+
+Choose one primary path for each rule. Do not maintain two independent copies of the same requirement.
+
+### Path A: repository documents
+
+Use repository documents when the guidance:
+
+- defines a local command, stack, owner, environment, or release unit;
+- must change in the same pull request as the code;
+- must remain readable without an agent runtime;
+- needs a visible history for people, auditors, and automation.
+
+Copy only the necessary generic guides. Record their source revision and local adaptations.
+
+Keep a short `AGENTS.md` that links to the local documents. Do not paste the complete handbook into it.
+
+### Path B: reusable skills and references
+
+Use a skill or versioned reference when the guidance:
+
+- applies unchanged across several repositories;
+- defines a repeatable agent procedure;
+- needs reusable scripts, fixtures, or validation;
+- has one reviewed owner and update path.
+
+Keep project-scoped skills in `.agents/skills/` when they form part of the repository contract.
+
+Pin shared skills and references to a reviewed revision. Link them from `AGENTS.md` and record their trust boundary.
+
+Do not hide required human guidance inside a skill. Provide a readable document or reference for every required workflow.
+
+### Optional organization profiles
+
+Keep the generic guides useful without organization access.
+
+Put private project names, teams, account identifiers, branch overrides, skill marketplaces, and stack preferences in an optional profile.
+
+Place each optional profile after all generic Gist files. Label inaccessible links and state which policy can override the generic guide.
+
+Use one export check to enforce this order.
+
 ## Templates that make the practice stick
 
 Provide templates for issues, milestones, specifications, decisions, test plans, work logs, pull requests, and release notes. Each template must request the smallest evidence needed for review.
@@ -101,12 +143,16 @@ At the start of work, confirm the issue, milestone, owner, specification, test p
 
 During work, record meaningful progress, decisions, failures, and evidence. Keep the issue status aligned with reality.
 
-At completion, run the quality gate, update the feature matrix and docs, attach bounded evidence, review risks, and record the next maintenance action.
+At completion, run the quality gate and update the feature matrix and docs.
+
+Attach bounded evidence, review risks, and record the next maintenance action.
 
 On a regular cadence, run documentation freshness, link, task-discovery, secret, dependency, workflow, and skill-source checks. Remove stale guidance and close obsolete plans.
 
 ## Definition of success
 
-The system is working when a new person or agent can find the correct source, run the correct local check, understand failure output, make a bounded change, and leave the repository and tracker more current than before.
+The system works when a new person or agent can find the correct source and local check.
+
+The reader can understand failures, make a bounded change, and leave current repository and tracker records.
 
 Success requires judgment. The documents guide decisions. They do not replace domain expertise, review, security approval, or production change control.
