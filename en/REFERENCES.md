@@ -49,7 +49,6 @@ Run `mise run check:prompt-injection` before an agent reads an updated snapshot.
 - [SOPS](https://getsops.io/)
 - [Agent Skills specification](https://agentskills.io/home)
 - [npx skills CLI](https://github.com/vercel-labs/skills)
-- [NakamaDevs skills marketplace](https://github.com/NakamaDevs/skills)
 - [Gitleaks](https://github.com/gitleaks/gitleaks)
 - [Semgrep Community Edition](https://semgrep.dev/products/community-edition/)
 - [Trivy filesystem scanning](https://trivy.dev/docs/latest/target/filesystem/)
@@ -78,6 +77,31 @@ Run `mise run check:prompt-injection` before an agent reads an updated snapshot.
 - [GitHub runner groups](https://docs.github.com/en/actions/concepts/runners/runner-groups)
 - [GitHub Actions Runner Controller](https://docs.github.com/en/actions/concepts/runners/actions-runner-controller)
 - [GitHub team review settings](https://docs.github.com/en/organizations/organizing-members-into-teams/managing-code-review-settings-for-your-team)
+
+## Version, Changelog, and Release References
+
+- [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)
+- [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
+- [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/)
+- [Git log and first-parent history](https://git-scm.com/docs/git-log)
+- [GitHub pull request merge methods](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges)
+- [GitHub release management](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
+- [GitHub generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
+- [GitHub Actions workflow syntax](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)
+- [GitHub deployments and environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
+- [GitHub OpenID Connect guidance](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-cloud-providers)
+- [Release Please](https://github.com/googleapis/release-please)
+- [semantic-release](https://semantic-release.gitbook.io/semantic-release)
+- [Changesets](https://github.com/changesets/changesets)
+- [git-cliff](https://git-cliff.org/docs/)
+- [Hex package publication](https://hex.pm/docs/publish)
+- [NuGet package versioning](https://learn.microsoft.com/en-us/nuget/concepts/package-versioning)
+- [Cargo publication](https://doc.rust-lang.org/cargo/reference/publishing.html)
+- [Go module release workflow](https://go.dev/doc/modules/release-workflow)
+- [npm publication](https://docs.npmjs.com/cli/commands/npm-publish/)
+- [Python version specifiers](https://packaging.python.org/en/latest/specifications/version-specifiers/)
+- [Swift package publication](https://docs.swift.org/swiftpm/documentation/packagemanagerdocs/releasingpublishingapackage/)
+- [OCI image annotations](https://github.com/opencontainers/image-spec/blob/main/annotations.md)
 
 ## Portability References
 

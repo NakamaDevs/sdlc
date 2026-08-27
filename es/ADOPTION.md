@@ -59,13 +59,55 @@ tests/
 
 `AGENTS.md` debe mapear el repositorio. `README.md` debe incorporar personas. `spec.md` debe definir el comportamiento. `workflow.md` debe definir el ciclo del agente. `feature-matrix.md` debe conectar características con tests. `test.md` debe definir la validación. `plans/` debe contener planes activos y terminados.
 
+## Dos rutas de adopción
+
+Seleccione una ruta principal para cada regla. No mantenga dos copias independientes del mismo requisito.
+
+### Ruta A: documentos del repositorio
+
+Use documentos del repositorio cuando la guía:
+
+- defina un comando, stack, owner, entorno o unidad de release local;
+- deba cambiar en el mismo pull request que el código;
+- deba poder leerse sin un runtime de agente;
+- necesite historia visible para personas, auditores y automatización.
+
+Copie sólo las guías genéricas necesarias. Registre su revisión de origen y las adaptaciones locales.
+
+Mantenga un `AGENTS.md` corto que enlace los documentos locales. No pegue todo el manual en él.
+
+### Ruta B: skills y referencias reutilizables
+
+Use una skill o referencia versionada cuando la guía:
+
+- aplique sin cambios en varios repositorios;
+- defina un procedimiento repetible para agentes;
+- necesite scripts, fixtures o validación reutilizables;
+- tenga un owner y una ruta de actualización revisados.
+
+Mantenga las skills del proyecto en `.agents/skills/` cuando formen parte del contrato del repositorio.
+
+Fije las skills y referencias compartidas a una revisión revisada. Enlácelas desde `AGENTS.md` y registre su límite de confianza.
+
+No oculte orientación humana obligatoria dentro de una skill. Proporcione un documento o referencia legible para cada workflow obligatorio.
+
+### Perfiles opcionales de organización
+
+Mantenga las guías genéricas útiles sin acceso a la organización.
+
+Ponga nombres privados, equipos, cuentas, excepciones de branch, marketplaces de skills y preferencias de stack en un perfil opcional.
+
+Coloque cada perfil opcional después de todos los archivos genéricos del Gist. Marque los enlaces inaccesibles e indique qué política sustituye la guía genérica.
+
+Use un check de exportación para aplicar este orden.
+
 ## Plantillas para fijar la práctica
 
 Proporcione plantillas para issues, hitos, especificaciones, decisiones, planes de test, registros de trabajo, pull requests y notas de release. Cada plantilla debe solicitar la evidencia mínima para la revisión.
 
 Mantenga las plantillas junto al repositorio o en un paquete de organización versionado. Use marcadores para nombres, identificadores, entornos y fechas. No ponga credenciales reales, URL privadas, datos de candidatos ni valores de producción en los ejemplos.
 
-Haga ejecutables las plantillas cuando sea posible. Una plantilla de tarea debe enlazar al comando de validación. Una plantilla de característica debe requerir una fila de test. Una plantilla de deploy debe requerir el destino, la puerta de salud, la consulta de observabilidad, el rollback y la limpieza.
+Haga ejecutables las plantillas cuando sea posible. Una plantilla de tarea debe enlazar al comando de validación. Una plantilla de característica debe requerir una fila de test. Una plantilla de deploy debe requerir destino, puerta de salud, observabilidad, rollback y limpieza.
 
 ## Adopción mínima viable
 
@@ -103,10 +145,14 @@ Durante el trabajo, registre el progreso importante, las decisiones, los fallos 
 
 Al terminar, ejecute la puerta de calidad. Actualice la matriz de características y la documentación. Adjunte evidencia acotada. Revise los riesgos y registre la siguiente acción de mantenimiento.
 
-En una cadencia regular, ejecute controles de vigencia de documentación, enlaces, descubrimiento de tareas, secretos, dependencias, workflows y fuentes de skills. Elimine la guía obsoleta y cierre los planes obsoletos.
+En una cadencia regular, compruebe documentación, enlaces, tareas, secretos, dependencias, workflows y fuentes de skills.
+
+Elimine la guía obsoleta y cierre los planes obsoletos.
 
 ## Definición de éxito
 
-El sistema funciona cuando una persona o agente nuevo encuentra la fuente correcta, ejecuta el control local correcto y entiende el resultado de fallo. También debe hacer un cambio acotado y dejar el repositorio y tracker más actualizados.
+El sistema funciona cuando una persona o agente nuevo encuentra la fuente y el control local correctos.
+
+El lector entiende los fallos, hace un cambio acotado y deja actuales el repositorio y el tracker.
 
 El éxito requiere juicio. Los documentos guían decisiones. No sustituyen la experiencia de dominio, la revisión, la aprobación de seguridad ni el control de cambios de producción.

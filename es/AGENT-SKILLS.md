@@ -108,8 +108,8 @@ selección de agentes, rutas locales, fuentes Git y URL directas. `npx skills us
 puede usar una skill sin instalarla. Use estos modos deliberadamente y registre
 la elección.
 
-Use el marketplace privado de skills de NakamaDevs como la fuente de la
-organización para paquetes compartidos revisados. Mantenga las skills específicas
+Use la fuente aprobada de skills de la organización para paquetes compartidos
+revisados. Mantenga las skills específicas
 del repositorio en el repositorio. Use un registro de bloqueo de skills o un
 manifiesto equivalente para revisiones exactas. Revise las actualizaciones como
 código y ejecute tests de cada skill antes de promoverla.
@@ -118,4 +118,3 @@ código y ejecute tests de cada skill antes de promoverla.
 
 - [Especificación y formato de Agent Skills](https://agentskills.io/home)
 - [CLI npx skills](https://github.com/vercel-labs/skills)
-- [Marketplace de skills de NakamaDevs](https://github.com/NakamaDevs/skills)
