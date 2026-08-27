@@ -1,4 +1,14 @@
-# SOURCE SNAPSHOT\n\n- Source URL: https://arxiv.org/abs/2608.23041\n- Title: AutoSaddler\n- Retrieved: 2026-08-27\n- Conversion: Turndown 7.2.4\n- Status: archival copy; verify the live source for current facts.\n\n---\n\n[Skip to main content](#content)
+# SOURCE SNAPSHOT
+
+- Source URL: https://arxiv.org/abs/2608.23041
+- Title: AutoSaddler
+- Retrieved: 2026-08-27
+- Conversion: Turndown 7.2.4
+- Status: archival copy; verify the live source for current facts.
+
+---
+
+[Skip to main content](#content)
 
 [](https://arxiv.org/IgnoreMe)[![archive](/static/base/1.0.1/images/arxiv-logo-primary-light.svg)](https://arxiv.org/)
 
