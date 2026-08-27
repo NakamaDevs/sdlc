@@ -3,12 +3,14 @@ defmodule Sdlc.PrivacyCheck do
 
   @email ~r/(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/u
   @ssn ~r/(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)/
-  @e164_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{9,14}(?!\d)/
-  @international_grouped_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{0,2}(?:[ .-]\d{1,7}){2,6}(?![ .-]?\d)/
+  @e164_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{7,14}(?!\d)/
+  @international_grouped_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{0,6}(?:[ .\-\x{00A0}\x{202F}]\d{1,7}){1,6}(?![ .\-\x{00A0}\x{202F}]?\d)/u
+  @international_trunk_phone ~r/(?<![A-Za-z0-9])\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]?\(0\)[ .\-\x{00A0}\x{202F}]?\d{1,4}(?:[ .\-\x{00A0}\x{202F}]\d{1,7}){1,5}(?![ .\-\x{00A0}\x{202F}]?\d)/u
   @separated_phone_patterns [
-    ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .-]?)?\(\d{1,4}\)[ .-]?|(?:\+[1-9]\d{0,2}[ .-])?\d{2,4}[ .-])\d{3,4}[ .-]\d{4}(?![ .-]?\d)/,
-    ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .-]?)?\(\d{1,4}\)[ .-]?|\+[1-9]\d{0,2}[ .-]\d{2,4}[ .-])\d{5}[ .-]\d{4}(?![ .-]?\d)/,
-    ~r/(?<![A-Za-z0-9])\d{2}(?:[ .-]\d{2}){4}(?![ .-]?\d)/
+    ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]?)?\(\d{1,4}\)[ .\-\x{00A0}\x{202F}]?|(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}])?\d{2,4}[ .\-\x{00A0}\x{202F}])\d{3,4}[ .\-\x{00A0}\x{202F}]\d{4}(?![ .\-\x{00A0}\x{202F}]?\d)/u,
+    ~r/(?<![A-Za-z0-9])(?:(?:\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]?)?\(\d{1,4}\)[ .\-\x{00A0}\x{202F}]?|\+[1-9]\d{0,2}[ .\-\x{00A0}\x{202F}]\d{2,4}[ .\-\x{00A0}\x{202F}])\d{5}[ .\-\x{00A0}\x{202F}]\d{4}(?![ .\-\x{00A0}\x{202F}]?\d)/u,
+    ~r/(?<![A-Za-z0-9+\/.)])(?<!\d[ .\-\x{00A0}\x{202F}])\d{2}(?:[ .\-\x{00A0}\x{202F}]\d{2}){3,4}(?![ .\-\x{00A0}\x{202F}]?\d)/u,
+    ~r/(?<![A-Za-z0-9+\/.)])(?<!\d[ .\-\x{00A0}\x{202F}])\d{4,6}[ \x{00A0}\x{202F}]\d{4,6}(?![ .\-\x{00A0}\x{202F}]?\d)/u
   ]
   @gist_account_url ~r"https?://gist\.github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[0-9a-f]{20,64}"i
 
@@ -105,7 +107,7 @@ defmodule Sdlc.PrivacyCheck do
         separated_phone?(line) ->
           [%{file: file, line: number, category: "a phone number pattern"}]
 
-        Regex.match?(@e164_phone, line) or international_grouped_phone?(line) ->
+        international_phone?(line) ->
           [%{file: file, line: number, category: "an international phone number pattern"}]
 
         true ->
@@ -126,18 +128,30 @@ defmodule Sdlc.PrivacyCheck do
     end)
   end
 
-  defp international_grouped_phone?(line) do
-    @international_grouped_phone
-    |> Regex.scan(line)
-    |> List.flatten()
-    |> Enum.any?(fn candidate ->
-      digit_count = candidate |> String.replace(~r/\D/u, "") |> String.length()
-      digit_count in 8..15
-    end)
+  defp international_phone?(line) do
+    [@e164_phone, @international_grouped_phone, @international_trunk_phone]
+    |> Enum.flat_map(&phone_candidates(&1, line))
+    |> Enum.any?(&valid_phone_candidate?(&1, 8..15))
   end
 
   defp separated_phone?(line) do
-    Enum.any?(@separated_phone_patterns, &Regex.match?(&1, line))
+    @separated_phone_patterns
+    |> Enum.flat_map(&phone_candidates(&1, line))
+    |> Enum.any?(fn candidate ->
+      range = if String.starts_with?(candidate, "+"), do: 8..15, else: 8..11
+      valid_phone_candidate?(candidate, range)
+    end)
+  end
+
+  defp phone_candidates(pattern, line) do
+    pattern
+    |> Regex.scan(line)
+    |> List.flatten()
+  end
+
+  defp valid_phone_candidate?(candidate, range) do
+    digit_count = candidate |> String.replace(~r/\D/u, "") |> String.length()
+    digit_count in range
   end
 
   defp safe_email?(email) do
