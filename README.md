@@ -19,6 +19,8 @@ Este repositorio contiene guías del SDLC para personas y agentes de IA.
 | `lib/sdlc/reader/` | Local reader and HTML-to-Markdown library. / Lector local y biblioteca HTML a Markdown. |
 | `scripts/` | Repeatable document and security checks. / Checks repetibles de documentación y seguridad. |
 | `test/` | Reader tests and local fixtures. / Tests del lector y fixtures locales. |
+| `.agents/skills/` | Repository workflows for agents. / Workflows del repositorio para agentes. |
+| `AGENTS.md` | Repository agent map and delivery rules. / Mapa de agentes y reglas de entrega. |
 
 The English and Spanish indexes list the same maintained guides in the same order.
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resolve PR Review Threads"
+  short_description: "Verify, answer, and resolve pull request review threads"
+  default_prompt: "Review every current pull request thread, verify each claim, fix or reject it with evidence, reply inline, and resolve each completed thread."

@@ -8,6 +8,24 @@ A Codex review identifies possible defects, regressions, missing tests, security
 
 Review comments are claims, not automatic requirements. Verify each claim against the current revision and repository contract.
 
+## Q: When should a Codex review start?
+
+Open a draft pull request when early visibility helps coordination. Do not request a complete review for known incomplete work.
+
+Move the pull request to ready for review only when:
+
+- its intended scope is present;
+- focused checks pass;
+- required documentation is current;
+- the author completed a self-review;
+- the description states evidence, limits, and stack position.
+
+The initial Codex review can start automatically when the pull request becomes ready. Record the exact reviewed head.
+
+After later changes, push the complete review response first. Then request another pass with `@codex review`.
+
+Do not request repeated reviews while known comments, failing checks, or unpublished fixes remain.
+
 ## Q: How should a finding be checked for accuracy?
 
 Read the comment, current head, exact diff, surrounding contract, and related tests.
@@ -51,6 +69,14 @@ State the exact code, test, command, or contract that supports rejection.
 
 Do not reject a valid finding because the fix is inconvenient. Use `blocked` and link the approved follow-up work.
 
+## Q: When should a person be tagged?
+
+Tag a responsible person only when an external decision, permission, dependency, or product choice blocks completion.
+
+State the smallest exact question. Include the available evidence, options, risk, and required owner.
+
+Keep the thread unresolved with status `blocked`. Continue all safe work that does not depend on the answer.
+
 ## Q: Which thread statuses should be used?
 
 Use one explicit status in each reply:
@@ -72,7 +98,12 @@ Include these fields:
 - `Change`: the exact behavior or document change;
 - `Evidence`: focused checks and aggregate checks;
 - `Limit`: any remaining unverified platform, path, or condition;
-- `Commit`: the pushed `SHA` that contains the result.
+- `Commit`: the pushed `SHA` and full commit link that contain the result;
+- `Code`: a stable source permalink at the full commit when a code location proves the result.
+
+Reply in the same inline thread. Do not move the conclusion to a general pull-request comment.
+
+Use the full commit for every permalink. Select the narrowest line range that proves the change.
 
 Use this form for a fixed finding:
 
@@ -83,7 +114,8 @@ Accuracy: valid. The current revision changed fenced code content.
 Change: normalization now applies only outside fenced code.
 Evidence: the focused regression test and mise run verify passed.
 Limit: no known limit for generated fenced blocks.
-Commit: SHA.
+Commit: <full-SHA> | <full-commit-url>.
+Code: <stable-code-url>.
 ```
 
 Use this form for a rejected finding:
@@ -95,7 +127,8 @@ Accuracy: invalid. The current contract rejects this path before the changed cod
 Change: no code change.
 Evidence: the named test reproduces the rejected input and passes at the pushed head.
 Limit: the test covers only the named contract.
-Commit: SHA.
+Commit: <full-SHA> | <full-commit-url>.
+Code: <stable-code-url>.
 ```
 
 ## Q: When should a review thread be resolved?
@@ -106,7 +139,34 @@ Resolve `fixed`, `rejected`, or `superseded` threads when the conclusion is comp
 
 Do not resolve a partial fix. Do not resolve a failing check or an undocumented limitation.
 
-After all threads reach a final state, request a new Codex review with `@codex review`.
+After all threads reach a final state, verify the complete pull request before requesting another Codex review.
+
+## Q: What must be checked before another review or merge?
+
+Confirm these conditions at the current head:
+
+- the pull request targets the intended base branch;
+- the branch contains the current base or the documented stack parent;
+- no merge conflict remains;
+- all required CI checks report success for the current head;
+- all required approvals apply to the current revision;
+- every review thread has a final or explicitly blocked status;
+- no accepted fix remains only in a local worktree;
+- the pull-request diff contains only the intended layer.
+
+Update or rebase the branch when repository policy requires it. Coordinate before rewriting published history, and use `--force-with-lease`.
+
+After these checks pass, request another review with `@codex review` when policy requires one.
+
+## Q: How can the workflow be repeatable?
+
+Keep a repository-local skill at `.agents/skills/resolve-pr-review-threads/SKILL.md` when the repository uses this workflow.
+
+The skill should list current threads, classify each finding, verify the current head, run focused checks, and prepare traceable replies.
+
+It should also verify CI, conflicts, base currency, approvals, and unresolved-thread count before completion.
+
+The skill must not accept, reject, reply, or resolve a thread without evidence. The pull-request owner remains responsible for the final merge decision.
 
 ## Q: How should review text be written?
 
