@@ -45,7 +45,12 @@ defmodule Sdlc.Reader.Renderer.ChromeTest do
 
     runner = fn executable, arguments, options ->
       send(caller, {:command, executable, arguments, options})
-      {:ok, "<html><body><article><h1>Rendered</h1></article></body></html>"}
+
+      {:ok,
+       %{
+         final_url: "https://example.test/final-article",
+         body: "<html><body><article><h1>Rendered</h1></article></body></html>"
+       }}
     end
 
     resolver = fn "example.test" -> {:ok, [{93, 184, 216, 34}]} end
@@ -63,7 +68,9 @@ defmodule Sdlc.Reader.Renderer.ChromeTest do
                runner: runner
              )
 
-    assert response.content_type == "text/html; charset=utf-8"
+    assert response.status == nil
+    assert response.headers == %{}
+    assert response.content_type == "text/html"
     assert response.body =~ "<h1>Rendered</h1>"
 
     assert_receive {:command, "/verified/chrome", arguments, command_options}
@@ -87,7 +94,12 @@ defmodule Sdlc.Reader.Renderer.ChromeTest do
 
     runner = fn _executable, arguments, _options ->
       send(caller, {:arguments, arguments})
-      {:ok, "<html><body><article>Ready</article></body></html>"}
+
+      {:ok,
+       %{
+         final_url: "https://example.test/final-article",
+         body: "<html><body><article>Ready</article></body></html>"
+       }}
     end
 
     resolver = fn "example.test" -> {:ok, [{93, 184, 216, 34}]} end
@@ -112,7 +124,12 @@ defmodule Sdlc.Reader.Renderer.ChromeTest do
 
     runner = fn _executable, arguments, _options ->
       send(caller, {:arguments, arguments})
-      {:ok, "<html><body><article>Final</article></body></html>"}
+
+      {:ok,
+       %{
+         final_url: "https://final.example.test/article",
+         body: "<html><body><article>Final</article></body></html>"
+       }}
     end
 
     resolver = fn "final.example.test" -> {:ok, [{93, 184, 216, 34}]} end
@@ -130,6 +147,51 @@ defmodule Sdlc.Reader.Renderer.ChromeTest do
     assert response.url == "https://final.example.test/article"
     assert_receive {:arguments, arguments}
     assert List.last(arguments) == response.url
+  end
+
+  test "rejects rendered HTML without browser final URL evidence" do
+    runner = fn _executable, _arguments, _options ->
+      {:ok, "<html><body><article>Unverified</article></body></html>"}
+    end
+
+    resolver = fn "example.test" -> {:ok, [{93, 184, 216, 34}]} end
+
+    assert {:error, :rendered_final_url_unverified} =
+             Chrome.render("https://example.test/article",
+               chrome_path: "/verified/chrome",
+               isolation_confirmed: true,
+               profile_root: @profile_root,
+               resolver: resolver,
+               fetcher: FakeFetcher,
+               runner: runner
+             )
+  end
+
+  test "rejects browser navigation after the static preflight" do
+    runner = fn _executable, _arguments, _options ->
+      {:ok,
+       %{
+         final_url: "https://other.example.test/article",
+         body: "<html><body><article>Other</article></body></html>"
+       }}
+    end
+
+    resolver = fn
+      "example.test" -> {:ok, [{93, 184, 216, 34}]}
+      "other.example.test" -> {:ok, [{93, 184, 216, 35}]}
+    end
+
+    assert {:error,
+            {:rendered_navigation_changed, "https://example.test/final-article",
+             "https://other.example.test/article"}} =
+             Chrome.render("https://example.test/article",
+               chrome_path: "/verified/chrome",
+               isolation_confirmed: true,
+               profile_root: @profile_root,
+               resolver: resolver,
+               fetcher: FakeFetcher,
+               runner: runner
+             )
   end
 
   test "rejects a private final URL before Chrome starts" do
