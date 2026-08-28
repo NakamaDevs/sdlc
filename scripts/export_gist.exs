@@ -91,6 +91,7 @@ defmodule GistExport do
 
     output = Path.expand(output)
     File.mkdir_p!(output)
+    validate_output_directory!(output)
 
     anchors = Map.new(@files, fn {source, target} -> {source, gist_anchor(target)} end)
 
@@ -104,6 +105,8 @@ defmodule GistExport do
       validate_export!(content, target)
       File.write!(Path.join(output, target), content)
     end)
+
+    validate_output_directory!(output)
 
     IO.puts("Exported #{length(@files)} #{language} files to #{output}.")
   end
@@ -136,6 +139,25 @@ defmodule GistExport do
       |> String.trim("-")
 
     "#file-#{normalized}"
+  end
+
+  defp validate_output_directory!(output) do
+    expected = MapSet.new(@files, &elem(&1, 1))
+    entries = File.ls!(output)
+
+    if Enum.any?(entries, &(not MapSet.member?(expected, &1))) do
+      raise "Gist output directory contains unexpected entries. Clear it before export."
+    end
+
+    Enum.each(entries, fn entry ->
+      case File.lstat(Path.join(output, entry)) do
+        {:ok, %{type: :regular}} ->
+          :ok
+
+        _result ->
+          raise "Gist output directory contains a non-regular entry. Clear it before export."
+      end
+    end)
   end
 
   defp validate_file_order! do
