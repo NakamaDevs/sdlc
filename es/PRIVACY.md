@@ -55,7 +55,9 @@ contenido binario. Revise imágenes, audio, video, archivos comprimidos y otros
 binarios con un proceso aprobado. Use enlaces de Gist sin propietario cuando el
 nombre de una cuenta pública no aporte contexto necesario.
 
-Un check repetible puede encontrar identificadores estructurados y valores prohibidos conocidos. Debe informar sólo archivo, línea y categoría. No debe repetir el valor encontrado.
+Un check repetible puede encontrar identificadores estructurados y valores
+prohibidos conocidos. Debe informar sólo una etiqueta de archivo censurada, la
+línea y la categoría. No debe repetir el valor encontrado.
 
 Mantenga las listas permitidas acotadas, explicadas, probadas y revisadas. Use
 entradas exactas para las direcciones públicas de roles de una organización. No
