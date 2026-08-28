@@ -32,4 +32,58 @@ defmodule Sdlc.GistExportTest do
     refute message =~ private_value
     assert File.read!(stale_path) == private_value
   end
+
+  test "redacts a rejected organization marker" do
+    root = export_fixture!()
+    marker = Enum.join(["NakamaDevs", "private-synthetic-repository"], "/")
+    File.write!(Path.join([root, "en", "SDLC.md"]), "\n#{marker}\n", [:append])
+
+    {message, status} = run_export(root)
+
+    assert status != 0
+    assert message =~ "SDLC.md contains an organization marker outside the optional profile."
+    refute message =~ marker
+  end
+
+  test "redacts a rejected relative destination" do
+    root = export_fixture!()
+    destination = Enum.join(["people", "synthetic-person-record"], "/")
+
+    File.write!(
+      Path.join([root, "en", "SDLC.md"]),
+      "\n[private reference](./#{destination})\n",
+      [:append]
+    )
+
+    {message, status} = run_export(root)
+
+    assert status != 0
+    assert message =~ "SDLC.md retains a relative Gist destination."
+    refute message =~ destination
+  end
+
+  defp export_fixture! do
+    root =
+      Path.join([
+        @root,
+        "_build",
+        "test",
+        "gist-export-source-#{System.unique_integer([:positive, :monotonic])}"
+      ])
+
+    on_exit(fn -> File.rm_rf!(root) end)
+    File.mkdir_p!(Path.join(root, "en"))
+    File.cp_r!(Path.join(@root, "scripts"), Path.join(root, "scripts"))
+    File.cp!(Path.join([@root, "en", "SDLC.md"]), Path.join([root, "en", "SDLC.md"]))
+    root
+  end
+
+  defp run_export(root) do
+    System.cmd(
+      System.find_executable("elixir"),
+      ["scripts/export_gist.exs", "en", Path.join(root, "output")],
+      cd: root,
+      stderr_to_stdout: true
+    )
+  end
 end

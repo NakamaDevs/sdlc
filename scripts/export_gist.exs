@@ -176,8 +176,8 @@ defmodule GistExport do
         nil ->
           :ok
 
-        marker ->
-          raise "#{source} contains an organization marker outside the optional profile: #{inspect(marker)}"
+        _marker ->
+          raise "#{source} contains an organization marker outside the optional profile."
       end
     end
   end
@@ -220,8 +220,8 @@ defmodule GistExport do
     case Regex.run(~r/!?\[[^\]]*\]\((?!#|https?:\/\/|mailto:)([^)\s]+)[^)]*\)/, content,
            capture: :all_but_first
          ) do
-      [destination] ->
-        raise "#{target} retains a relative Gist destination: #{destination}"
+      [_destination] ->
+        raise "#{target} retains a relative Gist destination."
 
       nil ->
         :ok
