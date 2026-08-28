@@ -2,7 +2,7 @@ defmodule Sdlc.PrivacyCheck do
   @moduledoc false
 
   @email ~r/(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/u
-  @ssn ~r/(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)/
+  @ssn ~r/(?<![A-Za-z0-9_])(?<!\d[.\-\p{Zs}])\d{3}-\d{2}-\d{4}(?![A-Za-z0-9_]|[.\-\p{Zs}]\d)/u
   @e164_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{7,14}(?![A-Za-z0-9_]|[.\-\p{Zs}]\d)/u
   @domestic_compact_phone ~r/(?<![A-Za-z0-9_\/.=])\d{8,11}(?![A-Za-z0-9_]|[.\-\p{Zs}]\d)/u
   @international_grouped_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{0,6}(?:[.\-\p{Zs}]\d{1,8}){1,6}(?![A-Za-z0-9_]|[.\-\p{Zs}]\d)/u
@@ -68,13 +68,12 @@ defmodule Sdlc.PrivacyCheck do
     |> Enum.flat_map(fn {{name, content}, index} ->
       redacted_name = "tracked path ##{index} (redacted)"
       path_findings = path_findings(redacted_name, name)
-      report_name = if path_findings == [], do: name, else: redacted_name
 
       content_findings =
         content
         |> String.split("\n")
         |> Enum.with_index(1)
-        |> Enum.flat_map(fn {line, number} -> line_findings(report_name, number, line) end)
+        |> Enum.flat_map(fn {line, number} -> line_findings(redacted_name, number, line) end)
 
       path_findings ++ content_findings
     end)
@@ -84,7 +83,7 @@ defmodule Sdlc.PrivacyCheck do
     name
     |> String.split(["/", "\\"])
     |> Enum.flat_map(fn component ->
-      strict_component = String.replace(component, ~r/[.=]/u, " ")
+      strict_component = String.replace(component, ~r/[\p{L}\p{M}_=.]+/u, " ")
 
       line_findings(redacted_name, "path", component) ++
         line_findings(redacted_name, "path", strict_component)

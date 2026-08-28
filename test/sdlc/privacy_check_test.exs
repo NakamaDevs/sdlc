@@ -27,10 +27,25 @@ defmodule Sdlc.PrivacyCheckTest do
 
     error = assert_raise RuntimeError, fn -> PrivacyCheck.validate!(documents) end
 
-    assert error.message =~ "guide.md:1 contains an email address"
-    assert error.message =~ "guide.md:1 contains a government identifier pattern"
+    assert error.message =~ "tracked path #1 (redacted):1 contains an email address"
+
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains a government identifier pattern"
+
     refute error.message =~ email
     refute error.message =~ government_id
+  end
+
+  test "requires complete boundaries for government identifier patterns" do
+    government_id = Enum.join(["000", "00", "0000"], "-")
+
+    assert [%{category: "a government identifier pattern"}] =
+             PrivacyCheck.findings([{"guide.md", government_id}])
+
+    assert PrivacyCheck.findings([{"guide.md", "build" <> government_id}]) == []
+    assert PrivacyCheck.findings([{"guide.md", government_id <> "beta"}]) == []
+    assert PrivacyCheck.findings([{"guide.md", government_id <> "-0"}]) == []
+    assert PrivacyCheck.findings([{"guide.md", "1-" <> government_id}]) == []
   end
 
   test "reports an account-bearing Gist URL without repeating it" do
@@ -42,7 +57,7 @@ defmodule Sdlc.PrivacyCheckTest do
         PrivacyCheck.validate!([{"guide.md", gist_url}])
       end
 
-    assert error.message =~ "guide.md:1 contains a Gist account identifier"
+    assert error.message =~ "tracked path #1 (redacted):1 contains a Gist account identifier"
     refute error.message =~ gist_url
   end
 
@@ -61,11 +76,11 @@ defmodule Sdlc.PrivacyCheckTest do
         ])
       end
 
-    assert error.message =~ "guide.md:1 contains a phone number pattern"
-    assert error.message =~ "guide.md:2 contains a phone number pattern"
-    assert error.message =~ "guide.md:3 contains a phone number pattern"
-    assert error.message =~ "guide.md:4 contains a phone number pattern"
-    assert error.message =~ "guide.md:5 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):2 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):3 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):4 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):5 contains a phone number pattern"
     refute error.message =~ domestic
     refute error.message =~ international
     refute error.message =~ adjacent
@@ -84,8 +99,8 @@ defmodule Sdlc.PrivacyCheckTest do
         ])
       end
 
-    assert error.message =~ "guide.md:1 contains a phone number pattern"
-    assert error.message =~ "guide.md:2 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):2 contains a phone number pattern"
     refute error.message =~ international_mobile
     refute error.message =~ domestic_mobile
 
@@ -105,9 +120,15 @@ defmodule Sdlc.PrivacyCheckTest do
         ])
       end
 
-    assert error.message =~ "guide.md:1 contains an international phone number pattern"
-    assert error.message =~ "guide.md:2 contains an international phone number pattern"
-    assert error.message =~ "guide.md:3 contains an international phone number pattern"
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):2 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):3 contains an international phone number pattern"
+
     refute error.message =~ two_groups
     refute error.message =~ one_digit_group
     refute error.message =~ wide_group
@@ -127,8 +148,12 @@ defmodule Sdlc.PrivacyCheckTest do
         PrivacyCheck.validate!([{"guide.md", Enum.join([compact, one_group], "\n")}])
       end
 
-    assert error.message =~ "guide.md:1 contains an international phone number pattern"
-    assert error.message =~ "guide.md:2 contains an international phone number pattern"
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):2 contains an international phone number pattern"
+
     refute error.message =~ compact
     refute error.message =~ one_group
   end
@@ -151,10 +176,18 @@ defmodule Sdlc.PrivacyCheckTest do
         ])
       end
 
-    assert error.message =~ "guide.md:1 contains an international phone number pattern"
-    assert error.message =~ "guide.md:2 contains an international phone number pattern"
-    assert error.message =~ "guide.md:3 contains an international phone number pattern"
-    assert error.message =~ "guide.md:4 contains an international phone number pattern"
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):2 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):3 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):4 contains an international phone number pattern"
+
     refute error.message =~ regular
     refute error.message =~ figure
     refute error.message =~ narrow
@@ -169,7 +202,9 @@ defmodule Sdlc.PrivacyCheckTest do
         PrivacyCheck.validate!([{"guide.md", adjacent}])
       end
 
-    assert error.message =~ "guide.md:1 contains an international phone number pattern"
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains an international phone number pattern"
+
     refute error.message =~ adjacent
   end
 
@@ -183,8 +218,12 @@ defmodule Sdlc.PrivacyCheckTest do
         PrivacyCheck.validate!([{"guide.md", Enum.join([trunk, maximum], "\n")}])
       end
 
-    assert error.message =~ "guide.md:1 contains an international phone number pattern"
-    assert error.message =~ "guide.md:2 contains an international phone number pattern"
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):2 contains an international phone number pattern"
+
     refute error.message =~ trunk
     refute error.message =~ maximum
     assert PrivacyCheck.findings([{"guide.md", overlong}]) == []
@@ -199,8 +238,8 @@ defmodule Sdlc.PrivacyCheckTest do
         PrivacyCheck.validate!([{"guide.md", Enum.join([international, domestic], "\n")}])
       end
 
-    assert error.message =~ "guide.md:1 contains a phone number pattern"
-    assert error.message =~ "guide.md:2 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):2 contains a phone number pattern"
     refute error.message =~ international
     refute error.message =~ domestic
   end
@@ -233,11 +272,11 @@ defmodule Sdlc.PrivacyCheckTest do
         ])
       end
 
-    assert error.message =~ "guide.md:1 contains a phone number pattern"
-    assert error.message =~ "guide.md:2 contains a phone number pattern"
-    assert error.message =~ "guide.md:3 contains a phone number pattern"
-    assert error.message =~ "guide.md:4 contains a phone number pattern"
-    assert error.message =~ "guide.md:5 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):2 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):3 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):4 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):5 contains a phone number pattern"
     refute error.message =~ two_groups
     refute error.message =~ four_groups
     refute error.message =~ uneven_groups
@@ -259,7 +298,7 @@ defmodule Sdlc.PrivacyCheckTest do
         PrivacyCheck.validate!([{"guide.md", compact}])
       end
 
-    assert error.message =~ "guide.md:1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
     refute error.message =~ compact
     assert PrivacyCheck.findings([{"guide.md", embedded}]) == []
     assert PrivacyCheck.findings([{"guide.md", overlong}]) == []
@@ -299,7 +338,7 @@ defmodule Sdlc.PrivacyCheckTest do
         PrivacyCheck.validate!([{"guide.md", domestic}])
       end
 
-    assert error.message =~ "guide.md:1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
     refute error.message =~ domestic
   end
 
@@ -330,8 +369,8 @@ defmodule Sdlc.PrivacyCheckTest do
 
     findings =
       PrivacyCheck.findings([
-        {"contacts/#{compact}.txt", ""},
-        {"contacts/id=#{parenthesized}.txt", ""}
+        {"contacts/phone_#{compact}.txt", ""},
+        {"contacts/id_#{parenthesized}.txt", ""}
       ])
 
     assert %{file: "tracked path #1 (redacted)", line: "path", category: category} =
@@ -345,6 +384,20 @@ defmodule Sdlc.PrivacyCheckTest do
     assert category == "a phone number pattern"
     refute inspect(findings) =~ compact
     refute inspect(findings) =~ parenthesized
+  end
+
+  test "redacts a tracked path in content diagnostics" do
+    private_email = Enum.join(["private", "invalid.local"], "@")
+    private_path = Enum.join(["sample", "user", "record.md"], "-")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{private_path, "Contact #{private_email}."}])
+      end
+
+    assert error.message =~ "tracked path #1 (redacted):1 contains an email address"
+    refute error.message =~ private_path
+    refute error.message =~ private_email
   end
 
   test "redacts a tracked path when the worktree file cannot be read" do
@@ -442,7 +495,7 @@ defmodule Sdlc.PrivacyCheckTest do
         |> PrivacyCheck.validate!()
       end
 
-    assert error.message =~ "guide.md:1 contains an email address"
+    assert error.message =~ "tracked path #1 (redacted):1 contains an email address"
     refute error.message =~ private_email
   end
 
@@ -465,7 +518,7 @@ defmodule Sdlc.PrivacyCheckTest do
         |> PrivacyCheck.validate!()
       end
 
-    assert error.message =~ "guide.md (worktree):1 contains an email address"
+    assert error.message =~ "tracked path #2 (redacted):1 contains an email address"
     refute error.message =~ private_email
   end
 
