@@ -54,7 +54,9 @@ version of a Git-tracked UTF-8 text file. It skips binary content. Review images
 audio, video, archives, and other binary files with an approved process. Use
 owner-free Gist links when a public account name adds no necessary context.
 
-A repeatable check can find structured identifiers and known prohibited values. It must report only the file, line, and category. It must not repeat the discovered value.
+A repeatable check can find structured identifiers and known prohibited values.
+It must report only a redacted file label, line, and category. It must not
+repeat the discovered value.
 
 Keep allowlists narrow, explained, tested, and reviewed. Use exact allowlist
 entries for public organizational role addresses. Do not allow a complete
