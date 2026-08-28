@@ -42,7 +42,8 @@ Este repositorio es la guía canónica y revisable. Los Gists públicos son edic
 34. [UPDATE.md](UPDATE.md) — revisión de documentos, evidencia de comandos y registros de actualización.
 35. [CHANGELOG.md](CHANGELOG.md) — fuentes del changelog, historia de merge, Semantic Versioning y generación.
 36. [DEPLOY.md](DEPLOY.md) — planificación de releases, publicación, deployment, promoción y rollback.
-37. [NAKAMADEVS.md](NAKAMADEVS.md) — perfil opcional de política, skills, stack y propiedad de NakamaDevs. Mantenga este perfil al final.
+37. [PRIVACY.md](PRIVACY.md) — PII, PHI, minimización, datos sintéticos, detección y respuesta.
+38. [NAKAMADEVS.md](NAKAMADEVS.md) — perfil opcional de política, skills, stack y propiedad de NakamaDevs. Mantenga este perfil al final.
 
 ## Referencias
 
@@ -50,5 +51,5 @@ Use [REFERENCES.md](REFERENCES.md) para las referencias activas verificadas y el
 
 Las instantáneas de fuentes conservan su idioma original. Son copias de evidencia, no traducciones mantenidas.
 
-- [Gist público en inglés — `sldc-en`](https://gist.github.com/hectorddmx/2ee0c10e6cb95231fd252d15ebfc8bbb)
-- [Gist público en español — `sldc-es`](https://gist.github.com/hectorddmx/048bf4208a4ede278917c6a93c3e7ac6)
+- [Gist público en inglés — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
+- [Gist público en español — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)

@@ -1,3 +1,5 @@
+Code.require_file("lib/privacy_check.exs", __DIR__)
+
 defmodule GistExport do
   @root Path.expand("..", __DIR__)
 
@@ -39,6 +41,7 @@ defmodule GistExport do
     {"CODE-REVIEW.md", "z34-CODE-REVIEW.md"},
     {"CHANGELOG.md", "z35-CHANGELOG.md"},
     {"DEPLOY.md", "z36-DEPLOY.md"},
+    {"PRIVACY.md", "z37-PRIVACY.md"},
     {"NAKAMADEVS.md", "zz01-NAKAMADEVS.md"}
   ]
 
@@ -46,8 +49,7 @@ defmodule GistExport do
 
   @organization_markers [
     ~r/@NakamaDevs\//i,
-    ~r/\bNAK-\d+\b/i,
-    ~r/hectorddmx@gmail\.com/i
+    ~r/\bNAK-\d+\b/i
   ]
 
   @organization_repository_marker ~r/(?:^|[^A-Za-z0-9_.-])NakamaDevs\/([A-Za-z0-9_.-]+)/im
@@ -56,7 +58,6 @@ defmodule GistExport do
   @organization_marker_examples [
     "@nakamadevs/devs",
     "nak-662",
-    "HECTORDDMX@GMAIL.COM",
     "github.com/nakamadevs/kaicho",
     "github.com/NAKAMADEVS/SKILLS",
     "git@github.com:NakamaDevs/Kaicho.git",
@@ -90,6 +91,7 @@ defmodule GistExport do
 
     output = Path.expand(output)
     File.mkdir_p!(output)
+    validate_output_directory!(output)
 
     anchors = Map.new(@files, fn {source, target} -> {source, gist_anchor(target)} end)
 
@@ -99,9 +101,12 @@ defmodule GistExport do
       validate_profile_boundary!(content, source)
       content = rewrite_guide_links(content, anchors)
       content = rewrite_repository_links(content)
+      Sdlc.PrivacyCheck.validate!([{target, content}])
       validate_export!(content, target)
       File.write!(Path.join(output, target), content)
     end)
+
+    validate_output_directory!(output)
 
     IO.puts("Exported #{length(@files)} #{language} files to #{output}.")
   end
@@ -136,6 +141,25 @@ defmodule GistExport do
     "#file-#{normalized}"
   end
 
+  defp validate_output_directory!(output) do
+    expected = MapSet.new(@files, &elem(&1, 1))
+    entries = File.ls!(output)
+
+    if Enum.any?(entries, &(not MapSet.member?(expected, &1))) do
+      raise "Gist output directory contains unexpected entries. Clear it before export."
+    end
+
+    Enum.each(entries, fn entry ->
+      case File.lstat(Path.join(output, entry)) do
+        {:ok, %{type: :regular}} ->
+          :ok
+
+        _result ->
+          raise "Gist output directory contains a non-regular entry. Clear it before export."
+      end
+    end)
+  end
+
   defp validate_file_order! do
     sources = Enum.map(@files, &elem(&1, 0))
     split_at = length(sources) - length(@optional_files)
@@ -152,8 +176,8 @@ defmodule GistExport do
         nil ->
           :ok
 
-        marker ->
-          raise "#{source} contains an organization marker outside the optional profile: #{inspect(marker)}"
+        _marker ->
+          raise "#{source} contains an organization marker outside the optional profile."
       end
     end
   end
@@ -196,8 +220,8 @@ defmodule GistExport do
     case Regex.run(~r/!?\[[^\]]*\]\((?!#|https?:\/\/|mailto:)([^)\s]+)[^)]*\)/, content,
            capture: :all_but_first
          ) do
-      [destination] ->
-        raise "#{target} retains a relative Gist destination: #{destination}"
+      [_destination] ->
+        raise "#{target} retains a relative Gist destination."
 
       nil ->
         :ok

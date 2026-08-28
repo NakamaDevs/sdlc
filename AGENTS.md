@@ -9,7 +9,8 @@ Kaicho defines required NakamaDevs policy. This file defines repository-specific
 - Use team `NAK` and project `SDLC` in Linear.
 - Create or locate an issue before a repository change.
 - Use one issue, branch, Herdr worktree, owner, and pull request for each reviewable change.
-- Follow the workspace branch policy. Automated agents use the reserved `cx` namespace.
+- Use `<type>/NAK-123-short-description` for every new branch.
+- Do not add usernames, initials, tool names, or agent namespaces to branch names.
 - Record stack parents in Linear and each pull request.
 
 ## Documentation contract
@@ -57,10 +58,7 @@ Do not resolve a thread before the evidence and fix are available on the remote 
 
 Use semantic and atomic Conventional Commits.
 
-Pass this identity for repository commits:
-
-```text
-Héctor De Diego <hectorddmx@gmail.com>
-```
+Use the approved repository identity for commits. Keep its name and email in
+private Git configuration. Do not copy them into reusable guidance.
 
 Publish both public Gists only after `mise run verify` passes. Keep the repository as the canonical source.

@@ -98,7 +98,9 @@ Si un check necesario no puede ejecutarse, registre la limitación exacta. No af
 
 ## P: ¿Cómo debe funcionar la autoría?
 
-Use la identidad humana aprobada para commits del repositorio. Configúrela explícitamente cuando no exista una identidad global de Git.
+Use la identidad aprobada para commits del repositorio. Mantenga sus valores en la configuración privada de Git.
+
+No publique un nombre real ni email en guías o ejemplos reutilizables. Use una dirección de autor que proteja la privacidad cuando lo permita la política.
 
 No invente coautores. Agregue un coautor solo cuando esa persona contribuyó y aprobó la atribución.
 
