@@ -36,6 +36,16 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ government_id
   end
 
+  test "requires a complete right boundary for email candidates" do
+    email = Enum.join(["release", "host.invalid"], "@")
+
+    assert [%{category: "an email address"}] =
+             PrivacyCheck.findings([{"guide.md", email}])
+
+    assert PrivacyCheck.findings([{"guide.md", email <> "_suffix"}]) == []
+    assert PrivacyCheck.findings([{"guide.md", email <> "%suffix"}]) == []
+  end
+
   test "requires complete boundaries for government identifier patterns" do
     government_id = Enum.join(["000", "00", "0000"], "-")
 
@@ -194,6 +204,28 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ thin
   end
 
+  test "reports international phone formats with Unicode dashes" do
+    nonbreaking_hyphen = <<0xE2, 0x80, 0x91>>
+    en_dash = <<0xE2, 0x80, 0x93>>
+    groups = ["1", "42", "68", "53", "00"]
+    nonbreaking = "+33" <> nonbreaking_hyphen <> Enum.join(groups, nonbreaking_hyphen)
+    typographic = "+33" <> en_dash <> Enum.join(groups, en_dash)
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", Enum.join([nonbreaking, typographic], "\n")}])
+      end
+
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains an international phone number pattern"
+
+    assert error.message =~
+             "tracked path #1 (redacted):2 contains an international phone number pattern"
+
+    refute error.message =~ nonbreaking
+    refute error.message =~ typographic
+  end
+
   test "reports adjacent country and area codes" do
     adjacent = "+44" <> "161" <> " " <> Enum.join(["496", "0123"], " ")
 
@@ -284,6 +316,24 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ dot_groups
   end
 
+  test "reports three equal domestic phone groups" do
+    spaced = Enum.join(["912", "345", "678"], " ")
+    hyphenated = Enum.join(["912", "345", "678"], "-")
+    dotted = Enum.join(["912", "345", "678"], ".")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", Enum.join([spaced, hyphenated, dotted], "\n")}])
+      end
+
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):2 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):3 contains a phone number pattern"
+    refute error.message =~ spaced
+    refute error.message =~ hyphenated
+    refute error.message =~ dotted
+  end
+
   test "reports bounded bare compact domestic phone formats" do
     compact = Enum.join(["212", "555", "1234"], "")
     embedded = "build" <> compact
@@ -292,6 +342,7 @@ defmodule Sdlc.PrivacyCheckTest do
     domestic_tail = Enum.join(["123", "456", "78901"], "") <> "-2"
     url_identifier = Enum.join(["4915", "1933"], "")
     url = "https://news.example.test/item?id=" <> url_identifier
+    labeled = "phone=" <> compact
 
     error =
       assert_raise RuntimeError, fn ->
@@ -305,6 +356,9 @@ defmodule Sdlc.PrivacyCheckTest do
     assert PrivacyCheck.findings([{"guide.md", international_tail}]) == []
     assert PrivacyCheck.findings([{"guide.md", domestic_tail}]) == []
     assert PrivacyCheck.findings([{"guide.md", url}]) == []
+
+    assert [%{category: "a phone number pattern"}] =
+             PrivacyCheck.findings([{"guide.md", labeled}])
   end
 
   test "keeps ambiguous grouped values blocked and rejects overlong domestic identifiers" do
