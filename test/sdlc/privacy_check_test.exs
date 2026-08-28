@@ -56,19 +56,24 @@ defmodule Sdlc.PrivacyCheckTest do
     assert PrivacyCheck.findings([{"guide.md", government_id <> "beta"}]) == []
     assert PrivacyCheck.findings([{"guide.md", government_id <> "-0"}]) == []
     assert PrivacyCheck.findings([{"guide.md", "1-" <> government_id}]) == []
+    assert PrivacyCheck.findings([{"guide.md", government_id <> "/0"}]) == []
+    assert PrivacyCheck.findings([{"guide.md", "1/" <> government_id}]) == []
   end
 
   test "reports an account-bearing Gist URL without repeating it" do
     owner = Enum.join(["personal", "handle"], "-")
     gist_url = "https://gist.github.com/#{owner}/#{String.duplicate("a", 32)}"
+    legacy_url = "https://gist.github.com/#{owner}/#{Enum.join(["317", "050"])}"
 
     error =
       assert_raise RuntimeError, fn ->
-        PrivacyCheck.validate!([{"guide.md", gist_url}])
+        PrivacyCheck.validate!([{"guide.md", Enum.join([gist_url, legacy_url], "\n")}])
       end
 
     assert error.message =~ "tracked path #1 (redacted):1 contains a Gist account identifier"
+    assert error.message =~ "tracked path #1 (redacted):2 contains a Gist account identifier"
     refute error.message =~ gist_url
+    refute error.message =~ legacy_url
   end
 
   test "reports common separated phone formats without repeating them" do
@@ -240,6 +245,39 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ adjacent
   end
 
+  test "reports international access-prefix phone formats" do
+    access_prefix = "00" <> "49 " <> Enum.join(["30", "901820"], " ")
+    doi = "https://doi.org/10.1037/" <> Enum.join(["0021", "9010", "86", "3", "499"], ".")
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", access_prefix}])
+      end
+
+    assert error.message =~
+             "tracked path #1 (redacted):1 contains an international phone number pattern"
+
+    refute error.message =~ access_prefix
+    assert PrivacyCheck.findings([{"guide.md", doi}]) == []
+  end
+
+  test "reports bounded slash-separated phone formats" do
+    international = "+49 " <> Enum.join(["30", "901820"], "/")
+    domestic = Enum.join(["030", "901820"], "/")
+    url = "https://news.example.test/030/901820"
+
+    error =
+      assert_raise RuntimeError, fn ->
+        PrivacyCheck.validate!([{"guide.md", Enum.join([international, domestic], "\n")}])
+      end
+
+    assert error.message =~ "tracked path #1 (redacted):1 contains a phone number pattern"
+    assert error.message =~ "tracked path #1 (redacted):2 contains a phone number pattern"
+    refute error.message =~ international
+    refute error.message =~ domestic
+    assert PrivacyCheck.findings([{"guide.md", url}]) == []
+  end
+
   test "reports an international trunk marker" do
     trunk = "+33 " <> "(0)" <> "1 " <> Enum.join(["42", "68", "53", "00"], " ")
     maximum = "+49 " <> "(0) " <> Enum.join(["1234", "1234567", "89"], " ")
@@ -342,7 +380,15 @@ defmodule Sdlc.PrivacyCheckTest do
     domestic_tail = Enum.join(["123", "456", "78901"], "") <> "-2"
     url_identifier = Enum.join(["4915", "1933"], "")
     url = "https://news.example.test/item?id=" <> url_identifier
+    query_id_url = "https://news.example.test/item?qid=" <> url_identifier
+
+    parameterized_path_url =
+      "https://news.example.test/item/ref=value?qid=" <> url_identifier
+
+    relative_url = "item?id=" <> url_identifier
+    query_only_url = "?id=" <> url_identifier
     labeled = "phone=" <> compact
+    labeled_url = "https://news.example.test/item?phone=" <> compact
 
     error =
       assert_raise RuntimeError, fn ->
@@ -356,9 +402,16 @@ defmodule Sdlc.PrivacyCheckTest do
     assert PrivacyCheck.findings([{"guide.md", international_tail}]) == []
     assert PrivacyCheck.findings([{"guide.md", domestic_tail}]) == []
     assert PrivacyCheck.findings([{"guide.md", url}]) == []
+    assert PrivacyCheck.findings([{"guide.md", query_id_url}]) == []
+    assert PrivacyCheck.findings([{"guide.md", parameterized_path_url}]) == []
+    assert PrivacyCheck.findings([{"guide.md", relative_url}]) == []
+    assert PrivacyCheck.findings([{"guide.md", query_only_url}]) == []
 
     assert [%{category: "a phone number pattern"}] =
              PrivacyCheck.findings([{"guide.md", labeled}])
+
+    assert [%{category: "a phone number pattern"}] =
+             PrivacyCheck.findings([{"guide.md", labeled_url}])
   end
 
   test "keeps ambiguous grouped values blocked and rejects overlong domestic identifiers" do
@@ -438,6 +491,21 @@ defmodule Sdlc.PrivacyCheckTest do
     assert category == "a phone number pattern"
     refute inspect(findings) =~ compact
     refute inspect(findings) =~ parenthesized
+  end
+
+  test "removes digits from strict tracked path label prefixes" do
+    government_id = Enum.join(["000", "00", "0000"], "-")
+    findings = PrivacyCheck.findings([{"records/ssn2_#{government_id}.txt", ""}])
+
+    assert [
+             %{
+               file: "tracked path #1 (redacted)",
+               line: "path",
+               category: "a government identifier pattern"
+             }
+           ] = findings
+
+    refute inspect(findings) =~ government_id
   end
 
   test "redacts a tracked path in content diagnostics" do
