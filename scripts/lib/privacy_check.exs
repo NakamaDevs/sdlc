@@ -2,27 +2,28 @@ defmodule Sdlc.PrivacyCheck do
   @moduledoc false
 
   @email ~r/(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?![A-Za-z0-9_%+-])/u
-  @ssn ~r/(?<![A-Za-z0-9_])(?<!\d[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{3}-\d{2}-\d{4}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
-  @e164_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{7,14}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
-  @domestic_compact_phone ~r/(?<![A-Za-z0-9_\/.])\d{8,11}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
-  @international_grouped_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{0,6}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{1,8}){1,6}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
-  @international_trunk_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?\(0\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?\d{1,4}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{1,8}){1,5}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
+  @ssn ~r/(?<![A-Za-z0-9_])(?<!\d[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{3}[\-\x{2010}-\x{2015}\x{2212}]\d{2}[\-\x{2010}-\x{2015}\x{2212}]\d{4}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
+  @e164_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{7,14}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
+  @domestic_compact_phone ~r/(?<![A-Za-z0-9_\/.])\d{8,11}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
+  @international_grouped_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{0,6}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{1,8}){1,6}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
+  @international_trunk_phone ~r/(?<![A-Za-z0-9_])\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?\(0\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?\d{1,4}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{1,8}){1,5}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
   @separated_phone_patterns [
-    ~r/(?<![A-Za-z0-9_\/.=])(?:(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?)?\(\d{1,4}\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?|(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])?\d{2,4}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{3,4}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{4}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
-    ~r/(?<![A-Za-z0-9_\/.=])(?:(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?)?\(\d{1,4}\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?|\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{2,4}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{5}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{4}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
-    ~r/(?<![A-Za-z0-9_\/.=])(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?)?\(\d{1,4}\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?\d{4,8}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
-    ~r/(?<![A-Za-z0-9_\/.=])\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{1,4}\/\d{4,8}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
-    ~r/(?<![A-Za-z0-9_\/.=])\d{2,4}\/\d{4,8}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
-    ~r/(?<![A-Za-z0-9+\/.)=])(?<!\d[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{2}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{2}){3,4}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
-    ~r/(?<![A-Za-z0-9+\/.)=:])(?<!\d[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{3}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{3}){2}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
-    ~r/(?<![A-Za-z0-9+\/.)=:])(?<!\d[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])(?!(?:\d{4}[.-]\d{4}|\d{5}[.-]\d{5})(?!\d))\d{2,8}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{2,8}(?![A-Za-z0-9_]|[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
+    ~r/(?<![A-Za-z0-9_\/.])(?:(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?)?\(\d{1,4}\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?|(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])?\d{2,4}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{3,4}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{4}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
+    ~r/(?<![A-Za-z0-9_\/.])(?:(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?)?\(\d{1,4}\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?|\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{2,4}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{5}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{4}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
+    ~r/(?<![A-Za-z0-9_\/.])(?:\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?)?\(\d{1,4}\)[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]?\d{4,8}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
+    ~r/(?<![A-Za-z0-9_\/.])\+[1-9]\d{0,2}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{1,4}\/\d{4,8}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
+    ~r/(?<![A-Za-z0-9_\/.])\d{2,4}\/\d{4,8}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
+    ~r/(?<![A-Za-z0-9+\/.)])(?<!\d[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{2}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{2}){3,4}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
+    ~r/(?<![A-Za-z0-9+\/.)\:])(?<!\d[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])\d{3}(?:[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{3}){2}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u,
+    ~r/(?<![A-Za-z0-9+\/.)\:])(?<!\d[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}])(?!(?:\d{4}[.-]\d{4}|\d{5}[.-]\d{5})(?!\d))\d{2,8}[.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d{2,8}(?![A-Za-z0-9_]|[\/.\-\p{Zs}\x{2010}-\x{2015}\x{2212}]\d)/u
   ]
   @gist_account_url ~r"https?://gist\.github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[0-9a-f]{1,64}(?![0-9a-f])"i
 
   @safe_email_domains ~w(example.com example.net example.org example.test users.noreply.github.com)
   @safe_transport_emails ~w(git@github.com git@gitlab.com git@bitbucket.org)
   @safe_role_emails ~w(privacy@nvidia.com)
-  @safe_numeric_url_query_keys ~w(id qid)
+  @safe_numeric_url_query_keys ~w(arxiv_id id qid)
+  @phone_label ~r/(?<![A-Za-z0-9_])(?:cell|mobile|phone|tel|telephone|telefono|teléfono)\s*[:=]\s*/iu
 
   def tracked_documents!(root) do
     index_documents = index_documents!(root)
@@ -161,9 +162,8 @@ defmodule Sdlc.PrivacyCheck do
 
   defp compact_domestic_phone?(line) do
     @domestic_compact_phone
-    |> Regex.scan(line, return: :index)
-    |> List.flatten()
-    |> Enum.any?(fn {start, _length} -> not url_query_value?(line, start) end)
+    |> phone_candidate_locations(line)
+    |> Enum.any?(fn {_candidate, start} -> not url_query_value?(line, start) end)
   end
 
   defp url_query_value?(line, candidate_start) do
@@ -184,12 +184,27 @@ defmodule Sdlc.PrivacyCheck do
   end
 
   defp separated_phone?(line) do
+    normalized_line = Regex.replace(@phone_label, line, " ")
+
+    [line, normalized_line]
+    |> Enum.uniq()
+    |> Enum.any?(&separated_phone_in_line?/1)
+  end
+
+  defp separated_phone_in_line?(line) do
     @separated_phone_patterns
-    |> Enum.flat_map(&phone_candidates(&1, line))
-    |> Enum.any?(fn candidate ->
+    |> Enum.flat_map(&phone_candidate_locations(&1, line))
+    |> Enum.any?(fn {candidate, start} ->
       range = if String.starts_with?(candidate, "+"), do: 8..15, else: 8..11
-      valid_phone_candidate?(candidate, range)
+      not url_query_value?(line, start) and valid_phone_candidate?(candidate, range)
     end)
+  end
+
+  defp phone_candidate_locations(pattern, line) do
+    pattern
+    |> Regex.scan(line, return: :index)
+    |> List.flatten()
+    |> Enum.map(fn {start, length} -> {binary_part(line, start, length), start} end)
   end
 
   defp phone_candidates(pattern, line) do

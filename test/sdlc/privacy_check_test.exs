@@ -48,9 +48,14 @@ defmodule Sdlc.PrivacyCheckTest do
 
   test "requires complete boundaries for government identifier patterns" do
     government_id = Enum.join(["000", "00", "0000"], "-")
+    unicode_dash = <<0xE2, 0x80, 0x91>>
+    unicode_government_id = Enum.join(["000", "00", "0000"], unicode_dash)
 
     assert [%{category: "a government identifier pattern"}] =
              PrivacyCheck.findings([{"guide.md", government_id}])
+
+    assert [%{category: "a government identifier pattern"}] =
+             PrivacyCheck.findings([{"guide.md", unicode_government_id}])
 
     assert PrivacyCheck.findings([{"guide.md", "build" <> government_id}]) == []
     assert PrivacyCheck.findings([{"guide.md", government_id <> "beta"}]) == []
@@ -101,6 +106,29 @@ defmodule Sdlc.PrivacyCheckTest do
     refute error.message =~ adjacent
     refute error.message =~ country_adjacent
     refute error.message =~ one_digit_area
+  end
+
+  test "reports separated phone formats after assignment labels" do
+    parenthesized = "phone=(" <> "212" <> ")" <> Enum.join(["555", "1234"], "-")
+    grouped = "phone=" <> Enum.join(["912", "345", "678"], " ")
+    colon = "phone:" <> Enum.join(["912", "345", "678"], "-")
+    grouped_url_value = Enum.join(["912", "345", "678"], ".")
+    safe_url = "https://news.example.test/item?id=" <> grouped_url_value
+    labeled_url = "https://news.example.test/item?phone=" <> grouped_url_value
+
+    assert [%{category: "a phone number pattern"}] =
+             PrivacyCheck.findings([{"guide.md", parenthesized}])
+
+    assert [%{category: "a phone number pattern"}] =
+             PrivacyCheck.findings([{"guide.md", grouped}])
+
+    assert [%{category: "a phone number pattern"}] =
+             PrivacyCheck.findings([{"guide.md", colon}])
+
+    assert PrivacyCheck.findings([{"guide.md", safe_url}]) == []
+
+    assert [%{category: "a phone number pattern"}] =
+             PrivacyCheck.findings([{"guide.md", labeled_url}])
   end
 
   test "reports a parenthesized mobile phone format without repeating it" do
@@ -378,6 +406,8 @@ defmodule Sdlc.PrivacyCheckTest do
     overlong = compact <> "12"
     international_tail = "+12345" <> Enum.join(["67890", "12345"], "") <> "-6"
     domestic_tail = Enum.join(["123", "456", "78901"], "") <> "-2"
+    international_slash_tail = "+12345" <> Enum.join(["67890", "12345"], "") <> "/6"
+    domestic_slash_tail = Enum.join(["123", "456", "78901"], "") <> "/2"
     url_identifier = Enum.join(["4915", "1933"], "")
     url = "https://news.example.test/item?id=" <> url_identifier
     query_id_url = "https://news.example.test/item?qid=" <> url_identifier
@@ -401,6 +431,8 @@ defmodule Sdlc.PrivacyCheckTest do
     assert PrivacyCheck.findings([{"guide.md", overlong}]) == []
     assert PrivacyCheck.findings([{"guide.md", international_tail}]) == []
     assert PrivacyCheck.findings([{"guide.md", domestic_tail}]) == []
+    assert PrivacyCheck.findings([{"guide.md", international_slash_tail}]) == []
+    assert PrivacyCheck.findings([{"guide.md", domestic_slash_tail}]) == []
     assert PrivacyCheck.findings([{"guide.md", url}]) == []
     assert PrivacyCheck.findings([{"guide.md", query_id_url}]) == []
     assert PrivacyCheck.findings([{"guide.md", parameterized_path_url}]) == []
