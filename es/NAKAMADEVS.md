@@ -31,26 +31,28 @@ Use un stack sólo cuando un cambio posterior dependa de uno anterior. Registre 
 
 ## P: ¿Qué política de branch sustituye los ejemplos genéricos?
 
-Use las formas de branch del workspace:
+Use una forma de branch para personas y agentes:
 
 ```text
-Human: <type>/<username>-NAK-123-short-description
-Agent: <type>/cx/NAK-123-short-description
+<type>/NAK-123-short-description
 ```
 
 Use un tipo de Conventional Commit para `<type>`. El alias `feature` sigue siendo válido para `feat`.
 
-El segmento `cx` es el espacio de nombres reservado para Codex y Claude Code. Los branches humanos usan el username aprobado.
+No agregue username, iniciales, cuenta, herramienta, modelo ni espacio de nombres de agente.
 
-La política del repositorio sustituye los ejemplos sin identidad de [BRANCHES.md](BRANCHES.md).
+Linear, el pull request y los metadatos de Git registran la propiedad. El nombre del branch registra el trabajo. Esta política coincide con [BRANCHES.md](BRANCHES.md).
+
+Antes de adoptar v2, registre en `LEGACY_BRANCH_ALLOWLIST` cada branch con
+identidad que tenga un pull request abierto. Use la lista en `.branch-policy`.
+Acepte solo esos nombres exactos. Quite cada entrada cuando cierre su pull
+request.
 
 ## P: ¿Qué identidad Git y forma de commit deben usarse?
 
-Use Conventional Commits semánticos y atómicos. Use la identidad humana revisada para commits del repositorio:
+Use Conventional Commits semánticos y atómicos. Use la identidad aprobada para commits del repositorio.
 
-```text
-SDLC Maintainers <maintainers@example.org>
-```
+Mantenga la identidad en la configuración privada de Git. No copie su nombre ni email en guías, ejemplos, logs o Gists.
 
 Use un alcance estable para cada módulo afectado. Enlace el issue `NAK` en el pull request y el cuerpo del commit cuando sea necesario.
 
@@ -156,3 +158,4 @@ Los Gists públicos genéricos deben ser útiles sin este perfil. Exporte este p
 - [COMMITS.md](COMMITS.md)
 - [CODE-REVIEW.md](CODE-REVIEW.md)
 - [GITHUB.md](GITHUB.md)
+- [PRIVACY.md](PRIVACY.md)

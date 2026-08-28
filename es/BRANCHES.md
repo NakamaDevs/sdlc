@@ -20,7 +20,7 @@ docs/PROJ-810-update-release-guide
 
 Use primero el identificador del issue del proyecto. Use kebab case en minúsculas para el título corto.
 
-No agregue un segmento de identidad salvo que la política lo exija. No invente un espacio de nombres sin documentar.
+No agregue un segmento de identidad ni un espacio de nombres de agente.
 
 El issue, pull request y metadatos del commit registran la propiedad. El nombre del branch registra el trabajo.
 
@@ -66,7 +66,7 @@ feature/PROJ-625-feature-for-bilingual-sdlc-tooling
 
 ## P: ¿Quién puede usar la misma forma de nombre?
 
-Las personas y agentes usan la forma del repositorio. La política puede reservar un espacio de nombres para agentes automatizados.
+Las personas y agentes usan la misma forma del repositorio.
 
 Un propietario controla cada branch y worktree. Otros colaboradores usan otro worktree o revisan el pull request.
 
@@ -101,6 +101,18 @@ Cambie un branch local antes de publicarlo cuando su issue, tipo o resultado sea
 Coordine antes de cambiar un branch publicado. Actualice juntos su pull request, registro de worktree y referencias de automatización.
 
 No cambie un branch solo para agregar la identidad de un colaborador.
+
+## P: ¿Cómo debe migrar un repositorio los nombres anteriores?
+
+Enumere cada branch anterior que tenga un pull request abierto antes de activar
+el checker nuevo. Use una lista temporal y exacta, como
+`LEGACY_BRANCH_ALLOWLIST`. Los hooks locales y CI deben aceptar solo los
+nombres de la lista. Deben rechazar los branches nuevos que usen la forma
+anterior.
+
+Quite cada entrada después de cerrar su pull request. Mantenga la lista vacía
+si ningún branch abierto la necesita. No cambie ni reescriba un branch
+publicado solo para completar esta migración.
 
 ## P: ¿Cuándo está completo un branch?
 

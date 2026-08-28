@@ -45,6 +45,7 @@ The companion guides explain focused practices. They do not replace the core pro
 - [SECURITY.md](SECURITY.md) — trust boundaries, secret protection, local security checks, and supply-chain controls.
 - [CHANGELOG.md](CHANGELOG.md) — changelog inputs, merge history, Semantic Versioning, and generation.
 - [DEPLOY.md](DEPLOY.md) — release planning, publication, deployment, promotion, and rollback.
+- [PRIVACY.md](PRIVACY.md) — PII, PHI, minimization, synthetic data, detection, and response.
 - [NAKAMADEVS.md](NAKAMADEVS.md) — optional organization policy, skills, stack, and ownership profile. Keep this profile last.
 
 ## Harness engineering
