@@ -47,8 +47,6 @@ class ReviewTests(unittest.TestCase):
             with self.assertRaises(api.GitError):
                 api.write_file('sdlc','escape/outside.md','bad')
 
-if __name__ == '__main__': unittest.main()
-
 class DocumentationTests(unittest.TestCase):
     def test_multiple_roots_map_back_to_sources_and_removed_roots_disappear(self):
         import json
@@ -83,7 +81,7 @@ class CommitTests(unittest.TestCase):
                 return subprocess.check_output(['git','-C',str(repo),*args],text=True).strip()
             git('init','-q')
             git('config','user.name','Test User')
-            git('config','user.email','test@example.invalid')
+            git('config','user.email','test@example.test')
             (repo / 'one.md').write_text('one')
             (repo / 'two.md').write_text('two')
             git('add','.')
@@ -97,3 +95,6 @@ class CommitTests(unittest.TestCase):
             self.assertEqual(git('diff','--cached','--name-only'),'two.md')
             with self.assertRaises(api.GitError):
                 api._range(None,'--output=outside')
+
+if __name__ == '__main__':
+    unittest.main()

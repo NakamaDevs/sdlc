@@ -20,6 +20,17 @@ defmodule Sdlc.PrivacyCheckTest do
     assert PrivacyCheck.findings(documents) == []
   end
 
+  test "allows uv artifact byte sizes but checks other lockfile fields" do
+    count = Enum.join(["1846", "9786"])
+
+    artifact =
+      ~s({ url = "https://files.pythonhosted.org/packages/example.whl", size = #{count}, upload-time = "2025-11-12T13:18:04.203Z" })
+
+    assert PrivacyCheck.findings([{"tools/uv.lock", artifact}]) == []
+    refute PrivacyCheck.findings([{"guide.md", artifact}]) == []
+    refute PrivacyCheck.findings([{"tools/uv.lock", artifact <> " phone: " <> count}]) == []
+  end
+
   test "reports only the location and category for detected values" do
     email = Enum.join(["person", "private.invalid"], "@")
     government_id = Enum.join(["000", "00", "0000"], "-")
