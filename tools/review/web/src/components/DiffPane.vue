@@ -21,7 +21,7 @@ const failure = ref('')
 /** Comments sit on the additions side, which is the side under review. */
 function annotations() {
   return props.notes
-    .filter((note) => note.line_number && note.file_path === props.path)
+    .filter((note) => note.page_path.startsWith('review:') && note.line_number && note.file_path === props.path)
     .map((note) => ({
       side: 'additions' as const,
       lineNumber: note.line_number as number,

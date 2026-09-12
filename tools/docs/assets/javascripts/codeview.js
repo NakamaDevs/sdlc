@@ -121,7 +121,10 @@
       "Comment on line " + lineNumber + " of " + entry.contents.name
     );
     if (!body || !body.trim()) return;
+    var source = window.SDLCPalette && window.SDLCPalette.source();
     notes.save({
+      repo: source && source.repository,
+      file_path: source && source.path,
       page_path: notes.pagePath(),
       page_title: notes.pageTitle(),
       block_anchor: entry.anchor,

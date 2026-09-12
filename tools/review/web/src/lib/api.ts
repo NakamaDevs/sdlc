@@ -52,6 +52,8 @@ export interface StatusEntry {
 }
 
 export interface Note {
+  page_path: string
+  block_preview: string
   id: number
   kind: string
   body: string
