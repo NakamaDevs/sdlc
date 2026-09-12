@@ -690,6 +690,42 @@ La evidencia debe mostrar éxito de la aplicación y de la plataforma. Un push d
 imagen o comando de deploy exitoso no prueba que los usuarios puedan llegar a la
 aplicación.
 
+## Q: ¿Cómo ejecuta este repositorio su espacio de trabajo local?
+
+El repositorio incluye un host Aspire en TypeScript, servicios Python nativos, un sitio Zensical y un editor de revisión Vue.
+Un servicio de notas controla DuckDB. Las dos herramientas web usan su API HTTP.
+
+```mermaid
+flowchart LR
+    docs --> notes
+    review --> notes
+    notes --> annotations[(DuckDB)]
+    docs --> review
+```
+
+Ejecute estos comandos desde la raíz del repositorio:
+
+```{.sh .codeview title="workspace.sh"}
+mise run workspace:setup
+mise run workspace:start
+npx aspire wait gateway --non-interactive
+```
+
+Abra `http://docs.sdlc.localhost:8870/` para consultar la documentación.
+Abra `http://review.sdlc.localhost:8870/` para revisar y editar.
+Use `mise run workspace:stop` para detener el espacio de trabajo.
+
+Configure las rutas de los repositorios y las carpetas de documentación en `workspace.json`.
+Las raíces predeterminadas son `en/`, `es/` y `references/`.
+Use Command/Ctrl+K para buscar, Command/Ctrl+P para navegar y Command/Ctrl+J para cambiar el tema.
+Seleccione texto para agregar una nota. Use **Edit file** para abrir el archivo fuente en el editor de revisión.
+Los cambios guardados permanecen en el árbol de trabajo hasta que los confirme con un commit.
+
+Cada copia guarda sus notas en `_build/state/notes.duckdb`.
+Use valores distintos de `SDLC_PORT` y `SDLC_DOMAIN` para las copias simultáneas.
+Ejecute `mise run workspace:check`, `mise run docs:build` y `mise run verify` antes de la entrega.
+Python es la implementación actual. La migración a Elixir queda para el futuro.
+
 ## Referencias
 
 Use la documentación oficial de Aspire para la configuración y el comportamiento

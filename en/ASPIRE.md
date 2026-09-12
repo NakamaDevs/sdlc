@@ -516,6 +516,42 @@ The deployment gate must:
 
 The evidence must show both application success and platform success. A successful image push or deployment command is not proof that users can reach the application.
 
+## Q: How does this repository run its local workspace?
+
+The repository includes a TypeScript Aspire host, native Python services, a Zensical site, and a Vue review editor.
+One notes service owns DuckDB. Both browser tools use its HTTP API.
+
+```mermaid
+flowchart LR
+    docs --> notes
+    review --> notes
+    notes --> annotations[(DuckDB)]
+    docs --> review
+```
+
+Run these commands from the repository root:
+
+```{.sh .codeview title="workspace.sh"}
+mise run workspace:setup
+mise run workspace:start
+npx aspire wait gateway --non-interactive
+```
+
+Open `http://docs.sdlc.localhost:8870/` for documentation.
+Open `http://review.sdlc.localhost:8870/` for review and editing.
+Use `mise run workspace:stop` to stop the workspace.
+
+Configure repository paths and documentation folders in `workspace.json`.
+The default roots are `en/`, `es/`, and `references/`.
+Use Command/Ctrl+K for search, Command/Ctrl+P for navigation, and Command/Ctrl+J for the theme.
+Select text to add a note. Use **Edit file** to open the source in the review editor.
+Saved edits stay in the working tree until you commit them.
+
+Each checkout keeps its notes in `_build/state/notes.duckdb`.
+Use separate `SDLC_PORT` and `SDLC_DOMAIN` values for concurrent checkouts.
+Run `mise run workspace:check`, `mise run docs:build`, and `mise run verify` before delivery.
+Python is the current implementation. Migration to Elixir is future work.
+
 ## References
 
 Use the official Aspire documentation for setup and current command behavior. Aspire documentation can change by version. Confirm the command and options against the installed version.
