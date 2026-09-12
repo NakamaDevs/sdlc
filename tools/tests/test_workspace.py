@@ -71,6 +71,10 @@ class DocumentationTests(unittest.TestCase):
             docs.CONFIG.write_text(json.dumps(config))
             docs.prepare()
             self.assertFalse((docs.SOURCE / 'es').exists())
+            (root / 'en' / 'README.md').rename(root / 'en' / 'guide.md')
+            docs.prepare()
+            self.assertIn('(en/guide.md)', (docs.SOURCE / 'index.md').read_text())
+            self.assertFalse((docs.SOURCE / 'en' / 'README.md').exists())
 
 class CommitTests(unittest.TestCase):
     def test_commit_preserves_unrelated_staged_work(self):

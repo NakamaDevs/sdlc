@@ -13,50 +13,21 @@ Entries are arrays rather than objects to keep the file small:
 section for a page, and the owning page title for a heading. ``source`` is the
 Markdown path, present on pages only, so the palette can open the file.
 
-Run it before a build or a preview; both documentation tasks do this already.
+The documentation service uses these helpers when preparing each build.
 """
 
 from __future__ import annotations
 
-import json
 import re
-import subprocess
-import sys
 from pathlib import Path
 
-import yaml
 from markdown.extensions.toc import slugify
-
-PAGE, HEADING = 0, 1
 
 _FENCE = re.compile(r"^(```|~~~)")
 _HEADING = re.compile(r"^(#{1,3})\s+(.+?)\s*#*\s*$")
 _ATTR_LIST = re.compile(r"\s*\{[:#][^}]*\}\s*$")
 _INLINE_CODE = re.compile(r"`([^`]*)`")
 _LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
-
-
-class _Loader(yaml.SafeLoader):
-    """Ignore the Python-object tags that the Markdown extensions use."""
-
-
-_Loader.add_multi_constructor("tag:yaml.org,2002:python/name:", lambda *_: None)
-_Loader.add_multi_constructor("!!python/name:", lambda *_: None)
-
-
-def _nav_sections(nav: object, trail: tuple[str, ...] = ()) -> dict[str, str]:
-    """Map each page path in the navigation to its section trail."""
-    sections: dict[str, str] = {}
-    if isinstance(nav, list):
-        for entry in nav:
-            sections.update(_nav_sections(entry, trail))
-    elif isinstance(nav, dict):
-        for title, value in nav.items():
-            if isinstance(value, str):
-                sections[value] = " › ".join(trail) if trail else ""
-            else:
-                sections.update(_nav_sections(value, trail + (str(title),)))
-    return sections
 
 
 def _page_url(relative: Path) -> str:
