@@ -5,3 +5,14 @@
 /doc/
 /artifacts/
 erl_crash.dump
+node_modules/
+dist/
+.aspire/
+
+.venv/
+__pycache__/
+*.duckdb
+*.duckdb.wal
+tools/docs/assets/assets/diffs/
+
+# Generated local workspace files stay private
