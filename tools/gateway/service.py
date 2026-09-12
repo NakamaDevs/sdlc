@@ -1,11 +1,11 @@
 """Loopback gateway for the docs and review localhost subdomains."""
 import asyncio
 import os
-from urllib.parse import urlsplit
 from aiohttp import ClientSession, WSMsgType, web
 
 HOP = {'connection','keep-alive','proxy-authenticate','proxy-authorization','te','trailer','transfer-encoding','upgrade','content-length','content-encoding'}
 DOMAIN = os.environ.get('SDLC_DOMAIN', 'sdlc.localhost')
+SESSION = web.AppKey('session', ClientSession)
 
 async def proxy(request):
     hostname = request.host.split(':')[0]
@@ -20,11 +20,11 @@ async def proxy(request):
     else:
         upstream = os.environ['REVIEW_WEB_URL'] if hostname.startswith('review.') else os.environ['DOCS_URL']
     origin = request.headers.get('Origin')
-    if origin and urlsplit(origin).hostname not in {f'docs.{DOMAIN}',f'review.{DOMAIN}'}:
+    if origin and origin != f'{request.scheme}://{request.host}':
         raise web.HTTPForbidden(text='Unexpected request origin')
     target = upstream.rstrip('/') + request.rel_url.path_qs
     headers = {k:v for k,v in request.headers.items() if k.lower() not in HOP | {'host','origin'}}
-    session = request.app['session']
+    session = request.app[SESSION]
     if request.headers.get('Upgrade','').lower() == 'websocket':
         protocols = request.headers.get('Sec-WebSocket-Protocol', '').split(',')
         protocols = [p.strip() for p in protocols if p.strip()]
@@ -43,7 +43,7 @@ async def proxy(request):
 
 async def lifecycle(app):
     async with ClientSession() as session:
-        app['session'] = session
+        app[SESSION] = session
         yield
 
 app = web.Application(client_max_size=8*1024*1024)
