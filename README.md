@@ -40,3 +40,9 @@ El repositorio es canónico. Estos Gists públicos son ediciones generadas para 
 
 - [English / Inglés — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
 - [Español / Spanish — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)
+
+## Local workspace / Espacio de trabajo local
+
+Read [the setup guide](tools/README.md) to run the documentation, shared notes, and review editor locally.
+
+Lea [la guía de Aspire](es/ASPIRE.md) para ejecutar la documentación, las notas compartidas y el editor de revisión localmente.
