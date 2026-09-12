@@ -6,7 +6,7 @@
  * held by the local notes service; when it is not running the page is untouched
  * and no marker appears.
  *
- * Start the service with:  mise run docs:notes
+ * Start the service with:  mise run workspace:start
  */
 
 (function () {

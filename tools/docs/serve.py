@@ -29,7 +29,8 @@ def prepare():
         if child.is_dir() and child.name not in set(ids) | reserved:
             shutil.rmtree(child)
     shutil.copytree(ASSETS, SOURCE, dirs_exist_ok=True)
-    entries, sources, nav = [], {}, []
+    entries, sources, nav, landing_links = [], {}, [], []
+    revisions = {}
     for item in config['documentation']:
         ident = item['id']
         if not ident.isidentifier():
@@ -55,13 +56,17 @@ def prepare():
             repository_url = config.get('repository_urls', {}).get(item['repository'])
             if repository_url:
                 from urllib.parse import quote
-                branch = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', 'HEAD'], text=True).strip()
+                if repo not in revisions:
+                    revisions[repo] = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', 'HEAD'], text=True).strip()
+                branch = revisions[repo]
                 sources[mounted.as_posix()]['url'] = repository_url.rstrip('/') + '/blob/' + branch + '/' + quote(path.relative_to(repo).as_posix())
             entries.extend([1, text, url + '#' + slug, title] for text, slug in headings)
             pages.append({title: mounted.as_posix()})
-        pages.sort(key=lambda p: 0 if next(iter(p.values())).endswith('/README.md') else 1)
+        pages.sort(key=lambda p: 0 if Path(next(iter(p.values()))).name in {'README.md', 'index.md'} else 1)
+        if pages:
+            landing_links.append(f"- [{item['label']}]({next(iter(pages[0].values()))})")
         nav.append({item['label']: pages})
-    (SOURCE / 'index.md').write_text('# ' + config['name'] + '\n\n' + '\n'.join(f"- [{d['label']}]({d['id']}/README.md)" for d in config['documentation']) + '\n')
+    (SOURCE / 'index.md').write_text('# ' + config['name'] + '\n\n' + '\n'.join(landing_links) + '\n')
     (SOURCE / 'assets').mkdir(exist_ok=True)
     (SOURCE / 'assets/palette-index.json').write_text(json.dumps({'entries':entries,'sources':sources,'origin':'','repositories':list(config.get('repository_urls', {}).items()),'applications':[],'linear':''},ensure_ascii=False))
     import yaml
