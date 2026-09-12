@@ -1,4 +1,6 @@
 [tools]
+node = "24.20.0"
+uv = "0.12.9"
 erlang = "28.4.1"
 elixir = "1.19.5-otp-28"
 
@@ -63,3 +65,23 @@ depends = [
   "check:reader",
   "export:gist",
 ]
+
+[tasks."workspace:setup"]
+description = "Install the local docs, review, and Aspire tools"
+run = "npm ci && npm ci --prefix tools/review/web && uv sync --project tools --frozen && uv run --project tools python tools/docs/codeview/vendor.py && npx aspire restore --non-interactive"
+
+[tasks."workspace:start"]
+description = "Start the local SDLC workspace"
+run = "npx aspire start --isolated --non-interactive"
+
+[tasks."workspace:stop"]
+description = "Stop this SDLC workspace"
+run = "npx aspire stop --non-interactive"
+
+[tasks."docs:build"]
+description = "Build documentation from configured roots"
+run = "uv run --project tools python tools/docs/serve.py --build"
+
+[tasks."workspace:check"]
+description = "Check the Python services and review UI"
+run = "uv run --project tools python -m unittest discover -s tools/tests && tools/review/web/node_modules/.bin/vue-tsc --noEmit -p tools/review/web/tsconfig.json && npx tsc --noEmit -p tsconfig.apphost.json"

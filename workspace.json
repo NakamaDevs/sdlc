@@ -1,0 +1,29 @@
+{
+  "name": "SDLC",
+  "repositories": {
+    "sdlc": "."
+  },
+  "documentation": [
+    {
+      "id": "en",
+      "label": "English",
+      "repository": "sdlc",
+      "path": "en"
+    },
+    {
+      "id": "es",
+      "label": "Español",
+      "repository": "sdlc",
+      "path": "es"
+    },
+    {
+      "id": "references",
+      "label": "Sources",
+      "repository": "sdlc",
+      "path": "references"
+    }
+  ],
+  "repository_urls": {
+    "sdlc": "https://github.com/NakamaDevs/sdlc"
+  }
+}
