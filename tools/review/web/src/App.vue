@@ -442,7 +442,7 @@ watch([base, head], loadChanges)
               class="flex items-baseline gap-3 border-b border-dotted border-rule px-4 py-2 last:border-b-0"
             >
               <span class="kicker text-accent">{{ note.kind }}</span>
-              <span v-if="note.line_number" class="font-mono text-[11px] text-faint">L{{ note.line_number }}</span>
+              <span v-if="note.line_number" class="font-mono text-[11px] text-faint">{{ note.page_path.startsWith('review:') ? `L${note.line_number}` : note.block_preview }}</span>
               <span class="min-w-0 flex-1 text-[13px] text-ink">{{ note.body }}</span>
               <Button variant="ghost" size="xs" @click="resolve(note.id)">Resolve</Button>
             </li>
