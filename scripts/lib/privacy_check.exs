@@ -78,10 +78,23 @@ defmodule Sdlc.PrivacyCheck do
         content
         |> String.split("\n")
         |> Enum.with_index(1)
-        |> Enum.flat_map(fn {line, number} -> line_findings(redacted_name, number, line) end)
+        |> Enum.flat_map(fn {line, number} ->
+          line_findings(redacted_name, number, metadata_line(name, line))
+        end)
 
       path_findings ++ content_findings
     end)
+  end
+
+  # uv records artifact byte counts, which can resemble compact phone numbers.
+  # Mask only that numeric field; URLs and every other field remain checked.
+  defp metadata_line(name, line) do
+    if Regex.match?(~r/(?:^|\/)uv\.lock(?: \(worktree\))?$/, name) and
+         Regex.match?(~r/^\s*(?:sdist = )?\{ url = "https:\/\/files\.pythonhosted\.org\//, line) do
+      Regex.replace(~r/(?<=, size = )\d+(?=, upload-time = )/, line, "0")
+    else
+      line
+    end
   end
 
   defp path_findings(redacted_name, name) do
