@@ -75,6 +75,10 @@ class DocumentationTests(unittest.TestCase):
             docs.prepare()
             self.assertIn('(en/guide.md)', (docs.SOURCE / 'index.md').read_text())
             self.assertFalse((docs.SOURCE / 'en' / 'README.md').exists())
+            docs.prepare(dev=True)
+            self.assertIn('tidewave_root', (docs.BUILD / 'mkdocs.yml').read_text())
+            self.assertIn('site_dir: site-dev', (docs.BUILD / 'mkdocs.yml').read_text())
+            self.assertNotIn('tidewave', (docs.BUILD / 'mkdocs.build.yml').read_text())
 
 class CommitTests(unittest.TestCase):
     def test_commit_preserves_unrelated_staged_work(self):

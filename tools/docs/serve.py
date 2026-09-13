@@ -18,7 +18,7 @@ SOURCE = BUILD / 'source'
 ASSETS = Path(__file__).parent / 'assets'
 
 
-def prepare():
+def prepare(dev=False):
     config = json.loads(CONFIG.read_text())
     ids = [item['id'] for item in config['documentation']]
     reserved = {'assets', 'stylesheets', 'javascripts'}
@@ -72,9 +72,14 @@ def prepare():
     import yaml
     theme = {'name':'material','variant':'classic','custom_dir':'../../tools/docs/overrides','font':False,'palette':[{'scheme':'default','toggle':{'icon':'material/weather-night','name':'Dark mode'}},{'scheme':'slate','toggle':{'icon':'material/weather-sunny','name':'Light mode'}}],'features':['navigation.tabs','navigation.sections','navigation.top','search.highlight','search.suggest']}
     settings = {'site_name':config['name'],'docs_dir':'source','site_dir':'site','use_directory_urls':True,'nav':[{'Home':'index.md'},*nav],'theme':theme,'markdown_extensions':['admonition','attr_list','md_in_html','tables',{'toc':{'permalink':True}},'pymdownx.details',{'pymdownx.highlight':{'pygments_lang_class':True,'anchor_linenums':True,'line_spans':'__span'}},'pymdownx.superfences'],'extra_css':[f'stylesheets/{name}.css' for name in ['sdlc','palette','annotations','codeview','diagram-viewer','course-navigation']],'extra_javascript':[f'javascripts/{name}.js' for name in ['palette','annotations','codeview']]}
+    if dev:
+        # The dev server loads the Tidewave toolbar. Static builds stay free of it.
+        settings['extra'] = {'tidewave_root': str(ROOT)}
+        settings['site_dir'] = 'site-dev'
     text = yaml.safe_dump(settings,sort_keys=False,allow_unicode=True)
     text = text.replace('- pymdownx.superfences\n', '- pymdownx.superfences:\n    custom_fences:\n    - name: mermaid\n      class: mermaid\n      format: !!python/name:pymdownx.superfences.fence_code_format\n')
-    (BUILD / 'mkdocs.yml').write_text(text)
+    # Separate files let a static build run beside the dev server.
+    (BUILD / ('mkdocs.yml' if dev else 'mkdocs.build.yml')).write_text(text)
 
 
 def signature():
@@ -91,14 +96,15 @@ def watch():
         time.sleep(1)
         current = signature()
         if current != previous:
-            prepare()
+            prepare(dev=True)
             previous = current
 
 
 if __name__ == '__main__':
-    prepare()
     executable = str(Path(sys.executable).parent / 'zensical')
     if '--build' in sys.argv:
-        raise SystemExit(subprocess.call([executable,'build','-f',str(BUILD/'mkdocs.yml')]))
+        prepare()
+        raise SystemExit(subprocess.call([executable,'build','-f',str(BUILD/'mkdocs.build.yml')]))
+    prepare(dev=True)
     threading.Thread(target=watch,daemon=True).start()
     raise SystemExit(subprocess.call([executable,'serve','-f',str(BUILD/'mkdocs.yml'),'--dev-addr',f"127.0.0.1:{os.environ['PORT']}"]))
