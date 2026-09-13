@@ -21,7 +21,18 @@ No copie política privada en un Gist público cuando baste una referencia auten
 
 ## P: ¿Cómo debe entrar el trabajo al sistema de entrega?
 
-Cree o encuentre un issue en el proyecto del repositorio dentro del equipo `NAK` de Linear.
+Cree o encuentre un issue en el proyecto del repositorio y en su equipo responsable de Linear.
+
+| Equipo | Responsabilidad del trabajo |
+|---|---|
+| `NAK` | Ingeniería, infraestructura, herramientas internas de desarrollo, investigación y documentación técnica. Incluye Kaicho, Docs, SDLC y Bunko. |
+| `OPS` | Operación de la empresa: contratación, entrevistas, finanzas, impuestos, contratos y procesos del negocio. Incluye Kahvi, SAT y Stingray. |
+| `APP` | Productos de aplicaciones para usuarios o comercialización futura. |
+| `GMD` | Videojuegos y herramientas específicas para videojuegos. |
+
+NakamaDevs es una empresa de desarrollo de software de dos personas. Estos equipos clasifican el trabajo; no definen empresas separadas. La documentación sigue a su equipo responsable. Conserve `DOC` para un uso futuro; cree los nuevos issues de documentación técnica en `NAK`.
+
+Crear infraestructura compartida de desarrollo corresponde a `NAK`. Crear el producto Mensetsukan corresponde a `APP`; realizar una entrevista de la empresa corresponde a `OPS`.
 
 Use el proyecto `SDLC` de Linear para este repositorio. Registre alcance, evidencia, owner, milestone, dependencias y status.
 
@@ -34,8 +45,10 @@ Use un stack sólo cuando un cambio posterior dependa de uno anterior. Registre 
 Use una forma de branch para personas y agentes:
 
 ```text
-<type>/NAK-123-short-description
+<type>/<TEAM>-123-short-description
 ```
+
+Use el prefijo real del issue para `<TEAM>`: `NAK`, `OPS`, `APP` o `GMD`. Este repositorio usa `NAK`. Configure el formato de branch de Linear como `identifier-title` y agregue el tipo de cambio.
 
 Use un tipo de Conventional Commit para `<type>`. El alias `feature` sigue siendo válido para `feat`.
 
@@ -43,10 +56,12 @@ No agregue username, iniciales, cuenta, herramienta, modelo ni espacio de nombre
 
 Linear, el pull request y los metadatos de Git registran la propiedad. El nombre del branch registra el trabajo. Esta política coincide con [BRANCHES.md](BRANCHES.md).
 
-Antes de adoptar v2, registre en `LEGACY_BRANCH_ALLOWLIST` cada branch con
-identidad que tenga un pull request abierto. Use la lista en `.branch-policy`.
+Antes de cambiar la política de branch, registre en `LEGACY_BRANCH_ALLOWLIST`
+cada branch existente que tenga un pull request abierto. Use la lista en `.branch-policy`.
 Acepte solo esos nombres exactos. Quite cada entrada cuando cierre su pull
 request.
+
+Cambiar el equipo de un proyecto no mueve sus issues. Registre los identificadores anteriores y nuevos cuando mueva issues abiertos. Conserve los nombres de branches publicados y corrija el cuerpo del PR con `Fixes TEAM-123` o `Refs TEAM-123`. Verifique el enlace del issue y el diff visible en Linear Reviews. Conserve el historial de issues terminados.
 
 ## P: ¿Qué identidad Git y forma de commit deben usarse?
 
@@ -54,7 +69,7 @@ Use Conventional Commits semánticos y atómicos. Use la identidad aprobada para
 
 Mantenga la identidad en la configuración privada de Git. No copie su nombre ni email en guías, ejemplos, logs o Gists.
 
-Use un alcance estable para cada módulo afectado. Enlace el issue `NAK` en el pull request y el cuerpo del commit cuando sea necesario.
+Use un alcance estable para cada módulo afectado. Enlace el issue del equipo responsable en el pull request y el cuerpo del commit cuando sea necesario.
 
 Prefiera un merge commit semántico en el branch de release. Conserve los commits atómicos útiles del branch.
 

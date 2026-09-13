@@ -21,7 +21,18 @@ Do not copy private policy into a public Gist when a short authenticated referen
 
 ## Q: How should work enter the delivery system?
 
-Create or locate an issue in the repository project on the `NAK` Linear team.
+Create or locate an issue in the repository project on its owning Linear team.
+
+| Team | Work ownership |
+|---|---|
+| `NAK` | Engineering, infrastructure, internal developer tools, research, and technical documentation. Includes Kaicho, Docs, SDLC, and Bunko. |
+| `OPS` | Company operations: hiring, interviews, finances, taxes, contracts, and business processes. Includes Kahvi, SAT, and Stingray. |
+| `APP` | Application products for users or future commercialization. |
+| `GMD` | Games and tools specific to games. |
+
+NakamaDevs is a two-person software development company. These teams classify work; they do not define separate companies. Documentation follows its owning team. Keep `DOC` available for future reuse; create new technical documentation issues in `NAK`.
+
+Building shared developer infrastructure belongs to `NAK`. Building the Mensetsukan product belongs to `APP`; conducting a company interview belongs to `OPS`.
 
 Use the `SDLC` Linear project for this repository. Record scope, acceptance evidence, owner, milestone, dependencies, and status.
 
@@ -34,8 +45,10 @@ Use a stack only when a later change depends on an earlier change. Record the di
 Use one workspace branch form for people and agents:
 
 ```text
-<type>/NAK-123-short-description
+<type>/<TEAM>-123-short-description
 ```
+
+Use the actual issue prefix for `<TEAM>`: `NAK`, `OPS`, `APP`, or `GMD`. This repository uses `NAK`. Set the Linear workspace branch format to `identifier-title`, then add the change type.
 
 Use a Conventional Commit type for `<type>`. The `feature` alias remains valid for `feat`.
 
@@ -43,9 +56,11 @@ Do not add a username, initials, account name, tool name, model name, or agent n
 
 Linear, the pull request, and Git commit metadata record ownership. The branch name records the work. This policy agrees with [BRANCHES.md](BRANCHES.md).
 
-Before v2 adoption, record each identity-bearing branch for an open pull
+Before changing branch policy, record each existing branch for an open pull
 request in `LEGACY_BRANCH_ALLOWLIST` in `.branch-policy`. Accept only those
 exact names. Remove each entry after its pull request closes.
+
+A project team change does not move its issues. Record old and new issue identifiers when moving open issues. Preserve published branch names and repair the PR body with `Fixes TEAM-123` or `Refs TEAM-123`. Verify the issue link and the visible diff in Linear Reviews. Preserve completed issue history.
 
 ## Q: Which Git identity and commit form should be used?
 
@@ -53,7 +68,7 @@ Use semantic and atomic Conventional Commits. Use the approved repository identi
 
 Keep the identity in private Git configuration. Do not copy its name or email address into reusable guidance, examples, logs, or Gists.
 
-Use one stable scope for each affected module. Link the `NAK` issue in the pull request and commit body when needed.
+Use one stable scope for each affected module. Link the owning team’s issue in the pull request and commit body when needed.
 
 Prefer a semantic merge commit on the release branch. Preserve useful atomic branch commits.
 
