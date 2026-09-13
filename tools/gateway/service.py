@@ -17,6 +17,8 @@ async def proxy(request):
         upstream = os.environ['NOTES_URL']
     elif request.path.startswith('/api/'):
         upstream = os.environ['REVIEW_API_URL']
+    elif request.path == '/tidewave' or request.path.startswith('/tidewave/'):
+        upstream = os.environ['REVIEW_WEB_URL']
     else:
         upstream = os.environ['REVIEW_WEB_URL'] if hostname.startswith('review.') else os.environ['DOCS_URL']
     origin = request.headers.get('Origin')
