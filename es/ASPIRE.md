@@ -723,6 +723,8 @@ Los cambios guardados permanecen en el árbol de trabajo hasta que los confirme 
 
 Cada copia guarda sus notas en `_build/state/notes.duckdb`.
 Use valores distintos de `SDLC_PORT` y `SDLC_DOMAIN` para las copias simultáneas.
+El servidor de desarrollo de revisión ejecuta Tidewave. Los agentes se conectan a `http://review.sdlc.localhost:8870/tidewave/mcp` mediante `.mcp.json`.
+Los dos sitios cargan la barra de herramientas de Tidewave en desarrollo. Las herramientas de servidor se ejecutan en el servidor de desarrollo de revisión.
 Ejecute `mise run workspace:check`, `mise run docs:build` y `mise run verify` antes de la entrega.
 Python es la implementación actual. La migración a Elixir queda para el futuro.
 

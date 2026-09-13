@@ -53,6 +53,19 @@ A note records its page, heading, text preview, and block hash. Changes to other
 If its block changes, the note remains available in the comments panel for review.
 Both tools read and write notes through HTTP. Only the notes process opens DuckDB.
 
+## Use Tidewave
+
+The review dev server runs the Tidewave Vite plugin. The gateway forwards `/tidewave` from both hosts to that server.
+
+- Agents connect to `http://review.sdlc.localhost:8870/tidewave/mcp`. The committed `.mcp.json` registers this URL.
+- Both sites load the Tidewave toolbar from `https://tidewave.ai`. Tidewave Web requires a Tidewave account.
+- On docs pages, browser tools inspect the docs page. Server tools such as `project_eval` and `get_logs` run in the review dev server.
+- `project_eval` runs code in that process. Treat it as a privileged capability.
+- Screenshots and recordings go to `_build/tidewave`. Uploads through the gateway are limited to 8 MB.
+- For a concurrent checkout, override the MCP URL with your `SDLC_DOMAIN` and `SDLC_PORT` values in a local MCP configuration.
+
+Static builds from `mise run docs:build` do not load the toolbar.
+
 ## Verify
 
 ```sh

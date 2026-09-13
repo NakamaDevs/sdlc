@@ -549,6 +549,8 @@ Saved edits stay in the working tree until you commit them.
 
 Each checkout keeps its notes in `_build/state/notes.duckdb`.
 Use separate `SDLC_PORT` and `SDLC_DOMAIN` values for concurrent checkouts.
+The review dev server runs Tidewave. Agents connect to `http://review.sdlc.localhost:8870/tidewave/mcp` through `.mcp.json`.
+Both sites load the Tidewave toolbar in development. Server tools run in the review dev server.
 Run `mise run workspace:check`, `mise run docs:build`, and `mise run verify` before delivery.
 Python is the current implementation. Migration to Elixir is future work.
 
