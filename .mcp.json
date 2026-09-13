@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tidewave": {
+      "type": "http",
+      "url": "http://review.sdlc.localhost:8870/tidewave/mcp"
+    }
+  }
+}
