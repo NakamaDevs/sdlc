@@ -3,6 +3,10 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
+import tidewave from 'tidewave/vite-plugin'
+
+const domain = process.env.SDLC_DOMAIN || 'sdlc.localhost'
+const gatewayPort = process.env.SDLC_PORT || '8870'
 
 // Aspire assigns the port and reaches the app through the gateway, so the dev
 // server must accept the gateway hostname as well as localhost.
@@ -19,6 +23,17 @@ export default defineConfig({
       },
     }),
     tailwindcss(),
+    // Tidewave serves /tidewave in dev only. The gateway forwards that path
+    // from both hosts, so the docs pages can load the same toolbar.
+    tidewave({
+      allowedOrigins: [
+        '//127.0.0.1',
+        '//localhost',
+        `//docs.${domain}:${gatewayPort}`,
+        `//review.${domain}:${gatewayPort}`,
+      ],
+      tmpDir: fileURLToPath(new URL('../../../_build/tidewave', import.meta.url)),
+    }),
   ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   server: {

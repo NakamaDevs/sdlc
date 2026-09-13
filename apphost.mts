@@ -23,7 +23,11 @@ const docs = await builder.addPythonApp('docs', './tools', 'docs/serve.py')
   .withEnvironment('SDLC_WORKSPACE_CONFIG', config)
   .withHttpEndpoint({ name: 'http', env: 'PORT' })
   .withHttpHealthCheck({ endpointName: 'http', path: '/' });
+const domain = process.env.SDLC_DOMAIN ?? 'sdlc.localhost';
+const port = process.env.SDLC_PORT ?? '8870';
 const review = await builder.addExecutable('review-web', 'npm', './tools/review/web', ['run', 'dev'])
+  .withEnvironment('SDLC_DOMAIN', domain)
+  .withEnvironment('SDLC_PORT', port)
   .withHttpEndpoint({ name: 'http', env: 'PORT' })
   .withHttpHealthCheck({ endpointName: 'http', path: '/' });
 await builder.addPythonApp('gateway', './tools', 'gateway/service.py')
@@ -32,8 +36,8 @@ await builder.addPythonApp('gateway', './tools', 'gateway/service.py')
   .withEnvironment('REVIEW_API_URL', api.getEndpoint('http').property(EndpointProperty.Url))
   .withEnvironment('REVIEW_WEB_URL', review.getEndpoint('http').property(EndpointProperty.Url))
   .withEnvironment('DOCS_URL', docs.getEndpoint('http').property(EndpointProperty.Url))
-  .withEnvironment('SDLC_DOMAIN', process.env.SDLC_DOMAIN ?? 'sdlc.localhost')
-  .withHttpEndpoint({ name: 'http', port: Number(process.env.SDLC_PORT ?? '8870'), env: 'PORT' })
+  .withEnvironment('SDLC_DOMAIN', domain)
+  .withHttpEndpoint({ name: 'http', port: Number(port), env: 'PORT' })
   .withHttpHealthCheck({ endpointName: 'http', path: '/health' })
   .waitFor(notes).waitFor(api).waitFor(docs).waitFor(review);
 await builder.build().run();
