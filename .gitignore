@@ -5,3 +5,5 @@
 /doc/
 /artifacts/
 erl_crash.dump
+
+/workspace.local.json
