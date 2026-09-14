@@ -40,3 +40,45 @@ El repositorio es canónico. Estos Gists públicos son ediciones generadas para 
 
 - [English / Inglés — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
 - [Español / Spanish — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)
+
+## Local documentation and review with Bunko
+
+Bunko is the single application dependency for the docs site, code reviewer,
+and annotations. `bunko.lock.json` pins the private release and its SHA256;
+`scripts/bunko.py` verifies and caches it. Application code is not vendored here.
+
+Use Python 3.12 or newer, Git, Node.js 24, npm, uv, and an authenticated GitHub
+CLI with read access to `NakamaDevs/Bunko`. Then run:
+
+```sh
+python3 scripts/bunko.py doctor
+python3 scripts/bunko.py setup
+python3 scripts/bunko.py start
+python3 scripts/bunko.py status
+python3 scripts/bunko.py build
+python3 scripts/bunko.py stop
+```
+
+The equivalent mise tasks are `workspace:check`, `workspace:setup`,
+`workspace:start`, `workspace:status`, `docs:build`, and `workspace:stop`.
+Start prints the docs and reviewer URLs. Ports and hostnames are isolated per
+checkout. Runtime files live in `_build/bunko`; notes remain separately in
+`_build/state/notes.duckdb`. Stop this workspace before changing its release pin.
+Keep the notes database when removing runtime files.
+
+`workspace.json` declares the repositories and documentation roots. Repository
+paths are relative to that file. To review manually managed checkouts, copy it
+to the ignored `workspace.local.json`, add their paths to `repositories`, and
+add documentation roots to `documentation`. They do not need to be registered
+in Meta. Bunko does not clone, pull, push, or switch their branches.
+
+```sh
+python3 scripts/bunko.py start --config workspace.local.json
+python3 scripts/bunko.py stop --config workspace.local.json
+```
+
+A local config has a separate runtime identity; stop it with the same config.
+For another repository, copy the reviewed bootstrap, release pin, and a minimal
+workspace configuration. To upgrade, replace the pin with the new release's
+verified pin; do not edit the cached installation. Restore the previous pin to
+roll back. Optional Tidewave runs with `start --dev-tools`.
