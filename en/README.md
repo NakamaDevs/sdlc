@@ -4,6 +4,12 @@ This repository provides evidence-backed SDLC guidance for people and AI agents.
 
 This repository is the canonical, reviewable guidance. The public Gists are generated reading editions.
 
+## New team starting point
+
+Start with [TEAM-START.md](TEAM-START.md), then the practical [COURSE.md](COURSE.md).
+Use [COMPOSITION.md](COMPOSITION.md) to adapt the template to your team.
+Use [AGENT-TEAM.md](AGENT-TEAM.md), [WORKSPACES.md](WORKSPACES.md), [LOCAL-TOOLS.md](LOCAL-TOOLS.md), and [REMOTE-ACCESS.md](REMOTE-ACCESS.md) for the selected workflow.
+
 ## Guide Index
 
 1. [SDLC.md](SDLC.md) — principles, specifications, workflows, quality, and completion.

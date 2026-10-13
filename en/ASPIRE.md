@@ -3,6 +3,8 @@
 Companion guidance extracted from the SDLC document.
 
 This file is the focused reference for optional Aspire development, testing, preview environments, deployment, networking, lifecycle, secrets, AI integrations, and observability.
+Use [WORKSPACES.md](WORKSPACES.md) for the composable team workflow and acceptance exercises.
+
 ## Aspire local development and runtime observability
 
 Aspire is optional.

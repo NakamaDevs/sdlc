@@ -1,0 +1,8 @@
+# Use Python 3.12 or newer. Select the team's reviewed patch version before adoption.
+[tasks."workspace:check"]
+description = "Validate the root inventory without changing child repositories"
+run = "python3 scripts/workspace.py check"
+
+[tasks."workspace:context"]
+description = "Print the human and agent context entry points"
+run = "python3 scripts/workspace.py context"

@@ -2,6 +2,8 @@
 
 Optional Q&A for persistent local-first and remote-first agent work.
 
+Use [REMOTE-ACCESS.md](REMOTE-ACCESS.md) for the composable team workflow and acceptance exercises.
+
 ## Q: What problem does Herdr solve?
 
 Herdr keeps agent work running in a persistent workspace. This helps when a laptop sleeps, a lid closes, a terminal closes, a person changes context, or a long test continues after the human leaves.

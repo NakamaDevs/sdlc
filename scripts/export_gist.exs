@@ -42,6 +42,13 @@ defmodule GistExport do
     {"CHANGELOG.md", "z35-CHANGELOG.md"},
     {"DEPLOY.md", "z36-DEPLOY.md"},
     {"PRIVACY.md", "z37-PRIVACY.md"},
+    {"TEAM-START.md", "z38-TEAM-START.md"},
+    {"COURSE.md", "z39-COURSE.md"},
+    {"AGENT-TEAM.md", "z40-AGENT-TEAM.md"},
+    {"WORKSPACES.md", "z41-WORKSPACES.md"},
+    {"COMPOSITION.md", "z42-COMPOSITION.md"},
+    {"LOCAL-TOOLS.md", "z43-LOCAL-TOOLS.md"},
+    {"REMOTE-ACCESS.md", "z44-REMOTE-ACCESS.md"},
     {"NAKAMADEVS.md", "zz01-NAKAMADEVS.md"}
   ]
 

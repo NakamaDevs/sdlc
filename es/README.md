@@ -4,6 +4,12 @@ Este repositorio ofrece guías del SDLC con evidencia para personas y agentes de
 
 Este repositorio es la guía canónica y revisable. Los Gists públicos son ediciones generadas para lectura.
 
+## Inicio para equipos nuevos
+
+Empiece con [TEAM-START.md](TEAM-START.md) y el curso práctico [COURSE.md](COURSE.md).
+Use [COMPOSITION.md](COMPOSITION.md) para adaptar la plantilla al equipo.
+Use [AGENT-TEAM.md](AGENT-TEAM.md), [WORKSPACES.md](WORKSPACES.md), [LOCAL-TOOLS.md](LOCAL-TOOLS.md) y [REMOTE-ACCESS.md](REMOTE-ACCESS.md) para el flujo seleccionado.
+
 ## Índice de guías
 
 1. [SDLC.md](SDLC.md) — principios, especificaciones, workflows, calidad y finalización.

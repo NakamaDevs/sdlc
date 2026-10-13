@@ -63,6 +63,7 @@ depends = [
   "check:prompt-injection",
   "check:privacy",
   "check:reader",
+  "check:starter",
   "export:gist",
 ]
 
@@ -89,3 +90,7 @@ run = "python3 scripts/bunko.py doctor"
 [tasks."docs:build"]
 description = "Bunko build for this workspace"
 run = "python3 scripts/bunko.py build"
+
+[tasks."check:starter"]
+description = "Test the portable Python root starter"
+run = "python3 -m unittest discover -s tests -v"

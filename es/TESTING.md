@@ -2,6 +2,8 @@
 
 Esta guía define especificaciones, tests FIRST, capas de test, evidencia de UI y validación.
 
+Use [WORKSPACES.md](WORKSPACES.md) para el flujo adaptable del equipo y los ejercicios de aceptación.
+
 ## `test.md`: especificación de test y validación
 
 Defina la estrategia de test antes de implementar.
