@@ -2,6 +2,12 @@
 
 This guide explains how people and AI agents intake, apply, and maintain the SDLC system.
 
+## Root-first adoption
+
+For an existing repository group, start with [TEAM-START.md](TEAM-START.md). Keep discovery, private context, courses, and tool adapters in a separate private root.
+Treat the application-local layout below as an option for new repositories whose owners approve it. Existing applications need no new instruction files for the root pilot.
+Use [COMPOSITION.md](COMPOSITION.md) to select or replace the tracker, multiplexer, cloud, and runtime.
+
 ## Intake for humans
 
 Read `SDLC.md` first. Treat it as the map and the shared principles. Then read only the companion guide for the current work. A person should find the project purpose in less than ten minutes. The person should also find the current milestone, quality gate, owner, and next action.
@@ -28,9 +34,9 @@ The agent entry point should be short. It should link to the source of truth ins
 
 Before work starts, create or locate the required issue in the repository project. Confirm its owner, scope, acceptance evidence, and milestone.
 
-Before editing, use Herdr to create or locate the assigned branch and worktree. Follow the repository branch policy for the branch name and base. Do not share a branch or worktree with another agent.
+Before editing, use Git or the selected workspace adapter to create or locate the assigned branch and worktree. Follow the repository branch policy for the branch name and base. Do not share a branch or worktree with another agent.
 
-If Herdr is unavailable, stop before a shared Git write. Follow the repository fallback procedure or ask the repository owner for direction.
+Herdr is optional. Confirm the worktree and ownership through the selected adapter before any shared Git write.
 
 ## Recommended repository structure
 

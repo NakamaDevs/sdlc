@@ -7,3 +7,6 @@
 erl_crash.dump
 
 /workspace.local.json
+
+__pycache__/
+*.pyc

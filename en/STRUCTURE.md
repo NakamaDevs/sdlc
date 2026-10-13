@@ -2,6 +2,10 @@
 
 Optional Q&A for organizing a monorepo, multiple repositories, and connected tools.
 
+## Private coordination root
+
+Use [WORKSPACES.md](WORKSPACES.md) when the team must coordinate existing repositories without adding process files to them. Keep the existing README and local checks authoritative. Store missing discovery and onboarding in the private root.
+
 ## Q: Should we use a monorepo or multiple repositories?
 
 Use a monorepo when shared changes, atomic commits, common tooling, and one release boundary outweigh repository size and permission complexity.

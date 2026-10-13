@@ -115,3 +115,19 @@ Run `mise run check:prompt-injection` before an agent reads an updated snapshot.
 - [libghostty C header](https://github.com/ghostty-org/ghostty/blob/main/include/ghostty.h)
 - [libghostty build integration](https://github.com/ghostty-org/ghostty/blob/main/CMakeLists.txt)
 - [Ghostling embedding example](https://github.com/ghostty-org/ghostling)
+
+## Team workspace references
+
+- [Git worktree](https://git-scm.com/docs/git-worktree)
+- [Git sparse checkout](https://git-scm.com/docs/git-sparse-checkout)
+- [Git clone](https://git-scm.com/docs/git-clone)
+- [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+- [Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
+- [Pierre Diffs](https://diffs.com/docs)
+- [Zensical](https://zensical.org/docs/)
+- [OpenTelemetry](https://opentelemetry.io/docs/languages/)
+- [Playwright Python videos](https://playwright.dev/python/docs/videos)
+- [Tailscale grants](https://tailscale.com/docs/reference/syntax/grants)
+- [Tailscale SSH](https://tailscale.com/docs/features/tailscale-ssh)
+- [Moshi connections](https://getmoshi.app/docs/connections)
+- [Moshi Herdr](https://getmoshi.app/docs/herdr)

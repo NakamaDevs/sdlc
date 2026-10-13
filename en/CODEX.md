@@ -2,6 +2,8 @@
 
 This guide adapts the language-agnostic SDLC for Codex-based workflows. It does not replace `AGENTS.md` or the repository contract.
 
+Use [AGENT-TEAM.md](AGENT-TEAM.md) for the composable team workflow and acceptance exercises.
+
 ## Q: How should Codex consume the SDLC?
 
 Read `AGENTS.md`, then `SDLC.md`, then the smallest relevant companion guide. Follow the instruction chain and repository quality gates.

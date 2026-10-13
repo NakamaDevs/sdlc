@@ -1,0 +1,12 @@
+/repos/
+/worktrees/
+/state/
+/artifacts/
+/workspace.local.json
+/.env
+/.env.*
+/mise.local.toml
+__pycache__/
+*.pyc
+.DS_Store
+/.venv-browser/

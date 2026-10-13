@@ -5,6 +5,8 @@ Guía complementaria extraída del documento SDLC.
 Este archivo es la referencia para desarrollo opcional con Aspire, tests, entornos
 preview, deploy, red, ciclo de vida, secretos, integraciones de IA y observabilidad.
 
+Use [WORKSPACES.md](WORKSPACES.md) para el flujo adaptable del equipo y los ejercicios de aceptación.
+
 ## Desarrollo local de Aspire y observabilidad de runtime
 
 Aspire es opcional.
