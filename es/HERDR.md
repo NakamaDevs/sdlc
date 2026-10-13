@@ -2,6 +2,8 @@
 
 Preguntas y respuestas opcionales para el trabajo persistente de agentes, primero local o primero remoto.
 
+Use [REMOTE-ACCESS.md](REMOTE-ACCESS.md) para el flujo adaptable del equipo y los ejercicios de aceptación.
+
 ## P: ¿Qué problema resuelve Herdr?
 
 Herdr mantiene el trabajo del agente en un espacio de trabajo persistente. Esto ayuda cuando una laptop entra en reposo, se cierra una tapa, se cierra una terminal o un test largo continúa.

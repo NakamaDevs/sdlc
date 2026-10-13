@@ -2,6 +2,10 @@
 
 Preguntas y respuestas opcionales para organizar un monorepo, varios repositorios y herramientas conectadas.
 
+## Raíz privada de coordinación
+
+Use [WORKSPACES.md](WORKSPACES.md) para coordinar repositorios existentes sin añadirles archivos de proceso. Conserve la autoridad del README y las pruebas existentes. Guarde descubrimiento e incorporación pendientes en la raíz privada.
+
 ## P: ¿Debemos usar un monorepo o varios repositorios?
 
 Use un monorepo cuando cambios compartidos, commits atómicos, herramientas comunes y un límite de release superen el tamaño y complejidad de permisos del repositorio.

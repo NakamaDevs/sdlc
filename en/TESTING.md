@@ -2,6 +2,8 @@
 
 This guide defines specifications, FIRST tests, test layers, UI evidence, and validation.
 
+Use [WORKSPACES.md](WORKSPACES.md) for the composable team workflow and acceptance exercises.
+
 ## `test.md`: testing and validation specification
 
 Define the test strategy before implementation.

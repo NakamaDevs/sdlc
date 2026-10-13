@@ -2,6 +2,8 @@
 
 This guide adapts the language-agnostic SDLC for Claude-based workflows. It does not replace the repository contract.
 
+Use [AGENT-TEAM.md](AGENT-TEAM.md) for the composable team workflow and acceptance exercises.
+
 ## Q: How should Claude consume the SDLC?
 
 Read `SDLC.md` first. Read the smallest companion document that matches the task. Read repository and directory agent instructions before editing.

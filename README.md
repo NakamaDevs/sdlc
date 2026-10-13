@@ -9,6 +9,12 @@ Este repositorio contiene guías del SDLC para personas y agentes de IA.
 - [English](en/README.md)
 - [Español](es/README.md)
 
+## New teams / Equipos nuevos
+
+Start with the [English adoption path](en/TEAM-START.md) or [la ruta en español](es/TEAM-START.md). Generate a separate private root with the Python starter, then follow the role-based course.
+
+Empiece con la ruta de adopción. Genere una raíz privada separada con la plantilla Python y siga el curso por rol.
+
 ## Repository structure / Estructura del repositorio
 
 | Path | Purpose / Propósito |

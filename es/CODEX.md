@@ -2,6 +2,8 @@
 
 Esta guía adapta el SDLC independiente del lenguaje a los flujos basados en Codex. No sustituye `AGENTS.md` ni el contrato del repositorio.
 
+Use [AGENT-TEAM.md](AGENT-TEAM.md) para el flujo adaptable del equipo y los ejercicios de aceptación.
+
 ## P: ¿Cómo debe Codex usar el SDLC?
 
 Lea `AGENTS.md`, después `SDLC.md` y después la guía complementaria mínima pertinente. Siga la cadena de instrucciones y las puertas de calidad del repositorio.

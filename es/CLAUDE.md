@@ -2,6 +2,8 @@
 
 Esta guía adapta el SDLC independiente del lenguaje a los flujos basados en Claude. No sustituye el contrato del repositorio.
 
+Use [AGENT-TEAM.md](AGENT-TEAM.md) para el flujo adaptable del equipo y los ejercicios de aceptación.
+
 ## Q: ¿Cómo debe Claude usar el SDLC?
 
 Lea primero `SDLC.md`. Lea el documento complementario mínimo que corresponda a la tarea. Lea las instrucciones de agentes del repositorio y del directorio antes de editar.

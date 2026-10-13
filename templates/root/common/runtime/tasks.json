@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "tasks": {
+    "demo": {
+      "argv": ["{python}", "-c", "print('Synthetic local task completed')"],
+      "cwd": "."
+    }
+  }
+}

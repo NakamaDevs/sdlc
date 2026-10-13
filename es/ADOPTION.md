@@ -2,6 +2,12 @@
 
 Esta guía explica cómo las personas y los agentes de IA incorporan, aplican y mantienen el sistema SDLC.
 
+## Adopción desde la raíz
+
+Para un grupo existente, empiece con [TEAM-START.md](TEAM-START.md). Mantenga descubrimiento, contexto privado, cursos y adaptadores en una raíz privada separada.
+La estructura local siguiente es una opción para repositorios nuevos cuyos responsables la aprueban. El piloto raíz no requiere nuevas instrucciones en aplicaciones existentes.
+Use [COMPOSITION.md](COMPOSITION.md) para seleccionar o sustituir gestor, multiplexor, nube y entorno.
+
 ## Incorporación para personas
 
 Lea primero `SDLC.md`. Trátelo como el mapa y los principios compartidos. Después, lea solo la guía complementaria del trabajo actual. Una persona debe encontrar el propósito del proyecto en menos de diez minutos. La persona debe encontrar también el hito actual, la puerta de calidad, el responsable y la siguiente acción.
@@ -28,9 +34,9 @@ El punto de entrada del agente debe ser corto. Debe enlazar a la fuente de verda
 
 Antes de empezar, cree o encuentre el issue requerido en el proyecto del repositorio. Confirme su responsable, alcance, evidencia de aceptación e hito.
 
-Antes de editar, use Herdr para crear o encontrar el branch y worktree asignados. Siga la política de branch del repositorio para el nombre y la base. No comparta un branch ni un worktree con otro agente.
+Antes de editar, use Git o el adaptador elegido para crear o encontrar el branch y worktree asignados. Siga la política de branch del repositorio para el nombre y la base. No comparta un branch ni un worktree con otro agente.
 
-Si Herdr no está disponible, deténgase antes de una escritura Git compartida. Siga el procedimiento alternativo del repositorio o pida instrucciones al responsable del repositorio.
+Herdr es opcional. Confirme el worktree y su responsable mediante el adaptador elegido antes de una escritura Git compartida.
 
 ## Estructura recomendada del repositorio
 
