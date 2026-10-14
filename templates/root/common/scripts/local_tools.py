@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """POSIX foreground task runner with bounded private artifacts; not a sandbox."""
 import argparse
+import errno
 import html
 import json
 import math
@@ -49,7 +50,16 @@ def run(name, timeout):
     timed_out=cancelled=truncated=False
     size=0
     print(directory,flush=True)
-    process=subprocess.Popen(argv,cwd=cwd,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,start_new_session=True)
+    try:
+        process=subprocess.Popen(argv,cwd=cwd,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,start_new_session=True)
+    except OSError as error:
+        code=127 if error.errno == errno.ENOENT else 126
+        # Do not copy exception text: it can contain private executable paths.
+        output=f'Task could not start (errno {error.errno}).\n'.encode('utf-8')
+        (directory/'output.log').write_bytes(output)
+        result={'task':name,'cwd':str(cwd.relative_to(ROOT)),'started_at':started,'duration_seconds':round(time.time()-started,3),'exit_code':code,'timed_out':False,'cancelled':False,'truncated':False,'output_bytes':len(output),'launch_failed':True,'launch_errno':error.errno}
+        (directory/'result.json').write_text(json.dumps(result,indent=2)+'\n')
+        return code
     previous_handler=signal.getsignal(signal.SIGTERM)
     def terminate(signum, frame):
         raise KeyboardInterrupt
@@ -107,13 +117,20 @@ def run(name, timeout):
 def report():
     directory=artifacts()
     entries=[]
-    for record in sorted(directory.glob('run-*/result.json'))[-50:]:
+    candidates=[]
+    for record in directory.glob('run-*/result.json'):
         if record.is_symlink() or record.parent.is_symlink():
             continue
         result=json.loads(record.read_text())
         log=record.with_name('output.log')
         if log.is_symlink():
             continue
+        started=result.get('started_at')
+        if isinstance(started,bool) or not isinstance(started,(int,float)) or not math.isfinite(started):
+            started=record.stat().st_mtime
+        candidates.append((started,str(record),result,log))
+    # UUID names break ties only; apply the limit after chronological ordering.
+    for _,_,result,log in sorted(candidates,key=lambda entry:entry[:2])[-50:]:
         with log.open('rb') as stream:
             output=stream.read(LIMIT).decode('utf-8',errors='replace')
         entries.append('<section><h2>'+html.escape(str(result['task']))+'</h2><pre>'+html.escape(json.dumps(result,indent=2))+'</pre><details><summary>Output</summary><pre>'+html.escape(output)+'</pre></details></section>')

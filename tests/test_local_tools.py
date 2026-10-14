@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import signal
 import time
@@ -36,6 +37,56 @@ class LocalToolsTest(unittest.TestCase):
     def test_failure_is_not_success(self):
         self.assertEqual(self.run_task('raise SystemExit(7)').returncode,7)
         self.assertEqual(self.result()['exit_code'],7)
+
+    def test_launch_failures_retain_reportable_evidence(self):
+        denied=self.root/'not-executable'
+        denied.write_text('not executable')
+        denied.chmod(0o600)
+        for executable, expected in ((str(self.root/'missing'),127),(str(denied),126)):
+            with self.subTest(expected=expected):
+                (self.root/'runtime/tasks.json').write_text(json.dumps({'schema_version':1,'tasks':{'test':{'argv':[executable],'cwd':'.'}}}))
+                completed=subprocess.run([sys.executable,'scripts/local_tools.py','run','test'],cwd=self.root,capture_output=True,text=True)
+                self.assertEqual(completed.returncode,expected)
+                record=Path(completed.stdout.strip())/'result.json'
+                result=json.loads(record.read_text())
+                self.assertEqual(result['exit_code'],expected)
+                self.assertTrue(result['launch_failed'])
+                self.assertFalse(result['timed_out'])
+                self.assertFalse(result['cancelled'])
+                self.assertGreaterEqual(result['duration_seconds'],0)
+                self.assertEqual(result['output_bytes'],record.with_name('output.log').stat().st_size)
+                self.assertNotIn(executable,record.with_name('output.log').read_text())
+        subprocess.run([sys.executable,'scripts/local_tools.py','report'],cwd=self.root,check=True,capture_output=True)
+        self.assertIn('launch_failed', (self.root/'artifacts/report.html').read_text())
+
+    def test_report_selects_latest_timestamps_not_random_names(self):
+        for index in range(60):
+            directory=self.root/'artifacts'/f'run-{59-index:032x}'
+            directory.mkdir(parents=True)
+            (directory/'result.json').write_text(json.dumps({'task':f'task-{index:02}', 'started_at':index}))
+            (directory/'output.log').write_text('synthetic')
+        (self.root/'artifacts/run-zzzz').symlink_to(directory,target_is_directory=True)
+        subprocess.run([sys.executable,'scripts/local_tools.py','report'],cwd=self.root,check=True,capture_output=True)
+        report=(self.root/'artifacts/report.html').read_text()
+        self.assertEqual(report.count('<section>'),50)
+        for index in range(10):
+            self.assertNotIn(f'<h2>task-{index:02}</h2>',report)
+        positions=[report.index(f'<h2>task-{index:02}</h2>') for index in range(10,60)]
+        self.assertEqual(positions,sorted(positions))
+
+    def test_report_timestamp_ties_and_legacy_fallback(self):
+        for name, timestamp in (('b',1),('a',1),('legacy',None),('invalid','bad'),('nonfinite',float('nan'))):
+            directory=self.root/'artifacts'/f'run-{name}'
+            directory.mkdir(parents=True)
+            record=directory/'result.json'
+            record.write_text(json.dumps({'task':name,'started_at':timestamp}))
+            os.utime(record,(0,0))
+            (directory/'output.log').write_text('synthetic')
+        subprocess.run([sys.executable,'scripts/local_tools.py','report'],cwd=self.root,check=True,capture_output=True)
+        report=(self.root/'artifacts/report.html').read_text()
+        expected=['invalid','legacy','nonfinite','a','b']
+        positions=[report.index(f'<h2>{name}</h2>') for name in expected]
+        self.assertEqual(positions,sorted(positions))
 
     def test_timeout_is_recorded(self):
         self.assertEqual(self.run_task('import time; time.sleep(10)',0.1).returncode,124)
