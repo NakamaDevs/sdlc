@@ -2,6 +2,8 @@
 
 This guide defines a repeatable path from reviewed source to a versioned release and a controlled deployment.
 
+For selective promotion through DEV, see the optional topic-branch workflow in [BRANCHES.md](BRANCHES.md). Adoption requires a team decision; existing delivery defaults remain in force.
+
 ## Q: What do release, publish, and deploy mean?
 
 Use one word for each operation:

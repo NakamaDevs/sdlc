@@ -131,3 +131,8 @@ Ejecute `mise run check:prompt-injection` antes de que un agente lea una instant
 - [Tailscale SSH](https://tailscale.com/docs/features/tailscale-ssh)
 - [Moshi connections](https://getmoshi.app/docs/connections)
 - [Moshi Herdr](https://getmoshi.app/docs/herdr)
+
+## Referencias de flujos de ramas
+
+- [Git workflows](https://git-scm.com/docs/gitworkflows)
+- [Trunk Based Development](https://trunkbaseddevelopment.com/)

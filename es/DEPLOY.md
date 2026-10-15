@@ -2,6 +2,8 @@
 
 Esta guía define una ruta repetible desde el código revisado hasta un release con versión y un deployment controlado.
 
+Para la promoción selectiva mediante DEV, consulte el flujo opcional de ramas temáticas en [BRANCHES.md](BRANCHES.md). Su adopción requiere una decisión del equipo; los valores predeterminados de entrega siguen vigentes.
+
 ## P: ¿Qué significan release, publicación y deployment?
 
 Use una palabra para cada operación:
