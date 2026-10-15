@@ -11,6 +11,7 @@ defmodule Sdlc.Reader.Capture do
 
   @conversion "sdlc-reader-0.1.0"
   @image_pattern ~r/!\[(?<alt>(?:\\.|[^\]])*)\]\((?<url><[^>]+>|[^\s\)]+)(?:\s+"(?<title>(?:\\.|[^"\\])*)")?\)/
+  @image_or_code_pattern Regex.compile!(Regex.source(@image_pattern) <> "|`+")
   @image_max_bytes 25 * 1024 * 1024
   @image_max_count 20
   @image_max_total_bytes 100 * 1024 * 1024
@@ -146,15 +147,14 @@ defmodule Sdlc.Reader.Capture do
   defp process_images(markdown, :link, _options, _fetcher), do: {:ok, markdown, []}
 
   defp process_images(markdown, :omit, _options, _fetcher) do
-    {:ok, Regex.replace(@image_pattern, markdown, ""), []}
+    matches = image_matches(markdown)
+    replacements = Map.new(matches, fn {_start, _length, full} -> {full, ""} end)
+    {:ok, replace_images(markdown, matches, replacements), []}
   end
 
   defp process_images(markdown, :local, options, fetcher) do
-    matches =
-      @image_pattern
-      |> Regex.scan(markdown, capture: :first)
-      |> List.flatten()
-      |> Enum.uniq()
+    matches = image_matches(markdown)
+    unique_images = matches |> Enum.map(&elem(&1, 2)) |> Enum.uniq()
 
     limits = %{
       count: Keyword.get(options, :image_max_count, @image_max_count),
@@ -162,11 +162,11 @@ defmodule Sdlc.Reader.Capture do
       output_bytes: Keyword.get(options, :image_max_output_bytes, @image_max_output_bytes)
     }
 
-    with :ok <- validate_image_limits(matches, limits) do
+    with :ok <- validate_image_limits(unique_images, limits) do
       Enum.reduce_while(
-        matches,
-        {:ok, markdown, [], 0, 0},
-        fn full, {:ok, current, images, input_bytes, output_bytes} ->
+        unique_images,
+        {:ok, %{}, [], 0, 0},
+        fn full, {:ok, replacements, images, input_bytes, output_bytes} ->
           captures = named_captures(full)
           remaining_bytes = limits.input_bytes - input_bytes
 
@@ -175,13 +175,19 @@ defmodule Sdlc.Reader.Capture do
               next_input = input_bytes + image.input_bytes
               next_output = output_bytes + image.output_bytes
 
-              if next_output <= limits.output_bytes do
-                {:cont,
-                 {:ok, String.replace(current, captures.full, replacement), [image | images],
-                  next_input, next_output}}
-              else
-                cleanup_images([image | images])
-                {:halt, {:error, :image_output_budget_exceeded}}
+              cond do
+                next_input > limits.input_bytes ->
+                  cleanup_images([image | images])
+                  {:halt, {:error, :image_input_budget_exceeded}}
+
+                next_output > limits.output_bytes ->
+                  cleanup_images([image | images])
+                  {:halt, {:error, :image_output_budget_exceeded}}
+
+                true ->
+                  {:cont,
+                   {:ok, Map.put(replacements, full, replacement), [image | images], next_input,
+                    next_output}}
               end
 
             {:error, reason} ->
@@ -191,13 +197,120 @@ defmodule Sdlc.Reader.Capture do
         end
       )
       |> case do
-        {:ok, processed, images, _input_bytes, _output_bytes} ->
-          {:ok, processed, Enum.reverse(images)}
+        {:ok, replacements, images, _input_bytes, _output_bytes} ->
+          {:ok, replace_images(markdown, matches, replacements), Enum.reverse(images)}
 
         error ->
           error
       end
     end
+  end
+
+  # Select occurrences before rewriting. Identical image syntax inside code is
+  # literal text, even when the same image also appears outside that code.
+  defp image_matches(markdown) do
+    markdown
+    |> mask_fenced_code()
+    |> image_locations(0, [])
+    |> Enum.map(fn {start, length} ->
+      {start, length, binary_part(markdown, start, length)}
+    end)
+  end
+
+  defp mask_fenced_code(markdown) do
+    {lines, _fence} =
+      markdown
+      |> String.split("\n", trim: false)
+      |> Enum.map_reduce(nil, fn line, fence ->
+        marker =
+          Regex.run(
+            ~r/^[ \t]*(?:>[ \t]*)*(?:(?:[-+*]|\d+[.)])[ \t]+)?(`{3,}|~{3,})([^\n]*)$/u,
+            line,
+            capture: :all_but_first
+          )
+
+        case {fence, marker} do
+          {nil, [run, suffix]} ->
+            if String.starts_with?(run, "~") or not String.contains?(suffix, "`") do
+              {String.duplicate(" ", byte_size(line)), run}
+            else
+              {line, nil}
+            end
+
+          {nil, _marker} ->
+            {line, nil}
+
+          {opening, [run, suffix]} ->
+            closed =
+              String.first(run) == String.first(opening) and
+                byte_size(run) >= byte_size(opening) and String.trim(suffix) == ""
+
+            {String.duplicate(" ", byte_size(line)), if(closed, do: nil, else: opening)}
+
+          {opening, _marker} ->
+            {String.duplicate(" ", byte_size(line)), opening}
+        end
+      end)
+
+    Enum.join(lines, "\n")
+  end
+
+  defp image_locations(text, offset, matches) do
+    case Regex.run(@image_or_code_pattern, text, return: :index, capture: :first) do
+      nil ->
+        Enum.reverse(matches)
+
+      [{start, length}] ->
+        token = binary_part(text, start, length)
+        prefix = binary_part(text, 0, start)
+        [slashes] = Regex.run(~r/\\*$/, prefix)
+        escaped = rem(byte_size(slashes), 2) == 1
+        rest_start = start + length
+        rest = binary_part(text, rest_start, byte_size(text) - rest_start)
+
+        cond do
+          escaped ->
+            # A backslash escapes one backtick, not the rest of a delimiter run.
+            skip = if String.starts_with?(token, "`"), do: start + 1, else: rest_start
+
+            image_locations(
+              binary_part(text, skip, byte_size(text) - skip),
+              offset + skip,
+              matches
+            )
+
+          String.starts_with?(token, "`") ->
+            closing =
+              ~r/`+/
+              |> Regex.scan(rest, return: :index, capture: :first)
+              |> Enum.find(fn [{_start, run_length}] -> run_length == length end)
+
+            skip =
+              case closing do
+                [{closing_start, closing_length}] -> closing_start + closing_length
+                nil -> 0
+              end
+
+            image_locations(
+              binary_part(rest, skip, byte_size(rest) - skip),
+              offset + rest_start + skip,
+              matches
+            )
+
+          true ->
+            image_locations(rest, offset + rest_start, [{offset + start, length} | matches])
+        end
+    end
+  end
+
+  defp replace_images(markdown, matches, replacements) do
+    {parts, position} =
+      Enum.map_reduce(matches, 0, fn {start, length, full}, position ->
+        {[binary_part(markdown, position, start - position), Map.fetch!(replacements, full)],
+         start + length}
+      end)
+
+    IO.iodata_to_binary([parts, binary_part(markdown, position, byte_size(markdown) - position)])
   end
 
   defp validate_image_limits(matches, limits) do
@@ -237,17 +350,16 @@ defmodule Sdlc.Reader.Capture do
 
   defp do_localize_image(capture, options, fetcher, max_body_bytes) do
     fetch_options =
-      fetch_options(options) ++
-        [
-          max_body_bytes: max_body_bytes,
-          accept: "image/*"
-        ]
+      options
+      |> fetch_options()
+      |> Keyword.merge(max_body_bytes: max_body_bytes, accept: "image/*")
 
     optimizer = Keyword.get(options, :image_optimizer, ImageOptimizer)
     output_dir = Keyword.fetch!(options, :assets_dir)
 
     with {:ok, response} <- fetcher.fetch(capture.url, fetch_options),
          :ok <- validate_image_response(response),
+         :ok <- validate_image_size(response, max_body_bytes),
          {:ok, optimized} <-
            optimizer.optimize(response.body,
              source_url: response.url,
@@ -268,7 +380,7 @@ defmodule Sdlc.Reader.Capture do
          license: options[:image_license],
          width: optimized.width,
          height: optimized.height,
-         input_bytes: optimized.input_bytes,
+         input_bytes: byte_size(response.body),
          output_bytes: optimized.output_bytes,
          created: Map.get(optimized, :created, true)
        }}
@@ -289,6 +401,12 @@ defmodule Sdlc.Reader.Capture do
   end
 
   defp validate_image_response(_response), do: {:error, :invalid_fetch_response}
+
+  defp validate_image_size(%{body: body}, max_bytes) when is_binary(body) do
+    if byte_size(body) <= max_bytes, do: :ok, else: {:error, :body_too_large}
+  end
+
+  defp validate_image_size(_response, _max_bytes), do: {:error, :invalid_fetch_response}
 
   defp image_markdown(alt, path, ""), do: "![#{alt}](#{path})"
   defp image_markdown(alt, path, title), do: ~s|![#{alt}](#{path} "#{title}")|

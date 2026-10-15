@@ -72,6 +72,29 @@ defmodule Sdlc.Reader.CaptureTest do
        }}
     end
 
+    def fetch("https://news.example.test/articles/image-code", _options) do
+      example = "![First](https://news.example.test/images/first.png)"
+
+      {:ok,
+       %{
+         url: "https://news.example.test/articles/image-code",
+         status: 200,
+         content_type: "text/html",
+         body: """
+         <html><body><article><h1>Image code examples</h1>
+         <p>Keep literal image syntax when capturing this useful documentation.</p>
+         <pre><code class="language-markdown">#{example}</code></pre>
+         <p>Inline example: <code>#{example}</code>.</p>
+         <p>Longer delimiter: <code>tick ` #{example}</code>.</p>
+         <blockquote><pre><code>#{example}</code></pre></blockquote>
+         <ul><li><pre><code>#{example}</code></pre></li></ul>
+         <p>Escaped text: #{example}.</p>
+         <img src="/images/first.png" alt="First">
+         </article></body></html>
+         """
+       }}
+    end
+
     def fetch("https://news.example.test/images/quoted.png", _options) do
       image = Image.new!(20, 10, color: [210, 220, 230])
       {:ok, body} = Image.write(image, :memory, suffix: ".png")
@@ -128,6 +151,13 @@ defmodule Sdlc.Reader.CaptureTest do
          </article></body></html>
          """
        }}
+    end
+  end
+
+  defmodule RecordingFetcher do
+    def fetch(url, options) do
+      if String.contains?(url, "/images/"), do: send(self(), {:image_fetch, url, options})
+      FakeFetcher.fetch(url, options)
     end
   end
 
@@ -325,6 +355,47 @@ defmodule Sdlc.Reader.CaptureTest do
              )
   end
 
+  test "image limits replace the page limit and bound adapter response bytes" do
+    for {per_image, total, expected_limits} <- [{4, 20, [4]}, {8, 8, [8, 3]}] do
+      assets_dir = Path.join(@output_dir, "input-budget-#{total}")
+
+      assert {:error, {:image_capture_failed, _url, :body_too_large}} =
+               Capture.capture("https://news.example.test/articles/failing-images",
+                 fetcher: RecordingFetcher,
+                 image_policy: :local,
+                 image_optimizer: SuccessfulImageOptimizer,
+                 assets_dir: assets_dir,
+                 image_license: "CC-BY-4.0",
+                 max_body_bytes: 1_000_000,
+                 image_max_bytes: per_image,
+                 image_max_total_bytes: total
+               )
+
+      for limit <- expected_limits do
+        assert_receive {:image_fetch, _url, options}
+        assert Keyword.get_values(options, :max_body_bytes) == [limit]
+      end
+
+      refute_receive {:image_fetch, _url, _options}
+      refute File.exists?(Path.join(assets_dir, "captured.png"))
+    end
+  end
+
+  test "input accounting uses response bytes rather than adapter metadata" do
+    assert {:ok, result} =
+             Capture.capture("https://news.example.test/articles/failing-images",
+               fetcher: FakeFetcher,
+               image_policy: :local,
+               image_optimizer: SuccessfulImageOptimizer,
+               assets_dir: Path.join(@output_dir, "exact-input-budget"),
+               image_license: "CC-BY-4.0",
+               image_max_bytes: 6,
+               image_max_total_bytes: 11
+             )
+
+    assert Enum.map(result.images, & &1.input_bytes) == [5, 6]
+  end
+
   test "stores a licensed optimized local image and keeps its context" do
     assets_dir = Path.join(@output_dir, "assets")
 
@@ -398,6 +469,40 @@ defmodule Sdlc.Reader.CaptureTest do
 
     refute result.markdown =~ "!["
     assert result.markdown =~ "Robots demonstrate the article context."
+  end
+
+  test "image policies preserve fenced, inline, quoted and escaped examples" do
+    example = "![First](https://news.example.test/images/first.png)"
+
+    for policy <- [:omit, :local] do
+      assert {:ok, result} =
+               Capture.capture("https://news.example.test/articles/image-code",
+                 fetcher: RecordingFetcher,
+                 image_policy: policy,
+                 image_optimizer: SuccessfulImageOptimizer,
+                 assets_dir: Path.join(@output_dir, "code-example-assets"),
+                 image_license: "CC-BY-4.0",
+                 image_max_count: 1
+               )
+
+      assert result.markdown =~ "```markdown\n#{example}\n```"
+      assert result.markdown =~ "`#{example}`"
+      assert result.markdown =~ "`` tick ` #{example} ``"
+      assert result.markdown =~ "> ```\n> #{example}\n> ```"
+      assert result.markdown =~ "- ```\n  #{example}\n  ```"
+      assert result.markdown =~ "!\\[First\\](https://news.example.test/images/first.png)"
+      assert length(:binary.matches(result.markdown, example)) == 5
+
+      if policy == :local do
+        assert [_image] = result.images
+        assert result.markdown =~ "![First](code-example-assets/captured.png)"
+        assert_receive {:image_fetch, "https://news.example.test/images/first.png", _options}
+      else
+        assert result.images == []
+      end
+
+      refute_receive {:image_fetch, _url, _options}
+    end
   end
 
   test "can use a rendered DOM for client-side content" do
