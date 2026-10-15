@@ -4,6 +4,10 @@ This guide defines the repository reference archive for external documentation.
 
 ## Q: Why keep Markdown snapshots?
 
+This repository currently uses a source catalog without copied pages. The workflow
+below is for an approved privacy-safe snapshot, usually in a separate private root.
+Prefer a source link when attribution or identifiers prevent redistribution.
+
 A snapshot preserves the source that informed a local decision. It helps reviewers inspect evidence when a site changes, moves, becomes unavailable, or renders differently for different clients.
 
 A snapshot is not the authoritative source. The source URL remains authoritative when it is available. The snapshot records what the project could read on a specific date.
@@ -81,7 +85,9 @@ If the body changes, `mise run check:prompt-injection` fails until a reviewer in
 
 ## Q: How should snapshots stay current?
 
-Review each snapshot at least every 90 days, before relying on a version-specific command, and after a source changes. Update the metadata and inventory in the same change as the snapshot.
+Review each snapshot's source currency at least every 90 days, before relying on a version-specific command, and after a source changes. Update the metadata and inventory in the same change as the snapshot.
+
+Separately, `mise run check:prompt-injection` requires a human prompt-injection review no more than 30 days old and a matching body hash. A changed body requires another human review regardless of the previous date. Record a new date and body hash only after a person reviews the current body. Follow [UPDATE.md](UPDATE.md); source-currency review does not replace this attestation.
 
 Keep the snapshot immutable after publication when it supports a historical decision. Create a new dated snapshot when the source changes materially.
 

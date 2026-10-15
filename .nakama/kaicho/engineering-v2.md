@@ -48,7 +48,8 @@ The detailed operating model remains in [`docs/governance/agentic-sdlc.md`](http
 
 ## Owner maintenance
 
-The lead administrator is the GitHub user `repository-owner`, user ID `configured-owner-id`.
+The lead administrator is the exact owner configured in the GitHub ruleset.
+Keep the personal account identifier outside this repository.
 Each active protection ruleset must give this exact `User` actor an `always`
 bypass. Do not grant this bypass to a role, team, bot, deploy key, or GitHub
 App. Other users remain subject to repository protection.

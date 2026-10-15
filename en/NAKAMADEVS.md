@@ -25,7 +25,16 @@ Create or locate an issue in the repository project on the `NAK` Linear team.
 
 Use the `SDLC` Linear project for this repository. Record scope, acceptance evidence, owner, milestone, dependencies, and status.
 
-Create one issue, branch, Herdr worktree, and pull request for each independently reviewable change.
+Use the configured Kaicho delivery route for each independently reviewable change:
+
+- `solo`: small tested changes may go directly to the default branch without a pull request.
+- `collaborative`: preserve the required pull requests, CI/CD checks, and human approvals.
+- `agent`: deliver within the explicitly assigned scope with actual validation and independent review evidence.
+- `owner-override`: the owner may explicitly authorize immediate delivery; record skipped checks, open findings, risks, and follow-up work.
+
+Keep one issue, accountable owner, and evidence record for each change. Use a separate branch and worktree when the route or concurrent work requires them. Preserve other contributors' work.
+
+These routes do not authorize unrequested deployments or changes to application, secret, runner, or access controls.
 
 Use a stack only when a later change depends on an earlier change. Record the direct parent in Linear and every pull request.
 
@@ -126,7 +135,7 @@ Use the `Devs` team for broad ownership after it is visible and has write access
 
 Add narrower owners after the default. Protect release, security, workflow, runner, and ownership files explicitly.
 
-Use the smallest named administrator bypass list. Preserve a pull request and audit record for every emergency bypass.
+Use the smallest named administrator bypass list. An emergency bypass requires explicit owner authorization and an audit record of its scope, skipped checks, risks, and follow-up work. Preserve a pull request when the configured delivery route requires one.
 
 ## Q: How should a repository adopt this profile?
 

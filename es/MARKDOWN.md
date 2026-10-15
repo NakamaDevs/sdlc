@@ -4,6 +4,10 @@ Esta guía define el archivo de referencia del repositorio para documentación e
 
 ## P: ¿Por qué mantener instantáneas de Markdown?
 
+Este repositorio usa un catálogo de fuentes sin copias de páginas. El flujo
+siguiente es para una captura aprobada que proteja la privacidad, normalmente en una raíz privada separada.
+Prefiera un enlace cuando la atribución o los identificadores impidan la redistribución.
+
 Una instantánea conserva la fuente que informó una decisión local. Ayuda a revisar la evidencia cuando un sitio cambia o deja de estar disponible.
 
 Una instantánea no es la fuente autoritativa. La URL activa conserva la autoridad cuando está disponible. La instantánea registra el contenido leído en una fecha específica.
@@ -81,9 +85,11 @@ Si el cuerpo cambia, `mise run check:prompt-injection` falla hasta que un reviso
 
 ## P: ¿Cómo deben mantenerse actuales las instantáneas?
 
-Revise cada instantánea al menos cada 90 días. Revísela antes de usar un comando específico de versión y después de un cambio de fuente.
+Revise la vigencia de la fuente de cada instantánea al menos cada 90 días. Revísela antes de usar un comando específico de versión y después de un cambio de fuente.
 
 Actualice los metadatos y el inventario en el mismo cambio.
+
+Por separado, `mise run check:prompt-injection` requiere una revisión humana de inyección de prompts de no más de 30 días y un hash que coincida con el cuerpo. Un cuerpo cambiado requiere otra revisión humana, sin importar la fecha anterior. Registre una fecha y un hash nuevos solo después de que una persona revise el cuerpo actual. Siga [UPDATE.md](UPDATE.md); revisar la vigencia de la fuente no reemplaza esta confirmación.
 
 Mantenga la instantánea inmutable cuando respalde una decisión histórica. Cree una instantánea nueva y fechada cuando la fuente cambie de forma material.
 

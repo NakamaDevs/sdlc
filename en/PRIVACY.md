@@ -65,6 +65,14 @@ and cross-field combinations.
 
 A passing scanner is supporting evidence. It does not prove that content has no PII or PHI.
 
+This repository uses the role identity `SDLC Maintainers <maintainers@example.org>`
+for author and committer metadata. `mise run check:identity` checks every ancestor
+of `HEAD`; `python3 scripts/check_identity_history.py --all` includes all local
+refs. Individual accountability remains in the private tracker and access audit.
+Do not merge pre-cleanup history into a cleaned branch. Re-clone or reapply only
+reviewed patches. Keep copied third-party pages out of the source catalog when
+their required attribution conflicts with the no-personal-identifiers policy.
+
 Keep an ambiguous phone-like numeric value blocked until a person classifies it. Do not add a broad exception for technical versions or identifiers.
 
 ## Q: What should happen after an exposure?

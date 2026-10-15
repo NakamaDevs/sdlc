@@ -21,7 +21,7 @@ Empiece con la ruta de adopción. Genere una raíz privada separada con la plant
 |---|---|
 | `en/` | Maintained English guides. / Guías mantenidas en inglés. |
 | `es/` | Maintained Spanish guides. / Guías mantenidas en español. |
-| `references/` | Shared source snapshots. / Instantáneas compartidas de fuentes. |
+| `references/` | Primary source catalog. / Catálogo de fuentes primarias. |
 | `lib/sdlc/reader/` | Local reader and HTML-to-Markdown library. / Lector local y biblioteca HTML a Markdown. |
 | `scripts/` | Repeatable document and security checks. / Checks repetibles de documentación y seguridad. |
 | `test/` | Reader tests and local fixtures. / Tests del lector y fixtures locales. |
@@ -32,9 +32,9 @@ The English and Spanish indexes list the same maintained guides in the same orde
 
 Los índices en inglés y español enumeran las mismas guías mantenidas en el mismo orden.
 
-Source snapshots stay in their original language. They are evidence copies, not maintained translations.
+The source catalog links to primary references. Third-party page copies are excluded to keep personal identifiers and client records out of the repository.
 
-Las instantáneas de fuentes conservan su idioma original. Son copias de evidencia, no traducciones mantenidas.
+El catálogo enlaza a referencias primarias. Las copias de páginas de terceros se excluyen para no guardar identificadores personales ni registros de clientes.
 
 See [English update rules](en/UPDATE.md) or [las reglas de actualización en español](es/UPDATE.md).
 

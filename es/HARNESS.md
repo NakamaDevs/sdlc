@@ -52,7 +52,6 @@ Los harness deben aprender de la evidencia de ejecución sin cambiar sus propias
 
 [AutoSaddler](https://arxiv.org/abs/2608.23041) es investigación sobre la optimización automática de harness con actualizaciones durables de traces de ejecución de agentes. Trátelo como evidencia de investigación, no como permiso para automodificación sin review. Mantenga los cambios de política revisables, versionados, reversibles y atribuibles.
 
-La [discusión de Source author](https://example.org/removed-source) es una referencia de discusión secundaria. No es una fuente normativa. Valide sus afirmaciones con el repositorio, los tests y la investigación primaria.
 
 ## Referencias
 

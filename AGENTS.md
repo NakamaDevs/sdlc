@@ -20,6 +20,8 @@ controls except for a specifically authorized owner override.
 Run `python3 .nakama/kaicho_delivery.py self-test` for delivery checks.
 Install the repository's configured hooks (for example `prek install --hook-type commit-msg`).
 Pinned source: Kaicho `91ec23b858c2d6aa74a987901592c7493259e89d`. Tracking: NAK-946.
+The local mirror removes personal account identifiers under NAK-1044; its hashes
+record the sanitized local content. The external source revision is unchanged.
 <!-- /kaicho-delivery-v2.1 -->
 
 # SDLC repository agent guide
@@ -82,7 +84,15 @@ Do not resolve a thread before the evidence and fix are available on the remote 
 
 Use semantic and atomic Conventional Commits.
 
-Use the approved repository identity for commits. Keep its name and email in
-private Git configuration. Do not copy them into reusable guidance.
+For this repository, use `SDLC Maintainers <maintainers@example.org>` for Git
+author and committer metadata. This is an owner-approved privacy identity, not
+a claim about an individual contributor. Keep individual accountability in the
+private tracker and access audit. Run `mise run check:identity` before delivery;
+use `python3 scripts/check_identity_history.py --all` for a complete local-ref audit.
+Do not merge old local history after the privacy rewrite. Re-clone or reapply
+reviewed patches so removed identifiers cannot return.
+
+Use the approved role identity for commits. Keep any personal name, email,
+account identifier, or access credential in private configuration and audits.
 
 Publish both public Gists only after `mise run verify` passes. Keep the repository as the canonical source.

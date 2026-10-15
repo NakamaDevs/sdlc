@@ -63,4 +63,4 @@ Pregunte si las personas pueden elegir trabajo significativo, entender decisione
 
 - [What happens when software developers are (un)happy](https://doi.org/10.1016/j.infsof.2018.04.001)
 - [Understanding developer well-being](https://doi.org/10.1007/s10664-026-10830-6)
-- Towards a theory of software developer job satisfaction and perceived productivity
+- Hacia una teoría de la satisfacción laboral y la productividad percibida de los desarrolladores de software

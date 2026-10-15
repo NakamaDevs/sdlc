@@ -66,6 +66,14 @@ texto libre, imágenes, audio y combinaciones de campos.
 
 Un análisis correcto es evidencia de apoyo. No demuestra que el contenido no tenga PII ni PHI.
 
+Este repositorio usa la identidad de rol `SDLC Maintainers <maintainers@example.org>`
+para los metadatos de autor y committer. `mise run check:identity` revisa cada ancestro
+de `HEAD`; `python3 scripts/check_identity_history.py --all` incluye todas las
+refs locales. La responsabilidad individual permanece en el tracker privado y la auditoría de acceso.
+No mezcle historial anterior a la limpieza con una rama limpia. Clone de nuevo o aplique solo
+parches revisados. No incluya copias de páginas de terceros en el catálogo cuando
+su atribución obligatoria contradiga la política que prohíbe identificadores personales.
+
 Mantenga bloqueado un valor numérico ambiguo que parezca un teléfono hasta que una persona lo clasifique. No añada una excepción general para versiones o identificadores técnicos.
 
 ## P: ¿Qué debe ocurrir después de una exposición?

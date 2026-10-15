@@ -53,9 +53,9 @@ Use [AGENT-TEAM.md](AGENT-TEAM.md), [WORKSPACES.md](WORKSPACES.md), [LOCAL-TOOLS
 
 ## References
 
-Use [REFERENCES.md](REFERENCES.md) for verified live references and the [source archive](../references/README.md) for source snapshots.
+Use [REFERENCES.md](REFERENCES.md) for verified live references and the [source catalog](../references/README.md) for primary-source links.
 
-Source snapshots stay in their original language. They are evidence copies, not maintained translations.
+Copied third-party pages are excluded from this repository. Use source links when required attribution or personal identifiers prevent safe redistribution.
 
 - [English public Gist — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
 - [Spanish public Gist — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)

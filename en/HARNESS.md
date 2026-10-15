@@ -52,7 +52,6 @@ Harnesses should learn from execution evidence without changing their own rules 
 
 [AutoSaddler](https://arxiv.org/abs/2608.23041) is research on automatic harness optimization with durable updates from agent execution traces. Treat it as research evidence, not a permission for unreviewed self-modification. Keep policy changes reviewable, versioned, reversible, and attributable.
 
-The [Source author discussion](https://example.org/removed-source) is a secondary discussion reference. It is not a normative source. Validate its claims against the repository, tests, and primary research.
 
 ## References
 

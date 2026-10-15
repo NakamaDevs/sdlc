@@ -6,7 +6,7 @@ Use [REMOTE-ACCESS.md](REMOTE-ACCESS.md) for the composable team workflow and ac
 
 ## Q: What problem does Herdr solve?
 
-Herdr keeps agent work running in a persistent workspace. This helps when a laptop sleeps, a lid closes, a terminal closes, a person changes context, or a long test continues after the human leaves.
+Herdr keeps agent work in a persistent workspace after a terminal disconnects or a person changes context. The execution host must stay awake. Work can continue while a client laptop sleeps only when it runs on an awake remote host. Suspending the execution host stops its work.
 
 Use it to preserve visible command output, long-running development servers, test runs, browser sessions, and agent workspaces. Keep the work inspectable and recoverable.
 

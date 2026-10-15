@@ -370,7 +370,7 @@ Model service dependencies with Aspire references. Use `WithReference` or its la
 
 Keep host, container, and public endpoints distinct. Aspire documents different network contexts for localhost, the container bridge network, and the public internet. A URL that works on the host may not work inside a container.
 
-Use YARP when the local system needs one HTTPS entry point, path routing, static files, or a proxy boundary. Give the gateway a stable local hostname and certificate mapping, such as `https://interview.mensetsukan.localhost:15180/`, only after verifying the certificate, port, route, and backend health.
+Use YARP when the local system needs one HTTPS entry point, path routing, static files, or a proxy boundary. Give the gateway a stable local hostname and certificate mapping, such as `https://app.example.localhost:15180/`, only after verifying the certificate, port, route, and backend health.
 
 Do not treat a local hostname as proof of production ingress behavior. Test the same route contract through the deployed ingress or gateway.
 

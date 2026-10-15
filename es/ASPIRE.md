@@ -419,7 +419,7 @@ contenedor.
 Use YARP si el sistema local necesita una entrada HTTPS, enrutamiento de rutas,
 archivos estáticos o un límite de proxy. Dé al gateway un hostname local estable
 y un mapeo de certificado, como
-`https://interview.mensetsukan.localhost:15180/`, solo después de verificar el
+`https://app.example.localhost:15180/`, solo después de verificar el
 certificado, puerto, ruta y salud del backend.
 
 No trate un hostname local como prueba de comportamiento de ingress en

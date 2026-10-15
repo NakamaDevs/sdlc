@@ -62,6 +62,7 @@ depends = [
   "check:format",
   "check:prompt-injection",
   "check:privacy",
+  "check:identity",
   "check:reader",
   "check:starter",
   "export:gist",
@@ -94,3 +95,7 @@ run = "python3 scripts/bunko.py build"
 [tasks."check:starter"]
 description = "Test the portable Python root starter"
 run = "python3 -m unittest discover -s tests -v"
+
+[tasks."check:identity"]
+description = "Check reachable Git history for personal authorship metadata"
+run = "python3 scripts/check_identity_history.py"

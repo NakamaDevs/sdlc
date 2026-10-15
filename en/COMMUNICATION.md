@@ -34,6 +34,5 @@ A human may ask an agent to produce a draft. The human must still choose the cla
 ## References
 
 - [Stop Sloppypasta](https://stopsloppypasta.ai/en/)
-- Don't be a meat proxy
 - [Don't paste the AI](https://dontpastetheai.com/?via=dailydev)
 - [Anthropic: AI assistance and coding skills](https://www.anthropic.com/research/ai-assistance-coding-skills)

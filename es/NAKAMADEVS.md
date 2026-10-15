@@ -25,7 +25,16 @@ Cree o encuentre un issue en el proyecto del repositorio dentro del equipo `NAK`
 
 Use el proyecto `SDLC` de Linear para este repositorio. Registre alcance, evidencia, owner, milestone, dependencias y status.
 
-Cree un issue, branch, worktree de Herdr y pull request para cada cambio que pueda revisarse de forma independiente.
+Use la ruta de entrega de Kaicho configurada para cada cambio que pueda revisarse de forma independiente:
+
+- `solo`: los cambios pequeños y probados pueden ir directamente a la rama predeterminada sin pull request.
+- `collaborative`: conserve los pull requests, checks de CI/CD y aprobaciones humanas obligatorios.
+- `agent`: entregue dentro del alcance asignado de forma explícita, con validación real y evidencia de revisión independiente.
+- `owner-override`: el propietario puede autorizar una entrega inmediata de forma explícita; registre checks omitidos, hallazgos abiertos, riesgos y trabajo de seguimiento.
+
+Mantenga un issue, un responsable y un registro de evidencia para cada cambio. Use una rama y un worktree separados cuando la ruta o el trabajo concurrente lo requieran. Conserve el trabajo de otros colaboradores.
+
+Estas rutas no autorizan deploys no solicitados ni cambios en controles de aplicación, secretos, runners o acceso.
 
 Use un stack sólo cuando un cambio posterior dependa de uno anterior. Registre el padre directo en Linear y cada pull request.
 
@@ -127,7 +136,7 @@ Use el equipo `Devs` para propiedad amplia después de que sea visible y tenga a
 
 Agregue owners más específicos después del valor predeterminado. Proteja de forma explícita archivos de release, seguridad, workflows, runners y propiedad.
 
-Use la lista con nombre más pequeña para bypass de administradores. Conserve un pull request y registro de auditoría para cada bypass de emergencia.
+Use la lista con nombre más pequeña para bypass de administradores. Un bypass de emergencia requiere autorización explícita del propietario y un registro de auditoría con alcance, checks omitidos, riesgos y seguimiento. Conserve un pull request cuando la ruta de entrega configurada lo requiera.
 
 ## P: ¿Cómo debe adoptar un repositorio este perfil?
 

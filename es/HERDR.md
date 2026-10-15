@@ -6,7 +6,7 @@ Use [REMOTE-ACCESS.md](REMOTE-ACCESS.md) para el flujo adaptable del equipo y lo
 
 ## P: ¿Qué problema resuelve Herdr?
 
-Herdr mantiene el trabajo del agente en un espacio de trabajo persistente. Esto ayuda cuando una laptop entra en reposo, se cierra una tapa, se cierra una terminal o un test largo continúa.
+Herdr conserva el trabajo del agente en un espacio persistente después de desconectar una terminal o cambiar de contexto. El host de ejecución debe permanecer activo. El trabajo puede continuar mientras la laptop cliente está en reposo solo si se ejecuta en un host remoto activo. Suspender el host de ejecución detiene su trabajo.
 
 Úselo para conservar la salida visible de comandos, servidores de desarrollo de larga ejecución, ejecuciones de tests, sesiones del navegador y espacios de trabajo de agentes. Mantenga el trabajo inspeccionable y recuperable.
 

@@ -709,7 +709,7 @@ Las referencias útiles incluyen:
 - https://agentskills.io/home
 - https://github.com/vercel-labs/skills
 - https://www.skills.sh/
-- [source URL removed for privacy]
+- [URL de fuente eliminada por privacidad]
 
 Mantenga neutrales los skills compartidos.
 
@@ -1405,7 +1405,7 @@ Una URL que funciona en el host puede fallar dentro de un contenedor.
 
 Use YARP cuando el sistema local necesite un punto de entrada HTTPS, enrutamiento de rutas, archivos estáticos o un proxy.
 Asigne al gateway un hostname local estable y una asociación de certificado.
-Por ejemplo, use `https://interview.mensetsukan.localhost:15180/` sólo después de comprobar el certificado, puerto, ruta y backend.
+Por ejemplo, use `https://app.example.localhost:15180/` sólo después de comprobar el certificado, puerto, ruta y backend.
 
 No considere un hostname local como prueba del comportamiento de ingress en producción.
 Pruebe el mismo contrato de ruta mediante el ingress o gateway desplegado.

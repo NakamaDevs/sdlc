@@ -53,9 +53,9 @@ Use [AGENT-TEAM.md](AGENT-TEAM.md), [WORKSPACES.md](WORKSPACES.md), [LOCAL-TOOLS
 
 ## Referencias
 
-Use [REFERENCES.md](REFERENCES.md) para las referencias activas verificadas y el [archivo de fuentes](../references/README.md) para las instantáneas de fuentes.
+Use [REFERENCES.md](REFERENCES.md) para las referencias activas verificadas y el [catálogo de fuentes](../references/README.md) para los enlaces a fuentes primarias.
 
-Las instantáneas de fuentes conservan su idioma original. Son copias de evidencia, no traducciones mantenidas.
+Las copias de páginas de terceros se excluyen de este repositorio. Use enlaces cuando la atribución obligatoria o los identificadores personales impidan una redistribución segura.
 
 - [Gist público en inglés — `sldc-en`](https://gist.github.com/2ee0c10e6cb95231fd252d15ebfc8bbb)
 - [Gist público en español — `sldc-es`](https://gist.github.com/048bf4208a4ede278917c6a93c3e7ac6)

@@ -34,6 +34,5 @@ Una persona puede pedir a un agente que produzca un borrador. La persona debe el
 ## Referencias
 
 - [Stop Sloppypasta](https://stopsloppypasta.ai/en/)
-- No sea un proxy humano
 - [No pegue contenido de IA](https://dontpastetheai.com/?via=dailydev)
 - [Anthropic: AI assistance and coding skills](https://www.anthropic.com/research/ai-assistance-coding-skills)
