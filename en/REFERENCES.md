@@ -131,3 +131,8 @@ Run `mise run check:prompt-injection` before an agent reads an updated snapshot.
 - [Tailscale SSH](https://tailscale.com/docs/features/tailscale-ssh)
 - [Moshi connections](https://getmoshi.app/docs/connections)
 - [Moshi Herdr](https://getmoshi.app/docs/herdr)
+
+## Branch workflow references
+
+- [Git workflows](https://git-scm.com/docs/gitworkflows)
+- [Trunk Based Development](https://trunkbaseddevelopment.com/)
