@@ -1,5 +1,7 @@
 # HARNESS
 
+See [JOURNEY.md](JOURNEY.md) for the six-stage proof of concept, evidence limits, and acceptance tests.
+
 Harness engineering makes the repository, tools, tests, observability, and workflow legible and enforceable for people and AI agents.
 
 Humans define intent, constraints, priorities, and acceptance. Agents execute within a repository-local harness. The harness must make the correct path easy to discover and the unsafe path difficult to execute.

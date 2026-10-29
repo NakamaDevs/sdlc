@@ -49,6 +49,7 @@ defmodule GistExport do
     {"COMPOSITION.md", "z42-COMPOSITION.md"},
     {"LOCAL-TOOLS.md", "z43-LOCAL-TOOLS.md"},
     {"REMOTE-ACCESS.md", "z44-REMOTE-ACCESS.md"},
+    {"JOURNEY.md", "z45-JOURNEY.md"},
     {"NAKAMADEVS.md", "zz01-NAKAMADEVS.md"}
   ]
 
