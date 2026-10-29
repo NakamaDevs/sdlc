@@ -49,7 +49,8 @@ Use [AGENT-TEAM.md](AGENT-TEAM.md), [WORKSPACES.md](WORKSPACES.md), [LOCAL-TOOLS
 35. [CHANGELOG.md](CHANGELOG.md) — fuentes del changelog, historia de merge, Semantic Versioning y generación.
 36. [DEPLOY.md](DEPLOY.md) — planificación de releases, publicación, deployment, promoción y rollback.
 37. [PRIVACY.md](PRIVACY.md) — PII, PHI, minimización, datos sintéticos, detección y respuesta.
-38. [NAKAMADEVS.md](NAKAMADEVS.md) — perfil opcional de política, skills, stack y propiedad de NakamaDevs. Mantenga este perfil al final.
+38. [JOURNEY.md](JOURNEY.md) — prueba de concepto de seis etapas, lecciones, evidencia de modelos y salidas medibles.
+39. [NAKAMADEVS.md](NAKAMADEVS.md) — perfil opcional de política, skills, stack y propiedad de NakamaDevs. Mantenga este perfil al final.
 
 ## Referencias
 

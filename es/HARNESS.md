@@ -1,5 +1,7 @@
 # HARNESS
 
+Consulte [JOURNEY.md](JOURNEY.md) para la prueba de concepto de seis etapas, límites de evidencia y pruebas de aceptación.
+
 La ingeniería de harness hace claros y aplicables el repositorio, las herramientas, los test, la observabilidad y el workflow para personas y agentes de IA.
 
 Las personas definen la intención, las restricciones, las prioridades y la aceptación. Los agentes ejecutan dentro de un harness local del repositorio. El harness debe facilitar la ruta correcta y dificultar la ruta insegura.
