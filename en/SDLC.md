@@ -147,7 +147,7 @@ A feature is complete only when it meets the [canonical completion standard](#ca
 
 ## Communication principles
 
-Use two communication layers.
+Use two communication layers: precise technical content and useful project updates. Choose the detail and structure for the person who needs to act. See [COMMUNICATION.md](COMMUNICATION.md) for audience choices, worked examples, uncertainty, and safe sharing.
 
 ### Technical communication
 
@@ -169,13 +169,9 @@ Apply STE and STS to:
 - handoff notes;
 - status updates.
 
-Use active voice.
+Use active voice and familiar words. Prefer short sentences, but keep related thoughts together when that makes a cause, condition, or trade-off clearer. Do not split an explanation into fragments to meet a sentence-length target. Use one term for one concept.
 
-Use short sentences.
-
-Use one idea in each sentence.
-
-Use one term for one concept.
+For colleague notes, start with what the reader needs to know or answer. Keep enough context to explain why the detail matters. A teammate continuing the work needs a starting point; a reviewer needs evidence; a decision-maker needs the choice and its consequences.
 
 Keep technical names, paths, commands, versions, identifiers, and error messages
 exact.
@@ -195,7 +191,7 @@ Do not claim official certification unless the project has certification.
 
 Use top-down, answer-first communication for important updates.
 
-Use this structure:
+Use these points to organize the update:
 
 1. Resolution or current answer.
 2. Situation.
@@ -204,15 +200,11 @@ Use this structure:
 5. Decision or recommendation.
 6. Owner and next action.
 
-Keep the main answer at the top.
+Keep the main answer at the top. Where sections help, make them clear and avoid repeating supporting points. Use evidence for each important claim. Separate facts, decisions, assumptions, and open questions without requiring a separate heading for each.
 
-Group supporting points into clear, non-overlapping sections.
+Report a recommendation as a recommendation until the authorized person decides. Keep uncertainty and disagreements that could change the next action. When a result covers only local tests or one revision, state that limit rather than describing the whole change as verified.
 
-Use evidence for each important claim.
-
-Separate facts, decisions, assumptions, and open questions.
-
-Use this format for milestone or project updates:
+Use this format for milestone or project updates when the project requires it, or when the update needs a durable structured record:
 
 ```md
 ## Decision
@@ -244,7 +236,9 @@ Use this format for milestone or project updates:
 - Next update: <condition for the next update>
 ```
 
-Use this structure for significant work-item comments, project updates, review summaries, and human handoffs.
+Cover the same points in significant work-item comments, project updates, review summaries, and human handoffs. A short paragraph may answer them more clearly than six mostly empty sections. Keep source links near the claims they support and link the full artifact when useful.
+
+This flexibility applies to ordinary colleague notes. It does not replace required legal, audit, incident, or procedural formats. Keep mandatory fields, exact quotations, approvals, privacy rules, and evidence requirements. A clearer message does not authorize wider access or sharing.
 
 This communication pattern is based on Situation–Complication–Resolution and
 top-down pyramid communication. The project must adapt it to its own audience.

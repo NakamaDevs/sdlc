@@ -158,7 +158,7 @@ Una capacidad termina sólo cuando cumple la [norma canónica de finalización](
 
 ## Principios de comunicación
 
-Use dos niveles de comunicación.
+Use dos niveles de comunicación: contenido técnico preciso y actualizaciones útiles del proyecto. Elija el detalle y la estructura para la persona que necesita actuar. Consulte [COMMUNICATION.md](COMMUNICATION.md) para elegir según la audiencia, ver ejemplos y tratar la incertidumbre y el intercambio seguro.
 
 ### Comunicación técnica
 
@@ -180,13 +180,9 @@ Aplique STE y STS a:
 - notas de handoff;
 - actualizaciones de status.
 
-Use la voz activa.
+Use la voz activa y palabras comunes. Prefiera frases cortas, pero mantenga juntas las ideas relacionadas cuando eso aclare una causa, condición o equilibrio entre opciones. No divida una explicación en fragmentos para cumplir un límite de palabras por frase. Use un término para cada concepto.
 
-Use frases cortas.
-
-Dé una idea en cada frase.
-
-Use un término para cada concepto.
+En las notas entre colegas, empiece por lo que el lector necesita saber o responder. Conserve suficiente contexto para explicar por qué importa el detalle. Un colega que continúa el trabajo necesita un punto de partida; un revisor necesita evidencia; quien decide necesita la elección y sus consecuencias.
 
 Conserve exactos los nombres técnicos, rutas, comandos, versiones, identificadores y mensajes de error.
 
@@ -206,7 +202,7 @@ No declare una certificación oficial si el proyecto no la tiene.
 
 Use comunicación descendente y muestre primero la respuesta.
 
-Use esta estructura:
+Use estos puntos para organizar la actualización:
 
 1. Resolución o respuesta actual.
 2. Situación.
@@ -215,15 +211,11 @@ Use esta estructura:
 5. Decisión o recomendación.
 6. Owner y siguiente acción.
 
-Ponga la respuesta principal al principio.
+Ponga la respuesta principal al principio. Cuando las secciones ayuden, hágalas claras y evite repetir los puntos de apoyo. Incluya evidencia para cada afirmación importante. Separe hechos, decisiones, suposiciones y preguntas abiertas sin exigir un encabezado distinto para cada uno.
 
-Agrupe los puntos de apoyo en secciones claras que no se superpongan.
+Presente una recomendación como recomendación hasta que la persona autorizada decida. Conserve la incertidumbre y los desacuerdos que podrían cambiar la siguiente acción. Cuando un resultado cubra solo tests locales o una revisión, indique ese límite en lugar de describir todo el cambio como verificado.
 
-Incluya evidencia para cada afirmación importante.
-
-Separe hechos, decisiones, suposiciones y preguntas abiertas.
-
-Use este formato para actualizar un milestone o proyecto:
+Use este formato para actualizar un milestone o proyecto cuando el proyecto lo exija o la actualización necesite un registro estructurado duradero:
 
 ```md
 ## Decisión
@@ -255,9 +247,9 @@ Use este formato para actualizar un milestone o proyecto:
 - Siguiente actualización: <condición para la siguiente actualización>
 ```
 
-Use esta estructura para comentarios importantes de elementos de trabajo.
+Cubra los mismos puntos en los comentarios importantes de elementos de trabajo, actualizaciones, resúmenes de revisión y handoffs humanos. Un párrafo corto puede cubrirlos con más claridad que seis secciones casi vacías. Mantenga los enlaces de origen cerca de las afirmaciones que respaldan y enlace el artefacto completo cuando sea útil.
 
-Úsela también para actualizaciones, resúmenes de revisión y handoffs humanos.
+Esta flexibilidad corresponde a las notas entre colegas. No sustituye los formatos legales, de auditoría, de incidentes o de procedimientos obligatorios. Conserve los campos obligatorios, citas textuales exactas, aprobaciones, reglas de privacidad y requisitos de evidencia. Un mensaje más claro no autoriza ampliar el acceso ni el intercambio.
 
 Este patrón usa Situation–Complication–Resolution y comunicación piramidal descendente.
 
