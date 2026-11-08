@@ -251,6 +251,45 @@ Registre el motivo, la condición, el artefacto, la acción de datos y el owner.
 
 Registre también las horas, el resultado y el issue de seguimiento.
 
+### Mantenga la compatibilidad entre versiones antiguas y nuevas
+
+Un deployment gradual puede dejar versiones antiguas y nuevas de la aplicación en ejecución al mismo tiempo. Los jobs, clientes, mensajes en cola y datos en cache pueden durar más que ambas versiones. Antes del deployment, registre qué versión puede leer y escribir cada formato de datos y contrato en cada paso de la migración. Pruebe las rutas con versiones mixtas, incluido el regreso a la aplicación antigua después de que la versión nueva haya escrito datos. Una migración correcta en una base de datos vacía no demuestra esto.
+
+Empiece con una ampliación compatible. Agregue el campo, tabla o contrato nuevo sin eliminar el anterior ni cambiar su significado. Mantenga válidos los valores existentes y compruebe que los lectores antiguos toleran los campos y valores nuevos. Seleccione el valor que será la fuente de verdad mientras existan ambas formas. Si las escrituras actualizan ambas formas, defina qué ocurre cuando sólo una actualización termina y cómo la conciliación detecta la diferencia. No suponga que dos escrituras son atómicas.
+
+Mueva los datos existentes con un backfill que pueda reanudarse, en lugar de un paso de deployment sin límites. Registre la regla de selección, el límite de lote, el checkpoint, el comportamiento de reintento y la evidencia de finalización. Repetir un lote no debe duplicar trabajo ni sobrescribir una escritura más reciente de la aplicación. Incluya los registros creados o modificados después de iniciar el recorrido, los registros con errores y las eliminaciones. Pruebe la pausa y la reanudación, y conserve evidencia suficiente para distinguir el trabajo terminado del pendiente. Defina límites de carga y condiciones de parada según la capacidad del sistema y los objetivos del servicio.
+
+Cambie las lecturas o los consumidores del contrato sólo después de que la conciliación demuestre que la forma nueva es utilizable y está actualizada. Mantenga una forma controlada de devolver el tráfico a la ruta antigua mientras siga siendo válida. Retrase la eliminación hasta que las instancias antiguas de la aplicación, los jobs programados, los clientes, el trabajo en cola y las caches pertinentes ya no la necesiten. Use sus periodos reales de soporte y retención para seleccionar el periodo de observación. Trate la eliminación como un cambio revisado por separado con su propio plan de recuperación; un deployment sin incidentes no la justifica por sí solo.
+
+### Seleccione la recuperación según el estado actual
+
+Antes de volver al artefacto antiguo, el owner de recuperación necesita saber qué cambió ya el deployment fallido. Compruebe la compatibilidad del esquema y la configuración, los valores nuevos escritos, los mensajes emitidos o consumidos y las acciones externas completadas. Incluya el deployment parcial y los resultados inciertos. Pause el rollout y limite los escritores o consumidores afectados cuando sea necesario, mientras mantiene disponibles las rutas esenciales del servicio donde sea seguro.
+
+El rollback es adecuado cuando el artefacto antiguo puede trabajar con los datos, la configuración y los contratos actuales, y volver a él no repetirá ni perderá trabajo completado. Compruébelo con el plan de compatibilidad y la evidencia actual. Dejar una ampliación compatible del esquema puede ser más seguro que revertirla. Restaurar un backup es una decisión separada de recuperación de datos: puede descartar escrituras válidas posteriores al backup y no deshace los efectos externos.
+
+Use forward recovery cuando la versión antigua no pueda gestionar con seguridad el estado actual. Mantenga la ampliación compatible y haga el deployment de un artefacto correctivo verificado mediante el procedimiento protegido. Repare o concilie los registros afectados con trabajo acotado que se pueda revisar. No fuerce el regreso a una versión antigua descartando datos nuevos sin indicarlo.
+
+Una notificación enviada, una solicitud externa aceptada o un mensaje consumido pueden ser irreversibles. Registre si el resultado está confirmado antes de reintentar. Use un identificador estable de operación u otro check de duplicados admitido, y compruebe el resultado de toda acción de compensación. La compensación también puede fallar y no demuestra que la acción original nunca ocurrió. Asigne un owner al trabajo de recuperación incierto o manual y manténgalo abierto hasta conciliarlo.
+
+### Ejemplo: migre un campo almacenado y su contrato
+
+Esta secuencia inventada cambia `label` por `display_label`. Cada paso avanza con evidencia, no con un tiempo transcurrido fijo. Una misma persona puede asumir los roles de aplicación, datos, contrato y recuperación, pero cada decisión necesita un owner.
+
+| Paso | Owner y evidencia antes de avanzar | Decisión de recuperación |
+|---|---|---|
+| Ampliar | Los owners de datos y contrato agregan un `display_label` opcional y aceptan ambos nombres. Comprueban que los lectores y escritores antiguos aún funcionan; `label` sigue siendo la fuente de verdad. | Vuelva a la aplicación antigua si es necesario y mantenga la adición compatible. |
+| Conectar escrituras | El owner de la aplicación hace el deployment del soporte para ambas formas y comprueba cómo todos los escritores las mantienen coherentes, incluidas las instancias antiguas y los jobs. | Detenga la promoción si las escrituras difieren. Mantenga la ruta antigua como fuente de verdad y concilie antes de continuar. |
+| Completar datos | El owner de datos ejecuta lotes que puede reanudar y los concilia con escrituras concurrentes, eliminaciones y registros con errores. | Pause y reanude desde un checkpoint comprobado. Repare diferencias sin sustituir valores más recientes. |
+| Cambiar la ruta | Los owners de aplicación y contrato establecen `display_label` como fuente de verdad y cambian las lecturas y los consumidores después de comprobar que los datos están completos y actualizados y que las versiones mixtas son compatibles. Conservan escrituras compatibles en `label`. | Vuelva a la ruta antigua sólo mientras aún represente las escrituras actuales. De lo contrario, use forward recovery. |
+| Observar | El owner de recuperación comprueba el tráfico real, el trabajo retrasado y los clientes admitidos durante el periodo de observación acordado. | Detenga la ampliación cuando ocurra una condición de parada. Seleccione la recuperación según los datos y efectos ya presentes. |
+| Eliminar | Los owners de datos y contrato confirman que ningún lector ni escritor admitido necesita `label` y después revisan su eliminación por separado. | Cuando la eliminación haga incompatible la aplicación antigua, descarte el rollback sólo del artefacto y prepare forward recovery o una restauración de datos aprobada explícitamente. |
+
+### Observe la recuperación antes de darla por terminada
+
+Seleccione los periodos de observación antes del rollout y de nuevo cuando la recuperación cambie el plan. Cubra tráfico representativo, trabajo programado, demoras de reintento, retraso de replicación o procesamiento y el consumidor admitido más lento que importe para el cambio. Indique quién observa cada señal y quién puede detener el rollout. Compare con una referencia conocida y use límites específicos del servicio; no hay una tasa de errores ni un periodo de espera seguros para todos los sistemas.
+
+Las condiciones de parada deben incluir pérdida de datos o fallos de integridad, rechazo de contratos, diferencias de conciliación crecientes, efectos secundarios duplicados y señales del servicio fuera de los límites acordados. La falta de telemetría también es motivo para pausar cuando impide decidir con seguridad. Registre la condición, el alcance afectado y el último paso seguro conocido. Reanude sólo después de que el owner compruebe la causa, la compatibilidad actual y la evidencia de recuperación. Mantenga visibles las reparaciones pendientes y la eliminación retrasada en el issue de seguimiento.
+
 ## P: ¿Cuál es el procedimiento manual de release?
 
 Use este procedimiento cuando la publicación en CI no esté disponible o esté desactivada por decisión:

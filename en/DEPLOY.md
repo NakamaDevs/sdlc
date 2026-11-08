@@ -247,6 +247,45 @@ Do not move or replace a published version after rollback. Publish a corrective 
 
 Record the reason, trigger, artifact, data action, owner, start time, end time, result, and follow-up issue.
 
+### Keep old and new versions compatible
+
+A rolling deployment can leave old and new application versions running together. Jobs, clients, queued messages, and cached data can outlive both versions. Before deployment, record which version can read and write each data shape and contract at each migration step. Test the mixed-version paths, including a return to the old application after the new version has written data. A successful migration on an empty database does not prove this.
+
+Start with a backward-compatible expansion. Add the new field, table, or contract without removing the old one or changing its meaning. Keep existing values valid, and check that old readers tolerate new fields and values. Choose the authoritative value while both forms exist. If writes update both forms, define what happens when only one update succeeds and how reconciliation finds the difference. Do not assume two writes are atomic.
+
+Move existing data with a resumable backfill rather than an unbounded deployment step. Record the selection rule, batch limit, checkpoint, retry behavior, and completion evidence. Repeating a batch must not duplicate work or overwrite a newer application write. Account for records created or changed after the scan starts, failed records, and deletes. Test pause and resume, and keep enough evidence to distinguish completed work from work still waiting. Set load limits and stop conditions from the system's capacity and service objectives.
+
+Cut over reads or contract consumers only after reconciliation shows that the new form is usable and current. Keep a controlled way to return traffic to the old path while it remains valid. Delay removal until old application instances, scheduled jobs, clients, queued work, and relevant caches no longer need it. Use their actual support and retention periods to choose the observation window. Treat removal as a separate reviewed change with its own recovery plan; a quiet deployment alone does not justify it.
+
+### Choose recovery from the state that exists now
+
+Before returning to the old artifact, the recovery owner needs to know what the failed deployment already changed. Check schema and configuration compatibility, new values written, messages emitted or consumed, and external actions completed. Include partial deployment and uncertain outcomes. Pause rollout and contain affected writers or consumers when needed, while keeping essential service paths available where safe.
+
+Rollback is suitable when the old artifact can work with the current data, configuration, and contracts, and returning to it will not repeat or lose completed work. Verify this against the compatibility plan and current evidence. Leaving an additive schema change in place may be safer than reversing it. Restoring a backup is a separate data-recovery decision: it can discard valid writes made since the backup and does not undo external effects.
+
+Use forward recovery when the old version cannot safely handle the current state. Keep the compatible expansion in place and deploy a verified corrective artifact through the protected procedure. Repair or reconcile affected records with bounded, reviewable work. Do not force an old version back by silently discarding new data.
+
+A sent notification, accepted external request, or consumed message may not be reversible. Record whether its outcome is confirmed before retrying. Use a stable operation identifier or another supported duplicate check, and verify the result of any compensating action. Compensation can also fail and is not proof that the original action never happened. Assign an owner to uncertain or manual recovery work and keep it open until reconciled.
+
+### Example: migrate a stored field and its contract
+
+This invented timeline changes `label` to `display_label`. Each step advances on evidence, not on a fixed elapsed time. The application, data, contract, and recovery roles can belong to the same person, but each decision still needs an owner.
+
+| Step | Owner and evidence before advancing | Recovery decision |
+|---|---|---|
+| Expand | The data and contract owners add an optional `display_label` and accept both names. They verify old readers and writers still work; `label` remains authoritative. | Return to the old application if needed and leave the compatible addition in place. |
+| Bridge writes | The application owner deploys support for both forms and checks how all writers keep them consistent, including old instances and jobs. | Stop promotion if writes diverge. Keep the old path authoritative and reconcile before proceeding. |
+| Backfill | The data owner runs resumable batches and reconciles them with concurrent writes, deletes, and failed records. | Pause and resume from a checked checkpoint. Repair discrepancies without replacing newer values. |
+| Cut over | The application and contract owners make `display_label` authoritative and switch reads and consumers after completeness, freshness, and mixed-version checks pass. They retain compatible writes to `label`. | Return to the old path only while it still represents current writes. Otherwise use forward recovery. |
+| Observe | The recovery owner checks live traffic, delayed work, and supported clients across the agreed observation window. | Stop further expansion when a stop condition occurs. Choose recovery from the data and effects already present. |
+| Remove | The data and contract owners confirm no supported reader or writer needs `label`, then review its removal separately. | Once removal makes the old application incompatible, exclude artifact-only rollback and prepare forward recovery or an explicitly approved data restore. |
+
+### Observe recovery before calling it complete
+
+Choose observation windows before rollout and again when recovery changes the plan. Cover representative traffic, scheduled work, retry delays, replication or processing lag, and the slowest supported consumer that matters to the change. Name who watches each signal and who can stop the rollout. Compare with a known baseline and use service-specific limits; there is no universal safe error rate or waiting period.
+
+Stop conditions should include data loss or integrity failures, contract rejection, growing reconciliation gaps, duplicate side effects, and service signals outside the agreed limits. Missing telemetry is also a reason to pause when it prevents a safe decision. Record the trigger, affected scope, and last known safe step. Resume only after the owner checks the cause, current compatibility, and recovery evidence. Keep unresolved repairs and delayed removal visible in the follow-up issue.
+
 ## Q: What is the manual release procedure?
 
 Use this procedure when CI publication is unavailable or deliberately disabled:
