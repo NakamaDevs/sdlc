@@ -50,7 +50,8 @@ Use [AGENT-TEAM.md](AGENT-TEAM.md), [WORKSPACES.md](WORKSPACES.md), [LOCAL-TOOLS
 36. [DEPLOY.md](DEPLOY.md) — release planning, publication, deployment, promotion, and rollback.
 37. [PRIVACY.md](PRIVACY.md) — PII, PHI, minimization, synthetic data, detection, and response.
 38. [JOURNEY.md](JOURNEY.md) — six-stage proof of concept, observed lessons, model evidence, and measurable exits.
-39. [NAKAMADEVS.md](NAKAMADEVS.md) — optional NakamaDevs policy, skills, stack, and ownership profile. Keep this profile last.
+39. [FACTORY.md](FACTORY.md) — software factory roles, owner brief, cadences, loss accounting, delegation, and adoption.
+40. [NAKAMADEVS.md](NAKAMADEVS.md) — optional NakamaDevs policy, skills, stack, and ownership profile. Keep this profile last.
 
 ## References
 

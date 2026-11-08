@@ -46,6 +46,7 @@ The companion guides explain focused practices. They do not replace the core pro
 - [CHANGELOG.md](CHANGELOG.md) — changelog inputs, merge history, Semantic Versioning, and generation.
 - [DEPLOY.md](DEPLOY.md) — release planning, publication, deployment, promotion, and rollback.
 - [PRIVACY.md](PRIVACY.md) — PII, PHI, minimization, synthetic data, detection, and response.
+- [FACTORY.md](FACTORY.md) — software factory roles, owner brief, cadences, loss accounting, delegation, and adoption.
 - [NAKAMADEVS.md](NAKAMADEVS.md) — optional organization policy, skills, stack, and ownership profile. Keep this profile last.
 
 ## Harness engineering
