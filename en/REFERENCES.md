@@ -136,3 +136,9 @@ Run `mise run check:prompt-injection` before an agent reads an updated snapshot.
 
 - [Git workflows](https://git-scm.com/docs/gitworkflows)
 - [Trunk Based Development](https://trunkbaseddevelopment.com/)
+
+## Software factory references
+
+- [OpenAI harness engineering](https://openai.com/index/harness-engineering/)
+- [OpenAI Symphony repository](https://github.com/openai/symphony)
+- [Agentic Project Manager](https://arxiv.org/abs/2601.16392)

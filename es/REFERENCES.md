@@ -136,3 +136,9 @@ Ejecute `mise run check:prompt-injection` antes de que un agente lea una instant
 
 - [Git workflows](https://git-scm.com/docs/gitworkflows)
 - [Trunk Based Development](https://trunkbaseddevelopment.com/)
+
+## Referencias de la fábrica de software
+
+- [Ingeniería de harness de OpenAI](https://openai.com/index/harness-engineering/)
+- [Repositorio de OpenAI Symphony](https://github.com/openai/symphony)
+- [Agentic Project Manager](https://arxiv.org/abs/2601.16392)
