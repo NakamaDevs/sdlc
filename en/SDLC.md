@@ -491,6 +491,136 @@ Each design decision must explain:
 - operational impact;
 - migration or rollback impact.
 
+### Start with the rules that must hold
+
+Draw boundaries around behavior and ownership before choosing folders, processes,
+or deployment units. An invariant is a rule that must remain true after every
+accepted operation. For a generic reservation flow, that might mean that confirmed
+reservations cannot exceed available capacity. Identify which component owns
+capacity, which operations can change it, and how concurrent requests are checked.
+
+Keep changes that must succeed together inside one consistency boundary where
+practical. Splitting the checks and writes across components introduces a
+coordination problem; an interface does not solve it. If the business can accept
+a temporary mismatch, describe that state, its permitted duration, and who repairs
+it. Otherwise, choose coordination that preserves the invariant.
+
+A boundary can be a module in one process. Use a separate service only when its
+independent ownership, scaling, isolation, or release needs justify network
+failures and operational work. Start with the smallest boundary that lets people
+change and test the behavior without depending on unrelated details.
+
+### Separate domain decisions from I/O
+
+Make it possible to ask whether an operation is allowed without contacting a
+database, clock, filesystem, or remote endpoint. Pass the facts needed for the
+decision explicitly and return a result that describes the permitted transition
+or a specific rejection. Keep authorization visible in the operation's contract,
+even when an outer layer performs the access check.
+
+The surrounding application code loads current state, invokes the decision,
+persists the result, and performs effects. A pure function does not prevent a
+race between reading and writing: use a transaction, conditional write, or other
+appropriate concurrency control, and test conflicting attempts. Put external
+formats and error translation at adapters so domain rules do not depend on a
+transport's response shape.
+
+Do not introduce an interface for every function. A direct implementation is
+often clearer when there is one use, few dependencies, and no demonstrated need
+for substitution. Add an abstraction when it removes repeated policy or isolates
+a concrete source of change. Name the variation it supports and avoid exposing
+options that no caller needs.
+
+### Choose what the caller must wait for
+
+Synchronous work gives the caller a result in the same interaction, but couples
+response time and availability to everything on that path. Deferred work can
+absorb bursts or let the caller continue, but adds durable acceptance, queue
+limits, retries, progress reporting, and recovery.
+
+For the reservation example, confirming capacity may need to finish before
+success is returned, while sending a notification may happen later. If acceptance
+itself is deferred, return an operation reference and a pending state rather than
+claiming that the reservation is confirmed. Define how the caller discovers
+completion, rejection, or expiry.
+
+Specify a latency budget for synchronous dependencies and a maximum acceptable
+delay for deferred work. Decide what happens when capacity is exhausted or a
+worker stays unavailable. Making a queue larger is not a recovery plan; define
+admission limits and how operators identify and handle stalled work.
+
+### Design for interrupted work
+
+Walk through failure after each externally visible step, not only failure before
+the operation starts. A timeout means the caller did not receive a result; it does
+not prove that nothing happened. Before retrying a state-changing request, use
+an operation identifier or a status lookup to determine whether repeating it is
+safe.
+
+Define idempotency as behavior, not just a header: the identifier's scope, retention
+period, response to repeated requests, and response to a different payload using
+the same identifier. Make the duplicate check and durable effect atomic where
+possible. A local record alone cannot prevent duplicates at a remote boundary;
+the receiving system needs its own deduplication or reconciliation contract.
+
+When a local state change must trigger deferred work, avoid an unprotected gap
+between committing the change and recording the work. A transactional outbox is
+one option when both records can share a transaction. It still needs delivery
+monitoring and consumers that tolerate repeat delivery.
+
+Record which failures are retryable, the retry limit and delay, and the next
+owner after retries stop. Distinguish compensation from rollback: a later
+corrective action may restore a business balance without erasing an already
+observed effect.
+
+### Compare realistic options
+
+Compare at least the simplest workable design with the proposed alternative.
+Describe consequences that someone maintaining or operating the system can
+verify.
+
+| Choice | Benefit to check | Cost or constraint to check |
+| --- | --- | --- |
+| One module or a separate service | Whether independent scaling or releases are actually needed | Cross-boundary consistency, network failure, deployment, and support ownership |
+| Immediate or deferred execution | Whether the caller needs the final outcome now | Response latency, pending states, backlog limits, and recovery |
+| Direct code or a shared abstraction | Whether callers share a stable rule or only similar syntax | Coupling between callers, indirection, and the cost of changing the contract |
+
+Include the transition, not only the desired end state. Check whether old and new
+callers can coexist, how stored data will be migrated and validated, and whether
+a rollback can still read data written by the new version. If rollback loses
+information or cannot reverse an external effect, state that limit and describe
+the recovery path. Do not call a change reversible merely because its code can
+be reverted.
+
+### Keep a decision someone can revisit
+
+Keep the record beside the work it explains. Use a short note for a local choice
+and a fuller architecture decision record when the consequences cross ownership
+or deployment boundaries. Separate assumptions from measured evidence.
+
+A generic, illustrative record might contain:
+
+- **Problem:** Reserve limited capacity without accepting more than is available.
+- **Choice:** One owner for capacity changes, with atomic confirmation and deferred
+  notification intent recorded in the same transaction.
+- **Alternative:** Separate confirmation and notification services immediately.
+  Defer that split because no independent release or scaling need is established.
+- **Assumptions:** Notification can arrive later; the store supports the required
+  transaction; the capacity component can handle the expected workload. These
+  need validation.
+- **Evidence needed:** Concurrent reservation attempts, duplicate delivery,
+  interruption after commit, and recovery with a backlog. Link actual results
+  when available rather than treating this list as completed testing.
+- **Migration and operations:** Keep existing callers compatible; monitor pending
+  notifications; assign retry and repair ownership. Check data compatibility
+  before rollback.
+- **Revisit when:** Measured contention breaks the agreed latency target,
+  notification delay exceeds its budget, or ownership and release needs change.
+
+Give the real record an owner and status. Set a review date for time-dependent
+assumptions, or use an observable trigger when a calendar date would add little.
+The record should explain what would change the decision, not defend it forever.
+
 ## `feature-matrix.md`: capability and evidence inventory
 
 Maintain one row for each important feature or capability.

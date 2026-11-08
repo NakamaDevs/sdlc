@@ -511,6 +511,149 @@ Cada decisión debe explicar:
 - el efecto operativo;
 - el efecto en la migración o rollback.
 
+### Empiece por las reglas que deben cumplirse
+
+Defina los límites según el comportamiento y la responsabilidad antes de elegir
+carpetas, procesos o unidades de despliegue. Una invariante es una regla que debe
+seguir cumpliéndose después de cada operación aceptada. En un flujo genérico de
+reservas, podría exigir que las reservas confirmadas no superen la capacidad
+disponible. Identifique qué componente controla la capacidad, qué operaciones
+pueden cambiarla y cómo se comprueban las solicitudes concurrentes.
+
+Mantenga los cambios que deben completarse juntos dentro de un mismo límite de
+consistencia cuando sea práctico. Separar las comprobaciones y las escrituras
+entre componentes introduce un problema de coordinación; una interfaz no lo
+resuelve. Si el negocio puede aceptar una discrepancia temporal, describa ese
+estado, su duración permitida y quién lo corrige. En caso contrario, elija una
+coordinación que conserve la invariante.
+
+Un límite puede ser un módulo dentro de un proceso. Use un servicio separado sólo
+cuando sus necesidades de responsabilidad, escalado, aislamiento o publicación
+independientes justifiquen los fallos de red y el trabajo operativo. Empiece con
+el límite más pequeño que permita cambiar y probar el comportamiento sin depender
+de detalles ajenos.
+
+### Separe las decisiones de dominio de la E/S
+
+Permita comprobar si una operación está permitida sin consultar una base de
+datos, un reloj, un sistema de archivos o un endpoint remoto. Pase explícitamente
+los datos necesarios para la decisión y devuelva un resultado que describa la
+transición permitida o un rechazo específico. Mantenga visible la autorización
+en el contrato de la operación, incluso si una capa exterior comprueba el acceso.
+
+El código de aplicación que rodea esa decisión carga el estado actual, invoca la
+decisión, persiste el resultado y ejecuta los efectos. Una función pura no evita
+una condición de carrera entre la lectura y la escritura: use una transacción,
+una escritura condicional u otro control de concurrencia adecuado, y pruebe
+intentos en conflicto. Sitúe los formatos externos y la traducción de errores en
+adaptadores para que las reglas de dominio no dependan del formato de respuesta
+de un transporte.
+
+No introduzca una interfaz para cada función. Una implementación directa suele
+ser más clara cuando tiene un solo uso, pocas dependencias y ninguna necesidad
+demostrada de sustitución. Añada una abstracción cuando elimine reglas repetidas
+o aísle una fuente concreta de cambio. Identifique la variación que admite y
+evite exponer opciones que ningún consumidor necesita.
+
+### Elija qué debe esperar quien llama
+
+El trabajo síncrono devuelve un resultado en la misma interacción, pero vincula
+el tiempo de respuesta y la disponibilidad a todo lo que participa en esa ruta.
+El trabajo diferido puede absorber picos o permitir que quien llama continúe,
+pero añade aceptación persistente, límites de cola, reintentos, información de
+progreso y recuperación.
+
+En el ejemplo de reservas, puede ser necesario confirmar la capacidad antes de
+devolver un resultado correcto, mientras que el envío de una notificación puede
+ocurrir después. Si la propia aceptación se difiere, devuelva una referencia a la
+operación y un estado pendiente, en lugar de afirmar que la reserva está
+confirmada. Defina cómo se conocerá su finalización, rechazo o caducidad.
+
+Especifique un presupuesto de latencia para las dependencias síncronas y un
+retraso máximo aceptable para el trabajo diferido. Decida qué ocurre cuando se
+agota la capacidad o un worker sigue sin estar disponible. Ampliar una cola no es
+un plan de recuperación; defina límites de admisión y cómo los operadores
+identifican y gestionan el trabajo estancado.
+
+### Diseñe para el trabajo interrumpido
+
+Revise qué sucede si hay un fallo después de cada paso visible externamente, no
+sólo antes de que empiece la operación. Un timeout significa que quien llama no
+recibió un resultado; no demuestra que no ocurrió nada. Antes de reintentar una
+solicitud que cambia el estado, use un identificador de operación o consulte su
+estado para determinar si es seguro repetirla.
+
+Defina la idempotencia como comportamiento, no sólo como un encabezado: el alcance
+del identificador, su periodo de conservación, la respuesta a solicitudes repetidas
+y la respuesta a un payload diferente que use el mismo identificador. Haga atómica
+la comprobación de duplicados junto con el efecto persistente cuando sea posible.
+Un registro local por sí solo no evita duplicados en un límite remoto; el sistema
+receptor necesita su propio contrato de deduplicación o reconciliación.
+
+Cuando un cambio de estado local deba generar trabajo diferido, evite un intervalo
+sin protección entre confirmar el cambio y registrar el trabajo. Un outbox
+transaccional es una opción cuando ambos registros pueden compartir una
+transacción. Aun así, necesita supervisión de la entrega y consumidores que
+toleren entregas repetidas.
+
+Registre qué fallos permiten reintentos, su límite y espera, y quién asume la
+responsabilidad cuando se agotan. Distinga compensación de rollback: una acción
+correctiva posterior puede restablecer un balance de negocio sin eliminar un
+efecto ya observado.
+
+### Compare opciones realistas
+
+Compare al menos el diseño viable más sencillo con la alternativa propuesta.
+Describa consecuencias que alguien que mantenga u opere el sistema pueda
+comprobar.
+
+| Opción | Beneficio que debe comprobarse | Coste o restricción que debe comprobarse |
+| --- | --- | --- |
+| Un módulo o un servicio separado | Si realmente hacen falta escalado o publicaciones independientes | Consistencia entre límites, fallos de red, despliegue y responsabilidad del soporte |
+| Ejecución inmediata o diferida | Si quien llama necesita el resultado final ahora | Latencia de respuesta, estados pendientes, límites de trabajo acumulado y recuperación |
+| Código directo o una abstracción compartida | Si los consumidores comparten una regla estable o sólo una sintaxis parecida | Acoplamiento entre consumidores, indirección y coste de cambiar el contrato |
+
+Incluya la transición, no sólo el estado final deseado. Compruebe si pueden
+coexistir los consumidores antiguos y nuevos, cómo se migrarán y validarán los
+datos almacenados y si un rollback todavía puede leer datos escritos por la nueva
+versión. Si el rollback pierde información o no puede revertir un efecto externo,
+indique ese límite y describa la vía de recuperación. No califique un cambio de
+reversible sólo porque pueda revertirse su código.
+
+### Mantenga una decisión que pueda revisarse
+
+Guarde el registro junto al trabajo que explica. Use una nota breve para una
+decisión local y un architecture decision record más completo cuando las
+consecuencias crucen límites de responsabilidad o despliegue. Separe las
+suposiciones de la evidencia medida.
+
+Un registro genérico e ilustrativo podría contener:
+
+- **Problema:** Reservar capacidad limitada sin aceptar más de la disponible.
+- **Decisión:** Un solo responsable de los cambios de capacidad, con confirmación
+  atómica y registro de la intención de notificar después en la misma transacción.
+- **Alternativa:** Separar de inmediato los servicios de confirmación y
+  notificación. Posponer esa separación porque no se ha establecido una necesidad
+  de publicación o escalado independientes.
+- **Suposiciones:** La notificación puede llegar después; el almacenamiento admite
+  la transacción requerida; el componente que controla la capacidad admite la
+  carga prevista. Estas suposiciones necesitan validación.
+- **Evidencia necesaria:** Intentos concurrentes de reserva, entregas duplicadas,
+  interrupción después de confirmar la transacción y recuperación con trabajo
+  acumulado. Enlace los resultados reales cuando estén disponibles, sin tratar
+  esta lista como pruebas ya completadas.
+- **Migración y operación:** Mantener la compatibilidad de los consumidores
+  existentes; supervisar las notificaciones pendientes; asignar la responsabilidad
+  de reintentos y reparación. Comprobar la compatibilidad de datos antes del rollback.
+- **Revisar cuando:** La contención medida incumpla el objetivo de latencia
+  acordado, el retraso de notificación supere su presupuesto o cambien las
+  necesidades de responsabilidad y publicación.
+
+Asigne un responsable y un estado al registro real. Fije una fecha de revisión
+para las suposiciones que dependan del tiempo, o use una condición observable
+cuando una fecha aporte poco. El registro debe explicar qué haría cambiar la
+decisión, no defenderla para siempre.
+
 ## `feature-matrix.md`: inventario de capacidades y evidencia
 
 Mantenga una fila por cada capacidad importante.
