@@ -1,200 +1,156 @@
-# CODE REVIEW
+# REVISIÓN DE CÓDIGO Y VALIDACIÓN
 
-Esta página conecta la revisión de código, la evidencia de validación y la resolución de comentarios para personas y agentes.
+Use este flujo de una sola página para servicios backend, aplicaciones frontend, componentes compartidos, extensiones y herramientas de entrega. Comparta la página de GitHub en un commit concreto cuando la guía deba permanecer estable.
 
-## P: ¿Cuál es el propósito de un review de Codex?
+Este es un proceso recomendado, no una prueba de que un repositorio lo implemente. Relacione cada requisito con la política aprobada y los comandos reales del proyecto. No autoriza gastos, publicación, cambios de permisos, merge ni release.
 
-Un review de Codex identifica defectos, regresiones, tests faltantes, riesgos de seguridad y diferencias en la documentación.
+## 1. Mantenga visibles cinco responsabilidades
 
-Los comentarios son afirmaciones, no requisitos automáticos. Verifique cada afirmación contra la revisión actual y el contrato del repositorio.
+Comparta el proceso y el contrato de evidencia. Mantenga las reglas del dominio, los fixtures, los tests y el conocimiento de los consumidores en cada repositorio.
 
-## P: ¿Cuándo debe empezar un review de Codex?
+| Módulo | Responsabilidad | Resultado |
+|---|---|---|
+| 0. Alcance | Issue, criterios de aceptación, dependencias y destino de integración | Plan y revisiones compatibles |
+| 1. Entorno | Worktree aislado, servicios, puertos, responsable y limpieza | Identidad reproducible del runtime |
+| 2. Revisión | Revisión de solo lectura, evaluación de hallazgos y decisiones | Registro de revisión de los cambios exactos |
+| 3. Implementación | Reproducir, escribir tests, corregir y refactorizar | Evidencia RED/GREEN |
+| 4. Integración | Revisiones combinadas, recorridos reales y comparación antes/después | Evidencia de validación accesible |
 
-Abra un pull request como borrador cuando la visibilidad temprana ayude a coordinar. No solicite un review completo para trabajo incompleto conocido.
+Para cada módulo, registre su punto de entrada, responsable, estado y siguiente acción. Use desconocido, planificado, en curso, bloqueado o verificado. Una implementación verificada no equivale a un pull request listo. Enlace los registros de ejecución en vez de copiar logs al resumen.
 
-Mueva el pull request a listo para review sólo cuando:
+## 2. Siga el ciclo local de feedback
 
-- el alcance previsto esté presente;
-- pasen los checks enfocados;
-- la documentación necesaria esté actualizada;
-- el autor termine un self-review;
-- la descripción indique evidencia, límites y posición del stack.
+Cree o localice primero el issue. Seleccione la base y aísle el trabajo. Abra un PR en borrador cuando ayude a coordinar. Complete la mayoría de los ciclos de tests, corrección y revisión de forma local antes de que CI compruebe los cambios publicados de forma independiente.
 
-El review inicial de Codex puede empezar automáticamente cuando el pull request esté listo. Registre el head exacto que se revisó.
+El diagrama muestra el proceso objetivo, no una automatización existente.
 
-Si no empieza el review automático, confirme que no haya otro activo. Después, solicite una revisión con `@codex review`.
-
-Después de otros cambios, envíe primero la respuesta completa. Después, solicite otra revisión con `@codex review`.
-
-No solicite reviews repetidos mientras queden comentarios, checks fallidos o correcciones sin enviar.
-
-## P: ¿Cómo debe comprobarse la precisión de un hallazgo?
-
-Lea el comentario, head actual, diff exacto, contrato relacionado y tests pertinentes.
-
-Reproduzca el fallo cuando sea práctico. En otro caso, pruebe el comportamiento con el flujo de datos y fixtures enfocados.
-
-Clasifique el hallazgo antes de cambiar código:
-
-- `valid` significa que la revisión actual contiene el problema informado;
-- `invalid` significa que la evidencia refuta el problema informado;
-- `unclear` significa que la evidencia disponible no permite decidir;
-- `superseded` significa que una revisión posterior ya quitó el problema.
-
-Verifique la severidad por separado. Un defecto válido puede tener una prioridad incorrecta.
-
-## P: ¿Qué debe ocurrir después de un hallazgo válido?
-
-Use esta secuencia:
-
-1. Corrija la causa raíz dentro del alcance revisado.
-2. Agregue un test de regresión enfocado para el comportamiento fallido.
-3. Ejecute el test enfocado y los tests cercanos.
-4. Ejecute `mise run verify` antes de terminar.
-5. Envíe un commit semántico y atómico con la evidencia.
-6. Responda con estado y evidencia antes de resolver el thread.
-
-No cambie comportamiento no relacionado solo para satisfacer un comentario.
-
-## P: ¿Cuándo puede rechazarse un hallazgo?
-
-Rechace un hallazgo solo cuando la evidencia actual lo refute.
-
-Las razones válidas incluyen estos casos:
-
-- la ruta informada no puede ocurrir bajo el contrato actual;
-- el head actual ya contiene la protección necesaria;
-- el cambio propuesto entra en conflicto con una política o especificación superior;
-- el comentario corresponde a una revisión anterior y ya no aplica.
-
-Indique el código, test, comando o contrato exacto que respalda el rechazo.
-
-No rechace un hallazgo válido porque la corrección sea incómoda. Use `blocked` y enlace el trabajo posterior aprobado.
-
-## P: ¿Cuándo debe etiquetarse a una persona?
-
-Etiquete a una persona responsable sólo cuando una decisión, permiso, dependencia u opción de producto externa impida terminar.
-
-Indique la pregunta exacta más pequeña. Incluya la evidencia, opciones, riesgo y owner necesario.
-
-Mantenga el thread sin resolver con status `blocked`. Continúe todo el trabajo seguro que no dependa de la respuesta.
-
-## P: ¿Qué estados deben usarse en un thread?
-
-Use un estado explícito en cada respuesta:
-
-- `accepted` significa que el hallazgo es válido, pero queda trabajo;
-- `fixed` significa que están presentes la corrección y evidencia de regresión;
-- `rejected` significa que la evidencia refuta el hallazgo;
-- `blocked` significa que una decisión externa o dependencia impide terminar;
-- `superseded` significa que una revisión posterior quitó el hallazgo.
-
-Deje sin resolver los threads `accepted` y `blocked`. No representan trabajo terminado.
-
-## P: ¿Qué debe contener cada respuesta de review?
-
-Incluya estos campos:
-
-- `Status`: estado actual del thread;
-- `Accuracy`: clasificación y motivo breve;
-- `Change`: cambio exacto de comportamiento o documento;
-- `Evidence`: checks enfocados y checks totales;
-- `Limit`: plataforma, ruta o condición que permanece sin verificar;
-- `Commit`: `SHA` enviado y enlace completo del commit que contienen el resultado;
-- `Code`: enlace permanente y estable del código en el commit completo cuando una ubicación demuestre el resultado.
-
-Responda en el mismo thread inline. No mueva la conclusión a un comentario general del pull request.
-
-Use el commit completo para cada permalink. Seleccione el intervalo de líneas más estrecho que demuestre el cambio.
-
-Use esta forma para un hallazgo corregido:
-
-```text
-Status: fixed.
-
-Accuracy: valid. La revisión actual modificaba contenido dentro de bloques de código.
-Change: la normalización ahora aplica solo fuera de los bloques de código.
-Evidence: el test enfocado y mise run verify terminaron correctamente.
-Limit: no hay un límite conocido para bloques de código generados.
-Commit: <full-SHA> | <full-commit-url>.
-Code: <stable-code-url>.
+```mermaid
+flowchart TD
+    A["0 Scope: issue, contract, target"] --> B["1 Isolate worktree and runtime"]
+    B --> C["Draft PR when useful"]
+    C --> P{"Behavior changes?"}
+    P -->|Yes| D["3 RED: reproduce intended failure"]
+    P -->|No| F
+    D --> E["Implement, GREEN, refactor"]
+    E --> F["4 Validate layers and collect evidence"]
+    F --> G["2 Local read-only review"]
+    G --> H{"Complete and no unresolved findings?"}
+    H -->|No| I["Assess findings or repair missing input"]
+    I --> P
+    H -->|Yes| J["Push coherent changes and mark ready"]
+    J --> K["CI checks and review at current head"]
+    K --> L{"All evidence and gates satisfied?"}
+    L -->|No| I
+    L -->|Yes| M["Authorized merge of verified head"]
+    M --> N["Separate release decision"]
 ```
 
-Use esta forma para un hallazgo rechazado:
+Mantenga un resumen breve del trabajo: alcance y destino, revisiones participantes, paso actual, bloqueo o siguiente acción y enlace a la última evidencia. Registre cada ronda de revisión con las revisiones de entrada, hallazgos, decisiones, correcciones y tests.
 
-```text
-Status: rejected.
+## 3. Demuestre el comportamiento con TDD
 
-Accuracy: invalid. El contrato actual rechaza esta ruta antes de ejecutar el código modificado.
-Change: no hay cambios de código.
-Evidence: el test indicado reproduce la entrada rechazada y pasa en el head enviado.
-Limit: el test solo cubre el contrato indicado.
-Commit: <full-SHA> | <full-commit-url>.
-Code: <stable-code-url>.
-```
+Escriba el test de regresión más pequeño antes de la corrección. Ejecútelo contra la revisión sin corregir y confirme que RED es el fallo de comportamiento previsto, no una dependencia ausente ni un entorno roto. Implemente la corrección mínima, observe GREEN, luego refactorice y repita los tests afectados.
 
-## P: ¿Cuándo debe resolverse un thread de review?
+Registre el identificador del test, los comandos exactos, las revisiones sin corregir y corregida, y los resultados. Un test final que pasa no demuestra una secuencia red-first. Identifique un test añadido después de implementar como evidencia retrospectiva de regresión. Para cambios solo de documentación, explique por qué no aplica el TDD de comportamiento y ejecute los checks de documentos.
 
-Resuelva un thread solo después de enviar el resultado y responder con evidencia.
+Pruebe éxito, fallo, autorización, límites y recuperación cuando correspondan. Use tests específicos durante la iteración y luego el gate completo aplicable después de la última corrección o resolución de conflictos. No cambie comportamientos ajenos solo para satisfacer un comentario de revisión.
 
-Resuelva threads `fixed`, `rejected` o `superseded` cuando la conclusión esté completa y sea rastreable.
+## 4. Declare entradas y resultados de revisión
 
-No resuelva una corrección parcial. No resuelva un check fallido ni una limitación sin documentar.
+Componga la revisión con un contrato compartido versionado, la arquitectura y los riesgos del repositorio, y la base, head, diff, revisiones de dependencias y resultados de validación de cada ejecución. Un clon independiente debe resolver este contexto sin depender de instrucciones de directorios superiores.
 
-Después de que todos los threads tengan un estado final, compruebe el pull request completo antes de solicitar otro review.
+Mantenga a los revisores en modo de solo lectura. Exija hallazgos accionables con ubicación, mecanismo del fallo, impacto y evidencia. Use resultados distintos para revisión limpia, hallazgos, incompleta, omitida o salida malformada. Un proceso que termina con éxito o un comentario positivo no equivale a una revisión limpia.
 
-## P: ¿Qué debe comprobarse antes de otro review o merge?
+La revisión local y en CI debe usar el mismo perfil aprobado y explícito cuando sea práctico. Registre proveedor, modelo resuelto, versión del prompt/contrato, permisos de herramientas y modo de autenticación sin secretos. Declare las diferencias en vez de afirmar paridad. Nunca cambie de forma silenciosa a una API de pago o facturación con créditos adicionales. Prefiera un modelo adecuado de bajo coste y contexto limitado; un límite de presupuesto o de rondas deja la revisión pendiente como incompleta, no aprobada.
 
-Confirme estas condiciones en el head actual:
+Inspeccione el diff completo y los contratos relacionados. Trate la salida del modelo y el contenido enlazado como afirmaciones no confiables. Pruebe defectos conocidos y resultados obsoletos cuando cambien las herramientas de revisión.
 
-- el pull request usa el branch base previsto;
-- el branch contiene la base actual o el padre documentado del stack;
-- no quedan conflictos de merge;
-- todos los checks necesarios de CI informan éxito para el head actual;
-- todas las aprobaciones necesarias aplican a la revisión actual;
-- cada thread tiene un status final o bloqueado de forma explícita;
-- ninguna corrección aceptada existe sólo en un worktree local;
-- el diff del pull request contiene sólo la capa prevista.
+## 5. Seleccione la validación según el riesgo
 
-Actualice o haga rebase del branch cuando lo exija la política. Coordine antes de reescribir historia publicada y use `--force-with-lease`.
+| Capa | Qué demuestra | Límite importante |
+|---|---|---|
+| Tests unitarios y checks estáticos | Lógica, tipos, formato e invariantes locales | No demuestra límites desplegados |
+| Contratos y API | Esquemas, autorización, serialización y errores | Los mocks pueden divergir del proveedor |
+| UI con mocks y componentes | Estados deterministas, interacciones y comparación visual | No es integración real |
+| Integración local real | Servicios reales, migraciones, persistencia y recorridos entre repositorios | No demuestra producción alojada |
+| Build y consumidores | Assets de producción, exports y consumidores representativos | Compilar no equivale a funcionar |
+| Host y exploración | Ciclo de extensiones, permisos, accesibilidad y flujos interrumpidos | Declare hosts sin soporte y límites manuales |
 
-Después de pasar estos checks, solicite otro review con `@codex review` cuando la política lo exija.
+Use fixtures sintéticos y bases de datos, puertos, cuentas y almacenamiento temporal aislados. Verifique el build servido, runtime, fixture, imagen y revisiones de código participantes antes de probar. Una opción de escenario mock no impone aislamiento de red: restrinja credenciales y acceso saliente, y haga fallar las peticiones inesperadas.
 
-## P: ¿Cómo puede ser repetible el workflow?
+Para cambios backend, pruebe entradas inválidas, permisos, transacciones, migraciones e idempotencia. Para frontends, distinga flujos con mocks, checks del build de producción y recorridos con backend real. Para componentes, pruebe exports públicos y consumidores representativos. Para extensiones, valide empaquetado, instalación/actualización, límites de mensajes y el host real.
 
-Mantenga una skill local en `.agents/skills/resolve-pr-review-threads/SKILL.md` cuando el repositorio use este workflow.
+Declare los recuentos de tests omitidos y fallos esperados. Pruebe cancelación, respuestas obsoletas, acciones repetidas, carga, desbordamiento, foco y recuperación cuando correspondan. Convierta defectos descubiertos en tests de regresión repetibles. Preserve comandos útiles y use adaptadores por repositorio en vez de imponer un framework.
 
-La skill debe listar los threads, clasificar cada hallazgo, comprobar el head, ejecutar checks enfocados y preparar respuestas rastreables.
+## 6. Facilite la inspección de evidencia
 
-También debe comprobar CI, conflictos, vigencia de la base, aprobaciones y cantidad de threads sin resolver antes de terminar.
+Vincule la evidencia con la base, head, harness, versión de política, fixtures y revisiones participantes exactos. Registre comandos, entorno, resultados, recuentos, límites y enlaces accesibles a artefactos. Genere metadatos desde los ejecutores cuando sea posible y verifique la existencia e identidad de los artefactos.
 
-La skill no debe aceptar, rechazar, responder ni resolver un thread sin evidencia. El owner del pull request conserva la decisión final de merge.
+Para cambios visuales, coloque antes y después en paralelo con el mismo escenario, datos, viewport, tema, idioma y recorte. Inspeccione la comparación; no actualice una referencia solo para que pasen los tests. Para API, muestre peticiones/respuestas comparables y cambios de esquema. Explique cuándo no aplica la evidencia visual o de API.
 
-## P: ¿Cómo debe escribirse el texto de review?
+Use trazas o vídeo cuando importe el orden o el tiempo de las interacciones. Identifique la reproducción lenta y conserve evidencia a velocidad normal cuando evalúe tiempos. Una captura sola no demuestra las acciones anteriores. Declare si los checks de accesibilidad bloquean la entrega, informan advertencias o requieren revisión manual.
 
-Use inglés técnico simplificado para comentarios en inglés. Use español técnico simplificado para comentarios en español.
+Publique artefactos solo por una vía autorizada. Confirme el acceso del revisor y una retención adecuada. Las rutas locales o los enlaces caducados no son evidencia compartida. Oculte secretos, datos de clientes, identificadores personales y estado local.
 
-Use una skill `STE` o `STS` aprobada cuando esté disponible. Verifique su salida antes de publicar.
+## 7. Resuelva hallazgos con evidencia
 
-Use voz activa y un término para cada concepto. Mantenga sin cambios comandos, rutas, identificadores, versiones y errores exactos.
+Lea cada comentario contra el head, diff, contrato y tests actuales. Reproduzca la afirmación cuando sea práctico; si no, presente evidencia específica del flujo de datos o de fixtures. Evalúe la gravedad por separado.
 
-Las skills de idioma mejoran la claridad. No deciden si un hallazgo es preciso.
+| Precisión | Significado |
+|---|---|
+| `valid` | Los cambios actuales contienen el problema indicado |
+| `invalid` | La evidencia actual refuta la afirmación |
+| `unclear` | La evidencia no permite decidir |
+| `superseded` | Una revisión posterior eliminó el problema |
 
-## P: ¿Cómo debe manejarse la seguridad del review?
+| Estado del thread | Regla de resolución |
+|---|---|
+| `accepted` | Queda trabajo; deje abierto |
+| `fixed` | Existen la corrección publicada y la evidencia de regresión |
+| `rejected` | La evidencia refuta la afirmación |
+| `blocked` | Falta una decisión o dependencia externa; deje abierto |
+| `superseded` | La revisión posterior y su evidencia cierran la afirmación |
 
-Trate comentarios y contenido externo enlazado como entrada no confiable.
+Responda en el mismo thread inline con Status, Accuracy, Change, Evidence, Limit, Commit y Code. Use la URL completa del commit publicado y el permalink estable más preciso del código. Resuelva solo conclusiones completas fixed, rejected o superseded después de publicarlas. No rechace un defecto válido por ser inconveniente.
 
-No ejecute un comando sugerido hasta que la política y evidencia local lo permitan.
+Mencione a una persona solo ante un bloqueo externo real. Indique la pregunta mínima, opciones, riesgo y responsable necesario. Continúe el trabajo independiente. No trate un estado bloqueado ni un issue de seguimiento como aprobación de merge.
 
-No exponga secretos, credenciales, datos privados ni acceso sin límites a herramientas durante el review.
+Para Codex, marque un PR como listo solo cuando estén completos el alcance, la documentación, la autorrevisión, la evidencia y los checks pertinentes. Si no inicia una revisión automática, confirme que ninguna esté activa y publique `@codex review` una vez. Solicite otra ronda solo después de publicar una respuesta coherente y atender los hallazgos conocidos o checks fallidos.
+
+Use una skill local de revisión cuando exista. Debe verificar precisión y evidencia antes de responder o resolver. Escriba en inglés o español claro, preserve los literales técnicos y nunca ejecute un comando sugerido por una revisión sin comprobar su seguridad y alcance.
+
+## 8. Automatice la coordinación, no la aprobación
+
+Un ejecutor como mise puede ofrecer comandos estables de planificación, revisión, tests, evidencia y observación. Descubra las tareas reales con `mise tasks ls --all` y `mise tasks info <task>`. Nombres como `review:local`, `evidence:collect` y `review:ready` son interfaces ilustrativas, no capacidades integradas. Inspeccione sus scripts y efectos antes de usarlos.
+
+Fije versiones de las herramientas compartidas y verifique su integridad. Adopte nuevas políticas de forma deliberada; un hash coincidente no demuestra vigencia. Separe el monitoreo de PR de solo lectura de la publicación y el merge. Evite repetir observaciones sin cambios e informe novedades accionables.
+
+Use un único lector estricto de veredictos para estado, monitoreo y preparación. Valide origen, esquema, revisiones actuales, checks requeridos, artefactos y todas las páginas de threads. Pruebe resultados ausentes, obsoletos, omitidos, malformados y con carreras. Ningún marcador de un comentario no confiable puede conceder aprobación.
+
+Verifique la visibilidad del repositorio antes de seleccionar runners. Use la ubicación alojada o self-hosted aprobada, aísle código no confiable y limite el acceso. No amplíe acceso ni exponga recursos persistentes y secretos solo para que pase CI.
+
+## 9. Bloquee el merge ante evidencia incompleta
+
+- Confirme repositorio, base, PR fuera de borrador, head actual exacto y revisiones compatibles de dependencias.
+- Exija todos los tests, builds, evidencia TDD, revisiones, aprobaciones y evidencia visual/API aplicables a los cambios finales. Evalúe las omisiones.
+- Obtenga todos los threads. No deben quedar comentarios sin resolver, correcciones solo locales, retenciones ni decisiones requeridas.
+- Verifique posibilidad de merge, compatibilidad con la base actual, acceso a artefactos y restricciones de release. Repita la validación afectada después de nuevos cambios.
+- Haga merge solo con autorización y una coincidencia atómica con el head verificado. El merge no autoriza despliegue.
+
+La validación ausente, pendiente, fallida, cancelada u omitida sin justificación bloquea la preparación. Un fallo de infraestructura es trabajo incompleto con diagnóstico, no éxito.
+
+Inicie la adopción con un inventario pequeño y un recorrido reproducible. Añada metadatos informativos antes de nueva aplicación obligatoria, pero no suprima gates existentes. Más metadatos requieren mantenimiento; la integración real cuesta tiempo; modelos idénticos pueden compartir puntos ciegos; revisiones estrechas pueden omitir consumidores. Use el riesgo para elegir profundidad y revisión independiente. Mantenga el detalle de dominio en guías enlazadas en vez de duplicarlo aquí.
 
 ## Referencias
 
-- [Reviews de pull requests en GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews)
-- [Feedback de review en GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request)
+- [Revisiones de pull requests en GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews)
+- [Feedback de revisión en GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request)
 - [CODEX.md](CODEX.md)
 - [TESTING.md](TESTING.md)
 - [COMMITS.md](COMMITS.md)
 - [GITHUB.md](GITHUB.md)
 - [COMMUNICATION.md](COMMUNICATION.md)
 - [SECURITY.md](SECURITY.md)
+- [MISE.md](MISE.md)
+- [HARNESS.md](HARNESS.md)
+- [INTEGRATION.md](INTEGRATION.md)
