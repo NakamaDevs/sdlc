@@ -330,6 +330,135 @@ The specification must not require:
 
 Implementation choices belong in architecture decision records.
 
+### Turn an ambiguous request into a contract
+
+A request such as "Let reviewers approve documents" is enough to start a
+conversation, but not enough to implement. It leaves several decisions open:
+which document version gets approved, who counts as a reviewer, and what happens
+when two people act at the same time.
+
+Start with the outcome the requester needs. In this example, another person
+needs to know that an assigned reviewer accepted one submitted version. The
+approval must remain tied to that version. It does not approve later edits or
+authorize publication. Electronic signatures, multiple required approvals, and
+notification delivery are outside this example's scope.
+
+Record these as proposed boundaries and ask the person responsible for the
+requirement to confirm them. The example decisions below make the discussion
+concrete. They are not defaults for every project. Keep unresolved decisions
+visible rather than filling gaps with whatever the implementation makes easiest.
+
+### Agree who can act
+
+Name the actors and their authority before choosing an interface. For this
+example, the document owner prepares and submits a version. An assigned reviewer
+can approve it, but cannot approve a document they own. A person who manages
+reviewer assignments does not gain approval authority merely by holding that
+role. The system checks authority when it processes the command.
+
+The document owner is not necessarily the owner of the requirement. Record who
+can settle questions about approval policy, who maintains the implementation,
+and who accepts the resulting behavior. Otherwise a developer or agent may
+quietly decide policy while fixing an edge case.
+
+Define the boundary visible to the caller too. A caller without access receives
+`not_available` whether the document is absent or inaccessible. A caller with
+access but without approval authority receives `not_allowed`. Neither result
+changes the document. Diagnostic records may explain the denial to authorized
+operators, but must not expose document content to the caller.
+
+### Write outcomes and failures together
+
+Give the operation a stable name, such as `approve_document`. Its inputs are
+`document_id`, `expected_version`, and `request_id`. The authenticated identity
+comes from the trusted calling context, not an actor identifier supplied in the
+request. In this example, `expected_version` names the exact submitted version
+the reviewer is accepting. Approval is allowed only while that version is in review and
+the caller is its assigned reviewer.
+
+On success, the result identifies the approved version and the recorded
+decision. A later read must show that same approval. The approval and the saved
+result for retries must become durable together. The caller must not receive
+success if that guarantee cannot be met. Keep diagnostic records limited to the
+actor reference, version, outcome, and correlation data needed for investigation,
+rather than copying the document body.
+
+Describe failure behavior with the same care. Malformed inputs return
+`invalid_input`. A stale version returns `version_conflict`. A visible version
+in an ineligible state returns `state_conflict`. These results leave its state
+unchanged. Check access before returning details that would reveal a hidden
+version or state. After access and authority checks, compare the version before
+checking whether its state permits approval.
+
+For retries, scope `request_id` to the authenticated actor and operation. After
+checking current access, an identical retry returns the saved result without
+another approval or approval event. Reusing that identifier with different
+inputs returns `request_conflict`. State the retention period for saved results;
+do not promise safe retries indefinitely when records expire.
+
+A timeout does not prove that approval failed. Tell the caller how to retrieve
+the saved result or retry with the same identifier. Return
+`temporarily_unavailable` only when the system knows no approval was committed.
+If the outcome is unknown, keep that uncertainty visible until recovery
+establishes the result.
+
+### Make state changes explicit
+
+A small transition table can expose disagreements that a success example misses.
+For a fresh, well-formed request from an authorized reviewer with access, this
+example uses the following transitions. The retry rules above apply before a
+fresh transition is attempted.
+
+| Current state | Condition | Result | Next state |
+| --- | --- | --- | --- |
+| `in_review` | Submitted version matches | Approval recorded | `approved` |
+| `in_review` | Submitted version changed | `version_conflict` | `in_review` |
+| `draft` | Version matches | `state_conflict` | `draft` |
+| `approved` | Version matches, new request | `state_conflict` | `approved` |
+
+If editing and approval race, both must not succeed against the same version.
+Choose an ordering rule that preserves the submitted version and rejects the
+losing operation. A new version must not inherit an earlier approval. Describe
+how submission and editing enter or leave these states in their own contracts,
+rather than assuming the approval command defines their full lifecycle.
+
+Before implementation, settle the open decisions that change acceptance:
+can assignments change during review, how long are retry results retained, and
+can an approval ever be withdrawn? Give each question an owner and a decision
+point. If one remains open, narrow the deliverable to behavior that does not
+depend on its answer or mark the affected work blocked.
+
+### Keep constraints separate from design
+
+"Approval remains tied to the reviewed version" is a behavior constraint.
+"Use a particular database lock" is an implementation choice. The contract can
+require one decision to win a race without selecting a database, transaction
+API, queue, or programming language.
+
+When an external obligation does require a specific mechanism, record its source,
+scope, and reason as a constraint. Put the choice of how to satisfy it in the
+decision register. This lets a reviewer challenge unnecessary coupling without
+discarding a real requirement.
+
+### Change the contract deliberately
+
+Suppose a later request allows document owners to approve their own submissions.
+That changes the authorization boundary. It is not a harmless adjustment to make
+a test pass. Record the requested change, its reason, and the person authorized
+to decide it. Compare it with the current contract before changing acceptance.
+
+Update the specification version and affected examples together. Identify the
+tests, interfaces, existing approvals, and in-progress reviews that may be
+affected. Decide whether the rule applies only to new submissions or also to
+existing ones. Preserve the previous acceptance criteria in history and explain
+which criteria the new decision replaces. Do not silently weaken a failing
+criterion or call the old behavior a defect without that decision.
+
+Connect each agreed outcome and failure to the project's acceptance work. Use
+[TESTING.md](TESTING.md) for test design and validation, and
+[CODE-REVIEW.md](CODE-REVIEW.md) for review and delivery gates. Keep their evidence
+rules there; the specification should state the behavior those checks must prove.
+
 ## Software design principles
 
 Use these principles when they improve the system:
