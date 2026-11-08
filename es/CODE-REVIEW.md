@@ -1,6 +1,6 @@
 # CODE REVIEW
 
-Esta guía define cómo las personas y los agentes manejan los comentarios de review de Codex.
+Esta página conecta la revisión de código, la evidencia de validación y la resolución de comentarios para personas y agentes.
 
 ## P: ¿Cuál es el propósito de un review de Codex?
 

@@ -1,6 +1,6 @@
 # CODE REVIEW
 
-This guide defines how people and agents handle Codex review comments.
+This page connects code review, validation evidence, and feedback resolution for people and agents.
 
 ## Q: What is the purpose of a Codex review?
 
