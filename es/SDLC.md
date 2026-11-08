@@ -348,6 +348,144 @@ La especificación no debe exigir:
 
 Registre las opciones de implementación en architecture decision records.
 
+### Convierta una petición ambigua en un contrato
+
+Una petición como "Permita que los revisores aprueben documentos" basta para
+iniciar una conversación, pero no para implementar. Deja abiertas varias
+decisiones: qué versión del documento se aprueba, quién cuenta como revisor y
+qué ocurre cuando dos personas actúan a la vez.
+
+Empiece por el resultado que necesita quien hace la petición. En este ejemplo,
+otra persona necesita saber que un revisor asignado aceptó una versión enviada.
+La aprobación debe seguir vinculada a esa versión. No aprueba cambios posteriores
+ni autoriza la publicación. Las firmas electrónicas, varias aprobaciones
+obligatorias y la entrega de notificaciones quedan fuera de este ejemplo.
+
+Registre estos límites como propuestas y pida confirmación a la persona
+responsable del requisito. Las decisiones del ejemplo siguiente concretan la
+conversación. No son valores predeterminados para todos los proyectos. Mantenga
+visibles las decisiones pendientes en vez de cubrir los vacíos con lo que sea
+más fácil de implementar.
+
+### Acuerden quién puede actuar
+
+Identifique a los actores y su autoridad antes de elegir una interfaz. En este
+ejemplo, el propietario del documento prepara y envía una versión. Un revisor
+asignado puede aprobarla, pero no puede aprobar un documento que le pertenece.
+Quien administra las asignaciones de revisores no obtiene autoridad de aprobación
+sólo por tener ese rol. El sistema comprueba la autoridad cuando procesa el comando.
+
+El propietario del documento no es necesariamente el responsable del requisito.
+Registre quién puede resolver preguntas sobre la política de aprobación, quién
+mantiene la implementación y quién acepta el comportamiento resultante. De lo
+contrario, un desarrollador o agente puede decidir la política sin avisar mientras
+corrige un caso límite.
+
+Defina también el límite visible para quien llama. Una persona sin acceso recibe
+`not_available` tanto si el documento no existe como si no tiene acceso a él.
+Una persona con acceso pero sin autoridad de aprobación recibe `not_allowed`.
+Ningún resultado cambia el documento. Los registros de diagnóstico pueden explicar
+la denegación a operadores autorizados, pero no deben exponer el contenido del
+documento a quien llama.
+
+### Escriba juntos los resultados y los fallos
+
+Dé un nombre estable a la operación, como `approve_document`. Sus entradas son
+`document_id`, `expected_version` y `request_id`. La identidad autenticada
+procede del contexto de llamada de confianza, no de un identificador de actor
+incluido en la petición. En este ejemplo, `expected_version` identifica la versión
+enviada exacta que acepta el revisor. Sólo se permite aprobar mientras esa versión
+está en revisión y quien llama es su revisor asignado.
+
+Si la operación tiene éxito, el resultado identifica la versión aprobada y la
+decisión registrada. Una lectura posterior debe mostrar la misma aprobación.
+La aprobación y el resultado guardado para reintentos deben persistir juntos.
+Quien llama no debe recibir éxito si no se puede cumplir esa garantía. Limite
+los registros de diagnóstico a la referencia del actor, la versión, el resultado
+y los datos de correlación necesarios para investigar, en vez de copiar el
+contenido del documento.
+
+Describa los fallos con el mismo cuidado. Las entradas mal formadas devuelven
+`invalid_input`. Una versión desactualizada devuelve `version_conflict`. Una
+versión visible en un estado no apto devuelve `state_conflict`. Estos resultados
+no cambian su estado. Compruebe el acceso antes de devolver detalles que revelen
+una versión o un estado ocultos. Tras comprobar el acceso y la autoridad, compare
+la versión antes de comprobar si su estado permite la aprobación.
+
+Para los reintentos, limite el alcance de `request_id` al actor autenticado y a la
+operación. Tras comprobar el acceso actual, un reintento idéntico devuelve el
+resultado guardado sin otra aprobación ni otro evento de aprobación. Reutilizar
+ese identificador con entradas distintas devuelve `request_conflict`. Indique el
+plazo de conservación de los resultados guardados. No prometa reintentos seguros
+indefinidos si los registros caducan.
+
+Un timeout no demuestra que la aprobación falló. Explique a quien llama cómo
+recuperar el resultado guardado o reintentar con el mismo identificador. Devuelva
+`temporarily_unavailable` sólo cuando el sistema sabe que no se confirmó ninguna
+aprobación. Si se desconoce el resultado, mantenga visible esa incertidumbre hasta
+que la recuperación establezca el resultado.
+
+### Haga explícitos los cambios de estado
+
+Una tabla pequeña de transiciones puede revelar desacuerdos que un ejemplo de
+éxito no muestra. Para una petición nueva y bien formada de un revisor autorizado
+con acceso, este ejemplo usa las transiciones siguientes. Las reglas de reintento
+anteriores se aplican antes de intentar una transición nueva.
+
+| Estado actual | Condición | Resultado | Estado siguiente |
+| --- | --- | --- | --- |
+| `in_review` | La versión enviada coincide | Aprobación registrada | `approved` |
+| `in_review` | La versión enviada cambió | `version_conflict` | `in_review` |
+| `draft` | La versión coincide | `state_conflict` | `draft` |
+| `approved` | La versión coincide, petición nueva | `state_conflict` | `approved` |
+
+Si la edición y la aprobación compiten, ambas no deben tener éxito sobre la misma
+versión. Elija una regla de orden que conserve la versión enviada y rechace la
+operación que pierde. Una versión nueva no debe heredar una aprobación anterior.
+Describa cómo el envío y la edición entran o salen de estos estados en sus propios
+contratos, en vez de suponer que el comando de aprobación define todo su ciclo.
+
+Antes de implementar, resuelva las decisiones abiertas que cambian la aceptación:
+¿pueden cambiar las asignaciones durante la revisión, cuánto tiempo se conservan
+los resultados de reintentos y se puede retirar una aprobación? Dé un responsable
+y un punto de decisión a cada pregunta. Si alguna sigue abierta, limite la entrega
+al comportamiento que no depende de su respuesta o marque el trabajo afectado
+como bloqueado.
+
+### Separe las restricciones del diseño
+
+"La aprobación sigue vinculada a la versión revisada" es una restricción de
+comportamiento. "Use un bloqueo de base de datos específico" es una opción de
+implementación. El contrato puede exigir que una decisión gane una carrera sin
+elegir una base de datos, una API de transacciones, una cola ni un lenguaje.
+
+Si una obligación externa exige un mecanismo específico, registre su fuente,
+alcance y motivo como restricción. Registre cómo cumplirla en el registro de
+decisiones. Así, un revisor puede cuestionar dependencias innecesarias sin
+descartar un requisito real.
+
+### Cambie el contrato de forma deliberada
+
+Suponga que una petición posterior permite a los propietarios aprobar sus propios
+documentos enviados. Eso cambia el límite de autorización. No es un ajuste inocuo
+para que una prueba apruebe. Registre el cambio solicitado, su motivo y la persona
+autorizada para decidirlo. Compárelo con el contrato actual antes de cambiar la
+aceptación.
+
+Actualice juntos la versión de la especificación y los ejemplos afectados.
+Identifique las pruebas, las interfaces, las aprobaciones existentes y las
+revisiones en curso que podrían verse afectadas. Decida si la regla sólo se
+aplica a envíos nuevos o también a los existentes. Conserve los criterios de
+aceptación anteriores en el historial y explique cuáles sustituye la decisión
+nueva. No debilite sin avisar un criterio que falla ni declare que el
+comportamiento anterior era un defecto sin esa decisión.
+
+Conecte cada resultado y fallo acordado con el trabajo de aceptación del proyecto.
+Use [TESTING.md](TESTING.md) para el diseño de pruebas y la validación, y
+[CODE-REVIEW.md](CODE-REVIEW.md) para la revisión y los gates de entrega. Mantenga
+allí sus reglas de evidencia. La especificación debe indicar el comportamiento
+que esos checks deben demostrar.
+
 ## Principios de diseño de software
 
 Use estos principios cuando mejoren el sistema:
