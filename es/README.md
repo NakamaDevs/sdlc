@@ -39,7 +39,7 @@ Use [AGENT-TEAM.md](AGENT-TEAM.md), [WORKSPACES.md](WORKSPACES.md), [LOCAL-TOOLS
 25. [INTEGRATION.md](INTEGRATION.md) — HTTP, SSE, WebSockets, webhooks, orden y recuperación.
 26. [CLAUDE.md](CLAUDE.md) — recepción y guía operativa de SDLC específica para Claude.
 27. [CODEX.md](CODEX.md) — recepción y guía operativa de SDLC específica para Codex.
-28. [CODE-REVIEW.md](CODE-REVIEW.md) — precisión, hallazgos, evidencia, estados y resolución de threads.
+28. [CODE-REVIEW.md](CODE-REVIEW.md) — flujo de revisión y validación en una página, TDD, evidencia y gates.
 29. [HOOKS.md](HOOKS.md) — Git hooks, prek, prevención de filtraciones, smoke tests y comprobaciones locales rápidas.
 30. [DAGGER.md](DAGGER.md) — pipelines portables de build, test, caché y entrega.
 31. [GITHUB.md](GITHUB.md) — arquitectura CI, rulesets, revisiones de equipos, bypass y runners.
