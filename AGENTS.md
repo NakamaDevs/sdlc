@@ -34,10 +34,10 @@ Kaicho defines required NakamaDevs policy. This file defines repository-specific
 
 - Use team `NAK` and project `SDLC` in Linear.
 - Create or locate an issue before a repository change.
-- Use one issue, branch, Herdr worktree, owner, and pull request for each reviewable change.
+- Use one issue, branch, Herdr worktree, and owner for each reviewable change. Open a pull request when the delivery route or the ruleset on `main` requires one.
 - Use `<type>/NAK-123-short-description` for every new branch.
 - Do not add usernames, initials, tool names, or agent namespaces to branch names.
-- Record stack parents in Linear and each pull request.
+- Record stack parents in Linear, and in the pull request when the change uses one.
 
 ## Documentation contract
 
@@ -64,6 +64,7 @@ The export tasks must create both reading editions under `_build/gists/`.
 ## Code review with Codex
 
 Use [CODE-REVIEW.md](en/CODE-REVIEW.md) and the repository-local `resolve-pr-review-threads` skill.
+These steps apply when the change uses a pull request. They add no human approval to the `solo` route.
 
 1. Keep incomplete work in a draft pull request.
 2. Run focused checks and self-review the complete diff.
@@ -75,7 +76,7 @@ Use [CODE-REVIEW.md](en/CODE-REVIEW.md) and the repository-local `resolve-pr-rev
 8. Reply in the same inline thread with status, accuracy, change, evidence, limit, commit link, and stable code link.
 9. Resolve complete `fixed`, `rejected`, and `superseded` threads.
 10. Leave `accepted` and `blocked` threads open. Tag a person only for a real external blocker.
-11. Verify CI, conflicts, base currency, approvals, and unresolved threads.
+11. Verify CI, conflicts, base currency, and unresolved threads. Verify approvals only when the delivery route requires one.
 12. Use `@codex review` when the updated pull request needs another review pass.
 
 Do not resolve a thread before the evidence and fix are available on the remote branch.
